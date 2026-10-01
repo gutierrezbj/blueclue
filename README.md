@@ -73,6 +73,12 @@ npm run build
 
 Para practicar: comienza en Teach y cuenta en voz alta, pasa a Assist cuando puedas mantener el pulso y usa Train para localizar el 1 solo por oído. Tras cada TAP, observa cuánto te adelantaste o retrasaste y usa «Escuchar otra vez» para oír el mismo momento.
 
+El recorrido indica la pista y el paso actuales. «Anterior» y «Continuar» recorren Teach → Assist → Train en cada una de las cinco pistas; también puedes elegir directamente otra pista. Cambiar de ayuda conserva el punto de reproducción y pausa el audio para leer la nueva consigna.
+
+El TAP no detiene la música: marca varios compases seguidos. «Escuchar otra vez» abre una revisión guiada que muestra la respuesta y no puntúa; «Volver a practicar» repite ese fragmento con las ayudas del modo elegido. Los controles junto al TAP permiten continuar o empezar desde el principio sin volver a la waveform, también en móvil.
+
+Se guardan localmente la pista, el modo, los últimos 100 intentos y el punto de reproducción (cada dos segundos y al pausar o salir). Al volver, el audio permanece pausado hasta que pulses «Continuar práctica». Si el navegador bloquea el almacenamiento, aparece un aviso y puedes seguir practicando sin persistencia. Avanzar en el recorrido no equivale a demostrar dominio: hay que comprobarlo por oído con música no practicada.
+
 ## Regla de alcance
 
 V0.1 **no** debe incluir todavía:

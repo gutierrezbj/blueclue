@@ -11,7 +11,11 @@ body { margin: 0; min-width: 320px; background: radial-gradient(circle at 78% 5%
 button, select { font: inherit; }
 button { cursor: pointer; }
 button:disabled { cursor: not-allowed; }
-button:focus-visible, select:focus-visible { outline: 2px solid #72e8c8; outline-offset: 3px; }
+button:focus-visible, select:focus-visible, a:focus-visible, [tabindex="-1"]:focus-visible { outline: 2px solid #72e8c8; outline-offset: 3px; }
+button:disabled { opacity: 0.5; }
+[id] { scroll-margin-top: 20px; }
+.skip-link { position: absolute; top: 8px; left: 8px; z-index: 10; padding: 14px; border-radius: 8px; background: #67e0c3; color: #09272c; transform: translateY(-150%); }
+.skip-link:focus { transform: translateY(0); }
 
 .app-shell { max-width: 1320px; margin: 0 auto; padding: 0 40px; }
 .site-header { height: 88px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #29404b; }
@@ -21,12 +25,29 @@ button:focus-visible, select:focus-visible { outline: 2px solid #72e8c8; outline
 .header-tag, .eyebrow, .section-topline, .field-label, .waveform-labels, .marker-legend, .practice-footer, .page-footer { font-size: 11px; font-weight: 700; letter-spacing: 0.15em; }
 .header-tag { color: #9cb1bb; }
 .header-tag span { color: #68e0c4; padding: 0 8px; }
-.intro { padding: 58px 0 45px; }
+.intro { padding: 36px 0 28px; }
 .eyebrow { display: flex; align-items: center; gap: 12px; color: #75e1c5; }
 .eyebrow-line { width: 24px; height: 2px; background: #75e1c5; }
 .intro h1 { margin: 14px 0 11px; font-size: clamp(52px, 6.1vw, 86px); line-height: 1; letter-spacing: -0.075em; }
 .intro h1 em { color: #68e0c4; font-style: normal; }
 .intro p { margin: 0; color: #a3bac1; font-size: 17px; line-height: 1.5; }
+
+.journey-card { display: grid; grid-template-columns: 1.3fr 1fr; gap: 28px; align-items: center; margin-bottom: 18px; padding: 24px 28px; border: 1px solid #36515b; border-radius: 14px; background: #10222c; }
+.journey-overview h2 { margin: 8px 0; font-size: 24px; letter-spacing: -0.035em; }
+.journey-overview p, .save-notice, .journey-hint { margin: 8px 0 0; color: #a3bac1; font-size: 13px; line-height: 1.5; }
+.journey-track { min-width: 0; }
+.section-links { display: flex; flex-wrap: wrap; gap: 4px 20px; margin-top: 8px; }
+.section-links a { display: inline-flex; align-items: center; min-height: 44px; color: #75e5c6; font-size: 13px; text-underline-offset: 4px; }
+.mode-caption { display: block; margin-top: 4px; font-size: 11px; font-weight: 400; letter-spacing: 0; }
+.practice-transport { display: flex; flex-direction: column; gap: 5px; margin-bottom: 20px; }
+.continue-button, .next-button, .previous-button { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 11px 13px; border: 1px solid #41636b; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none; text-align: center; }
+.continue-button { background: #275a58; color: #eafff8; }
+.text-button { min-height: 44px; border: 0; background: transparent; color: #a3bac1; font-size: 12px; text-decoration: underline; text-underline-offset: 4px; }
+.journey-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.previous-button { background: transparent; color: #c2d6dc; }
+.next-button { flex: 1; background: #67e0c3; color: #09272c; }
+.continue-button:hover:not(:disabled), .next-button:hover:not(:disabled), .previous-button:hover:not(:disabled) { filter: brightness(1.15); }
+.journey-hint { font-size: 12px; }
 
 .trainer-grid { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(345px, 1fr); gap: 18px; align-items: stretch; }
 .player-card, .practice-card { background: #10222c; border: 1px solid #29414b; border-radius: 18px; overflow: hidden; box-shadow: 0 20px 60px #0002; }
@@ -44,7 +65,7 @@ button:focus-visible, select:focus-visible { outline: 2px solid #72e8c8; outline
 .mode-heading { display: flex; justify-content: space-between; align-items: flex-end; margin: 29px 0 11px; }
 .mode-heading span:last-child { color: #79929c; font-size: 12px; }
 .mode-selector { display: flex; padding: 4px; gap: 4px; background: #0b1a23; border: 1px solid #29414b; border-radius: 10px; }
-.mode-button { flex: 1; min-height: 47px; border: 0; border-radius: 7px; color: #92aab1; background: transparent; font-size: 12px; font-weight: 800; letter-spacing: 0.1em; }
+.mode-button { flex: 1; min-height: 60px; border: 0; border-radius: 7px; color: #92aab1; background: transparent; font-size: 12px; font-weight: 800; letter-spacing: 0.1em; }
 .mode-button small { margin-right: 10px; color: #60818b; font-size: 10px; }
 .mode-button.active { background: #275a58; color: #eafff8; box-shadow: 0 3px 10px #0002; }
 .mode-button.active small { color: #94f0d6; }
@@ -100,7 +121,7 @@ button:focus-visible, select:focus-visible { outline: 2px solid #72e8c8; outline
 .result-badge.clavado { color: #77edc6; }
 .result-badge.cerca { color: #efce88; }
 .result-badge.temprano, .result-badge.tarde { color: #ffac91; }
-.replay-button { margin-top: 16px; padding: 0; border: 0; background: transparent; color: #75e5c6; font-size: 13px; font-weight: 750; }
+.replay-button { min-height: 44px; margin-top: 8px; padding: 0; border: 0; background: transparent; color: #75e5c6; font-size: 13px; font-weight: 750; }
 .replay-button:hover { text-decoration: underline; }
 .practice-footer { display: flex; align-items: center; gap: 8px; padding: 22px 27px; border-top: 1px solid #29414b; color: #829ea8; font-size: 10px; }
 .practice-footer strong { margin-left: auto; color: #79e5c9; font-size: 20px; font-variant-numeric: tabular-nums; letter-spacing: -0.04em; }
@@ -111,6 +132,7 @@ button:focus-visible, select:focus-visible { outline: 2px solid #72e8c8; outline
   .app-shell { padding: 0 24px; }
   .trainer-grid { grid-template-columns: 1fr; }
   .practice-content { padding-top: 26px; }
+  .journey-card { grid-template-columns: 1fr; gap: 16px; }
 }
 
 @media (max-width: 580px) {
@@ -121,6 +143,7 @@ button:focus-visible, select:focus-visible { outline: 2px solid #72e8c8; outline
   .intro { padding: 42px 0 30px; }
   .intro h1 { font-size: 51px; }
   .intro p { font-size: 15px; }
+  .journey-card { padding: 20px 17px; }
   .player-card { padding: 20px 17px; }
   .section-topline { font-size: 9px; }
   .track-heading { margin: 30px 0 25px; }

@@ -4,22 +4,24 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import WaveSurfer from "wavesurfer.js";
 import type { TrainingTrack } from "./tracks";
 
-export function useWaveformPlayer(track: TrainingTrack) {
+export function useWaveformPlayer(track: TrainingTrack, enabled = true) {
   const containerRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<WaveSurfer | null>(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isReady, setIsReady] = useState(false);
+  const [loadedTrackId, setLoadedTrackId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || !enabled) return;
 
     setCurrentTime(0);
     setDuration(0);
     setIsPlaying(false);
     setIsReady(false);
+    setLoadedTrackId(null);
     setError(null);
 
     const player = WaveSurfer.create({
@@ -41,6 +43,7 @@ export function useWaveformPlayer(track: TrainingTrack) {
     playerRef.current = player;
     player.on("ready", (loadedDuration) => {
       setDuration(loadedDuration);
+      setLoadedTrackId(track.id);
       setIsReady(true);
     });
     player.on("timeupdate", setCurrentTime);
@@ -56,7 +59,7 @@ export function useWaveformPlayer(track: TrainingTrack) {
       playerRef.current = null;
       player.destroy();
     };
-  }, [track]);
+  }, [track, enabled]);
 
   const play = useCallback(async () => {
     const player = playerRef.current;
@@ -74,5 +77,6 @@ export function useWaveformPlayer(track: TrainingTrack) {
   const seek = useCallback((time: number) => playerRef.current?.setTime(time), []);
   const getTime = useCallback(() => playerRef.current?.getCurrentTime() ?? 0, []);
 
-  return { containerRef, currentTime, duration, isPlaying, isReady, error, play, pause, seek, getTime };
+  const isCurrentTrack = loadedTrackId === track.id;
+  return { containerRef, currentTime, duration, isPlaying: isPlaying && isCurrentTrack, isReady: isReady && isCurrentTrack, error, play, pause, seek, getTime };
 }

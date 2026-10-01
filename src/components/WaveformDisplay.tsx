@@ -37,9 +37,13 @@ export function WaveformDisplay({ track, mode, duration, containerRef, revealedT
         )}
       </div>
       <div className="marker-legend">
-        {mode === "teach" && <><span><i className="legend-beat" /> Beat</span><span><i className="legend-downbeat" /> El 1</span></>}
-        {mode === "assist" && <span><i className="legend-beat" /> Pulso, sin señalar el 1</span>}
-        {mode === "train" && <span>Sin marcas: escucha y cuenta por dentro.</span>}
+        {revealedTarget !== null ? <span><i className="legend-downbeat" /> Revisión guiada: aquí cae el 1. Sin puntuar.</span> : (
+          <>
+            {mode === "teach" && <><span><i className="legend-beat" /> Beat</span><span><i className="legend-downbeat" /> El 1</span></>}
+            {mode === "assist" && <span><i className="legend-beat" /> Pulso, sin señalar el 1</span>}
+            {mode === "train" && <span>Sin marcas: escucha y cuenta por dentro.</span>}
+          </>
+        )}
       </div>
     </div>
   );

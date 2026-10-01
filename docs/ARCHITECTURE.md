@@ -94,11 +94,14 @@ V0.1 puede usar almacenamiento local para:
 
 - pista actual
 - modo
+- punto de reproducción, recuperado sin autoplay
 - número de intentos
 - aciertos
 - historial de la sesión
 
 No añadir base de datos todavía.
+
+`src/lib/practice.ts` define el orden navegable Teach → Assist → Train por pista y valida la sesión guardada. Los datos antiguos sin posición se recuperan desde el inicio; las entradas inválidas se descartan sin bloquear la práctica. El avance es voluntario y no acredita dominio pedagógico.
 
 ## Audio
 
