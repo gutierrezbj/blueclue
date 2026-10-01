@@ -17,6 +17,11 @@ export type TrainingTrack = {
   downbeats: number[];
   difficulty: Difficulty;
   description: string;
+  sourceTitle?: string;
+  duration?: number;
+  referenceStatus?: "pending-listening" | "listening-verified";
+  referenceSource?: string;
+  sourceStart?: number;
 };
 
 export const tracks: TrainingTrack[] = [pulse, fourCount, offbeat, returnTrack, subtleOne] as TrainingTrack[];

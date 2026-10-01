@@ -9,3 +9,6 @@ coverage/
 .DS_Store
 *.log
 .vercel/
+.local/
+public/tracks/local-pilot/
+*.tsbuildinfo

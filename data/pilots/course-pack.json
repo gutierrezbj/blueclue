@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "tracks": [
+    {
+      "id": "local-practice-122",
+      "title": "Encuentra el pulso",
+      "sourceTitle": "10 Steps 2 DJ — Practice Track 01",
+      "sourceFile": "2 Be a DJ Practice Track 01 - 122bpm.wav",
+      "sourceSha256": "63a80691c385e7c3275bee455b02a4481bc7336c9399e82e758082bb48653ee8",
+      "bpm": 122,
+      "firstDownbeat": 0.9567630290985107,
+      "startBar": 0,
+      "bars": 6,
+      "leadSeconds": 0.5,
+      "difficulty": "very-easy",
+      "description": "Empieza con una base de práctica. Cuenta 1-2-3-4 en voz alta y marca solo el inicio de cada grupo."
+    },
+    {
+      "id": "local-practice-124",
+      "title": "Mantén cuatro pulsos",
+      "sourceTitle": "10 Steps 2 DJ — Practice Track 02",
+      "sourceFile": "2 Be a DJ Practice Track 02 - 124bpm.wav",
+      "sourceSha256": "db89e29cf7c73483fb042bd56b411b7b62814fafca3bade3acc636b38796cb1d",
+      "bpm": 124,
+      "firstDownbeat": 0.8606909513473511,
+      "startBar": 0,
+      "bars": 6,
+      "leadSeconds": 0.6,
+      "difficulty": "easy",
+      "description": "Repite el conteo sin acelerarte. Mantén el mismo pulso durante varios compases y después reduce las ayudas."
+    },
+    {
+      "id": "local-push-feeling",
+      "title": "Entra en la cuenta",
+      "sourceTitle": "Nightcrawlers — Push The Feeling On (Max Chapman, Kodewerk Remix)",
+      "sourceFile": "Nightcrawlers - Push The Feeling On (Max Chapman, Kodewerk Remix).wav",
+      "sourceSha256": "978f340a778a9bb1c19242bf7b2b06a30209af7efb2b24bec22dba7a7440c9af",
+      "bpm": 128,
+      "firstDownbeat": 0,
+      "startBar": 16,
+      "bars": 8,
+      "leadSeconds": 0.65,
+      "difficulty": "medium",
+      "description": "La música ya está en marcha: el primer golpe del fragmento no tiene por qué ser el 1. Encuentra el inicio del grupo."
+    },
+    {
+      "id": "local-lolas-theme",
+      "title": "Conserva la cuenta",
+      "sourceTitle": "The Shapeshifters — Lola's Theme (Mistrix Dub)",
+      "sourceFile": "The Shapeshifters - Lola's Theme (Mistrix Dub) [blanc].wav",
+      "sourceSha256": "97314bfdd9023abb24b3bf7cdd74f5478d315e2543f46412ecbea35eff6b9db2",
+      "bpm": 124,
+      "firstDownbeat": 0.07102607935667038,
+      "startBar": 62,
+      "bars": 8,
+      "leadSeconds": 0.65,
+      "difficulty": "medium",
+      "description": "Sigue contando cuando cambie el acompañamiento. No reinicies la cuenta en cada acento: espera al siguiente 1."
+    },
+    {
+      "id": "local-shook-90",
+      "title": "No persigas cada golpe",
+      "sourceTitle": "FreeBeats.io — Shook (Beatmatch Edit 90 BPM)",
+      "sourceFile": "Shook (Beatmatch Edit 90 BPM).wav",
+      "sourceSha256": "b60da4f64768770855b50176f0df9ac6f6a9f50eb10b8098e0b47f4fb6b2fcb3",
+      "bpm": 90,
+      "firstDownbeat": 1.32878577709198,
+      "startBar": 0,
+      "bars": 6,
+      "leadSeconds": 0.6,
+      "difficulty": "hard",
+      "description": "Mantén cuatro pulsos regulares aunque aparezcan golpes entre ellos. Prueba Train sin seguir las marcas visuales."
+    }
+  ]
+}
