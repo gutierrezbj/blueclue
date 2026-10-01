@@ -55,6 +55,24 @@ Oculta casi todas las pistas visuales. El usuario marca el 1 por oído.
 - JSON local por pista
 - persistencia local simple
 
+## Ejecutar V0.1
+
+Requiere Node.js 22.15 o superior.
+
+```bash
+npm ci
+npm run dev
+```
+
+Abre `http://localhost:3000`. Las cinco pistas piloto y sus referencias de beats están incluidas; son patrones de percusión sintéticos creados para el ejercicio. Se pueden regenerar con `npm run generate:tracks`.
+
+```bash
+npm test
+npm run build
+```
+
+Para practicar: comienza en Teach y cuenta en voz alta, pasa a Assist cuando puedas mantener el pulso y usa Train para localizar el 1 solo por oído. Tras cada TAP, observa cuánto te adelantaste o retrasaste y usa «Escuchar otra vez» para oír el mismo momento.
+
 ## Regla de alcance
 
 V0.1 **no** debe incluir todavía:

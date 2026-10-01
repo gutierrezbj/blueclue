@@ -78,10 +78,10 @@ for (const track of tracks) {
   const samples = new Float32Array(Math.ceil(duration * sampleRate));
 
   beatTimes.forEach((time, index) => {
+    if (track.id === "return" && index === 15) return;
     const position = index % 4;
-    const afterBreak = track.id === "return" && index === 16;
     const kickGain = track.id === "subtle-one" && position === 0 ? 0.35 : position === 0 ? 0.9 : 0.65;
-    if (!afterBreak) addKick(samples, time, kickGain);
+    addKick(samples, time, kickGain);
     if (position === 1 || position === 3) addNoise(samples, time, 0.13, 0.24, track.seed, 27);
     if (track.id !== "pulse") addNoise(samples, time, 0.055, 0.11, track.seed + 11, 55);
     if (track.id === "offbeat" || track.id === "subtle-one") {
