@@ -1,5 +1,6 @@
 import type { RefObject } from "react";
 import type { TrainingMode, TrainingTrack } from "@/lib/tracks";
+import { isDownbeat } from "@/lib/beatGrid";
 
 type Props = {
   track: TrainingTrack;
@@ -23,7 +24,7 @@ export function WaveformDisplay({ track, mode, duration, containerRef, revealedT
             {mode !== "train" && track.beats.map((beat, index) => (
               <span
                 key={index}
-                className={mode === "teach" && index % 4 === 0 ? "beat-marker downbeat-marker" : "beat-marker"}
+                className={mode === "teach" && isDownbeat(beat, track.downbeats) ? "beat-marker downbeat-marker" : "beat-marker"}
                 style={{ left: position(beat) }}
               />
             ))}

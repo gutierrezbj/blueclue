@@ -48,6 +48,12 @@ button:disabled { opacity: 0.5; }
 .next-button { flex: 1; background: #67e0c3; color: #09272c; }
 .continue-button:hover:not(:disabled), .next-button:hover:not(:disabled), .previous-button:hover:not(:disabled) { filter: brightness(1.15); }
 .journey-hint { font-size: 12px; }
+.catalog-notice { color: #9fc1c8; font-size: 11px; letter-spacing: 0.08em; line-height: 1.6; }
+.track-heading .source-title { color: #75e1c5; margin-bottom: 12px; }
+.reference-notice { padding: 12px 14px; border: 1px solid #695d39; border-radius: 8px; color: #eed69d; background: #302b1d; font-size: 12px; line-height: 1.5; }
+.preparation-notice { min-height: 36px; margin: 0 0 8px; color: #b6d8d4; font-size: 12px; line-height: 1.5; }
+.keyboard-hint { margin: 0 0 12px; color: #b6d8d4; font-size: 12px; line-height: 1.5; }
+.keyboard-hint kbd { font: inherit; color: #eafff8; }
 
 .trainer-grid { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(345px, 1fr); gap: 18px; align-items: stretch; }
 .player-card, .practice-card { background: #10222c; border: 1px solid #29414b; border-radius: 18px; overflow: hidden; box-shadow: 0 20px 60px #0002; }

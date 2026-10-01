@@ -66,6 +66,16 @@ npm run dev
 
 Abre `http://localhost:3000`. Las cinco pistas piloto y sus referencias de beats están incluidas; son patrones de percusión sintéticos creados para el ejercicio. Se pueden regenerar con `npm run generate:tracks`.
 
+Si existe un piloto privado preparado, la aplicación usa sus cinco fragmentos en lugar de la demostración. Para preparar la selección del pack de curso con Python 3.11 o superior:
+
+```powershell
+python scripts/prepare-local-pilot.py --source-dir "D:\DJ Course Music Pack"
+npm run build
+npm start
+```
+
+El script solo recorta los cinco archivos fijados en `data/pilots/course-pack.json`, comprueba sus SHA-256 y conserva los originales. No analiza una biblioteca ni detecta beats. Los audios y el catálogo local están excluidos de Git; no los publiques ni redistribuyas sin autorización. Los comandos de desarrollo y producción escuchan únicamente en `127.0.0.1`. Si faltan el catálogo o sus archivos, vuelve a las pistas de demostración. Más detalles en [selección del piloto musical](docs/PILOT_MUSIC.md).
+
 ```bash
 npm test
 npm run build
@@ -76,6 +86,10 @@ Para practicar: comienza en Teach y cuenta en voz alta, pasa a Assist cuando pue
 El recorrido indica la pista y el paso actuales. «Anterior» y «Continuar» recorren Teach → Assist → Train en cada una de las cinco pistas; también puedes elegir directamente otra pista. Cambiar de ayuda conserva el punto de reproducción y pausa el audio para leer la nueva consigna.
 
 El TAP no detiene la música: marca varios compases seguidos. «Escuchar otra vez» abre una revisión guiada que muestra la respuesta y no puntúa; «Volver a practicar» repite ese fragmento con las ayudas del modo elegido. Los controles junto al TAP permiten continuar o empezar desde el principio sin volver a la waveform, también en móvil.
+
+Antes de empezar, reanudar o reiniciar una práctica, una cuenta atrás de **4 segundos** permite colocar el ratón sobre TAP. Durante la preparación el audio permanece parado y no se puede puntuar. Espacio inicia o pausa desde la página o desde TAP; clic o Enter sobre TAP marca el 1. Al arrancar, el foco pasa a TAP. El atajo respeta selectores, campos de texto y el comportamiento nativo de otros botones. Puedes cancelar la preparación; cambiar de pista o modo cancela cualquier inicio pendiente. La escucha del replay no añade esta espera porque no requiere marcar.
+
+Las referencias del piloto musical proceden de las rejillas Serato de los archivos originales y están pendientes de validación auditiva. Se muestra feedback provisional, pero no se suman aciertos hasta revisar esas referencias. La posición y el modo sí se guardan, separados del historial de la demostración.
 
 Se guardan localmente la pista, el modo, los últimos 100 intentos y el punto de reproducción (cada dos segundos y al pausar o salir). Al volver, el audio permanece pausado hasta que pulses «Continuar práctica». Si el navegador bloquea el almacenamiento, aparece un aviso y puedes seguir practicando sin persistencia. Avanzar en el recorrido no equivale a demostrar dominio: hay que comprobarlo por oído con música no practicada.
 

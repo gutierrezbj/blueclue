@@ -103,6 +103,10 @@ No añadir base de datos todavía.
 
 `src/lib/practice.ts` define el orden navegable Teach → Assist → Train por pista y valida la sesión guardada. Los datos antiguos sin posición se recuperan desde el inicio; las entradas inválidas se descartan sin bloquear la práctica. El avance es voluntario y no acredita dominio pedagógico.
 
+`src/lib/localPilot.ts` lee y valida un catálogo JSON privado preparado previamente. Si no está disponible, mantiene las cinco pistas de demostración. `src/lib/beatGrid.ts` vincula el contador y las marcas a `downbeats`, también con un inicio a mitad de compás. Las referencias pendientes de escucha no generan aciertos persistidos. No se analiza audio en tiempo de ejecución.
+
+`src/lib/playbackPreparation.ts` proporciona una cuenta atrás cancelable de cuatro segundos. No desplaza la posición del audio ni genera intentos y se cancela al navegar o desmontar el entrenador.
+
 ## Audio
 
 Prioridades:
