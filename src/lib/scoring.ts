@@ -36,8 +36,9 @@ export function nearestDownbeat(time: number, downbeats: readonly number[]): num
   return nearest;
 }
 
-export function calculateTimingError(tapTime: number, target: number): number {
-  return Math.round((tapTime - target) * 1000);
+export function calculateTimingError(tapTime: number, target: number, playbackRate = 1): number {
+  if (!Number.isFinite(playbackRate) || playbackRate <= 0) throw new RangeError("Playback rate must be positive");
+  return Math.round((tapTime - target) * 1000 / playbackRate);
 }
 
 export function getReplayStart(target: number, leadSeconds = 2.5): number {
@@ -56,7 +57,8 @@ export function scoreAttempt(
   tapTime: number,
   downbeats: readonly number[],
   duration: number,
-  thresholds: ScoringThresholds = DEFAULT_THRESHOLDS
+  thresholds: ScoringThresholds = DEFAULT_THRESHOLDS,
+  playbackRate = 1
 ): AttemptResult {
   const target = nearestDownbeat(tapTime, downbeats);
   if (target === null || tapTime < 0 || tapTime > duration) {
@@ -69,7 +71,7 @@ export function scoreAttempt(
     };
   }
 
-  const errorMs = calculateTimingError(tapTime, target);
+  const errorMs = calculateTimingError(tapTime, target, playbackRate);
   const classification = classifyAttempt(errorMs, thresholds);
   const messages: Record<AttemptClassification, string> = {
     clavado: "Clavado. Ese era el 1.",
