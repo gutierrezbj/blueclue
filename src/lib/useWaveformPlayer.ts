@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import WaveSurfer from "wavesurfer.js";
 import type { TrainingTrack } from "./tracks";
+import { WAVEFORM_SECONDS, type WaveformWindow } from "./waveformWindow";
 
 export function useWaveformPlayer(track: TrainingTrack, enabled = true) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -13,6 +14,7 @@ export function useWaveformPlayer(track: TrainingTrack, enabled = true) {
   const [isReady, setIsReady] = useState(false);
   const [loadedTrackId, setLoadedTrackId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [viewport, setViewport] = useState<WaveformWindow>({ start: 0, end: WAVEFORM_SECONDS });
 
   useEffect(() => {
     if (!containerRef.current || !enabled) return;
@@ -23,6 +25,8 @@ export function useWaveformPlayer(track: TrainingTrack, enabled = true) {
     setIsReady(false);
     setLoadedTrackId(null);
     setError(null);
+    setViewport({ start: 0, end: WAVEFORM_SECONDS });
+    let pixelsPerSecond = Math.max(1, containerRef.current.clientWidth / WAVEFORM_SECONDS);
 
     const player = WaveSurfer.create({
       container: containerRef.current,
@@ -37,15 +41,37 @@ export function useWaveformPlayer(track: TrainingTrack, enabled = true) {
       barRadius: 2,
       normalize: true,
       interact: true,
-      autoScroll: false,
+      minPxPerSec: pixelsPerSecond,
+      autoScroll: true,
+      autoCenter: true,
+      hideScrollbar: true,
       backend: "MediaElement"
     });
     playerRef.current = player;
+    function syncViewport() {
+      const width = player.getWrapper().scrollWidth;
+      const secondsPerPixel = width > 0 ? player.getDuration() / width : 0;
+      if (secondsPerPixel > 0) {
+        setViewport({ start: player.getScroll() * secondsPerPixel, end: (player.getScroll() + player.getWidth()) * secondsPerPixel });
+      }
+    }
+    function resizeViewport() {
+      const nextPixelsPerSecond = Math.max(1, player.getWidth() / WAVEFORM_SECONDS);
+      if (Math.abs(pixelsPerSecond - nextPixelsPerSecond) > 0.01 && player.getDecodedData()) {
+        pixelsPerSecond = nextPixelsPerSecond;
+        player.zoom(pixelsPerSecond);
+      }
+      syncViewport();
+    }
     player.on("ready", (loadedDuration) => {
       setDuration(loadedDuration);
       setLoadedTrackId(track.id);
       setIsReady(true);
+      resizeViewport();
     });
+    player.on("scroll", (start, end) => { if (end > start) setViewport({ start, end }); });
+    player.on("redrawcomplete", syncViewport);
+    player.on("resize", resizeViewport);
     player.on("timeupdate", setCurrentTime);
     player.on("play", () => setIsPlaying(true));
     player.on("pause", () => setIsPlaying(false));
@@ -65,7 +91,10 @@ export function useWaveformPlayer(track: TrainingTrack, enabled = true) {
     const player = playerRef.current;
     if (!player) return;
     try {
-      if (player.getCurrentTime() >= player.getDuration() - 0.05) player.setTime(0);
+      if (player.getCurrentTime() >= player.getDuration() - 0.05) {
+        player.setTime(0);
+        player.setScroll(0);
+      }
       await player.play();
       setError(null);
     } catch {
@@ -74,9 +103,12 @@ export function useWaveformPlayer(track: TrainingTrack, enabled = true) {
   }, []);
 
   const pause = useCallback(() => playerRef.current?.pause(), []);
-  const seek = useCallback((time: number) => playerRef.current?.setTime(time), []);
+  const seek = useCallback((time: number) => {
+    playerRef.current?.setTime(time);
+    if (time === 0) playerRef.current?.setScroll(0);
+  }, []);
   const getTime = useCallback(() => playerRef.current?.getCurrentTime() ?? 0, []);
 
   const isCurrentTrack = loadedTrackId === track.id;
-  return { containerRef, currentTime, duration, isPlaying: isPlaying && isCurrentTrack, isReady: isReady && isCurrentTrack, error, play, pause, seek, getTime };
+  return { containerRef, currentTime, duration, viewport, isPlaying: isPlaying && isCurrentTrack, isReady: isReady && isCurrentTrack, error, play, pause, seek, getTime };
 }

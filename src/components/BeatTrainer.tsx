@@ -7,7 +7,7 @@ import { difficultyLabels, type TrainingMode, type TrainingTrack } from "@/lib/t
 import { useWaveformPlayer } from "@/lib/useWaveformPlayer";
 import { getPracticeNeighbor, getResumePosition, modeLabels, practiceModes, readPracticeSession, type PracticeLocation, type PracticeSession } from "@/lib/practice";
 import { getBeatPosition } from "@/lib/beatGrid";
-import { PREPARATION_SECONDS, preparePlayback } from "@/lib/playbackPreparation";
+import { getPreparationSeconds } from "@/lib/playbackPreparation";
 import { getPracticeEntry, scorePracticeAttempt } from "@/lib/practiceEntry";
 
 type Progress = PracticeSession["progress"];
@@ -37,8 +37,6 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
   const [isReviewing, setIsReviewing] = useState(false);
   const [storageUnavailable, setStorageUnavailable] = useState(false);
   const [resumed, setResumed] = useState(false);
-  const [preparationSeconds, setPreparationSeconds] = useState<number | null>(null);
-  const cancelPreparationRef = useRef<(() => void) | null>(null);
   const tapButtonRef = useRef<HTMLButtonElement>(null);
   const focusTapRef = useRef(false);
   const replayEndRef = useRef<number | null>(null);
@@ -48,11 +46,10 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
   const track = tracks.find((item) => item.id === trackId) ?? tracks[0];
   const isReferencePending = track.referenceStatus === "pending-listening";
   const player = useWaveformPlayer(track, hydrated);
+  const preparationSeconds = getPreparationSeconds(player.currentTime, track.leadInSeconds);
   const practiceEntry = getPracticeEntry(track.downbeats, player.duration);
   const isListening = practiceEntry !== null && player.currentTime < practiceEntry.opensAt;
   const canTap = player.isPlaying && player.isReady && !isReviewing && preparationSeconds === null && practiceEntry !== null && !isListening;
-
-  useEffect(() => () => cancelPreparationRef.current?.(), []);
 
   useEffect(() => {
     function handleSpace(event: KeyboardEvent) {
@@ -138,24 +135,12 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
   const previousStep = getPracticeNeighbor(trackIds, { trackId, mode }, -1);
   const nextStep = getPracticeNeighbor(trackIds, { trackId, mode }, 1);
   const hasEnded = player.isReady && player.currentTime >= player.duration - 0.05;
-  const playbackLabel = preparationSeconds !== null ? "Cancelar preparación" : isReviewing ? "Volver a practicar" : player.isPlaying ? "Pausar práctica" : hasEnded ? "Repetir esta pista" : "Continuar práctica";
-
-  function cancelPreparation() {
-    cancelPreparationRef.current?.();
-    cancelPreparationRef.current = null;
-    setPreparationSeconds(null);
-    focusTapRef.current = false;
-  }
+  const playbackLabel = isReviewing ? "Volver a practicar" : player.isPlaying ? "Pausar práctica" : hasEnded ? "Repetir esta pista" : "Continuar práctica";
 
   function startPracticePlayback() {
-    cancelPreparation();
     if (!player.isReady) return;
-    player.pause();
-    cancelPreparationRef.current = preparePlayback(setPreparationSeconds, () => {
-      cancelPreparationRef.current = null;
-      focusTapRef.current = true;
-      void player.play();
-    });
+    focusTapRef.current = true;
+    void player.play();
   }
 
   function selectTrack(nextTrackId: string) {
@@ -164,7 +149,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
 
   function navigatePractice(location: PracticeLocation) {
     if (location.trackId === trackId && location.mode === mode) return;
-    cancelPreparation();
+    focusTapRef.current = false;
     player.pause();
     replayEndRef.current = null;
     resumePositionRef.current = null;
@@ -177,10 +162,6 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
   }
 
   function togglePlayback() {
-    if (preparationSeconds !== null) {
-      cancelPreparation();
-      return;
-    }
     replayEndRef.current = null;
     if (isReviewing && feedback?.result.replayStart !== null && feedback?.result.replayStart !== undefined) {
       player.seek(feedback.result.replayStart);
@@ -207,7 +188,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
 
   function replay() {
     if (!feedback || feedback.result.replayStart === null || feedback.result.target === null) return;
-    cancelPreparation();
+    focusTapRef.current = false;
     player.seek(feedback.result.replayStart);
     replayEndRef.current = Math.min(player.duration, feedback.result.target + 1.2);
     setIsReviewing(true);
@@ -215,6 +196,8 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
   }
 
   function restartPractice() {
+    if (!player.isReady) return;
+    player.pause();
     replayEndRef.current = null;
     setIsReviewing(false);
     setFeedback(null);
@@ -288,6 +271,8 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
             track={track}
             mode={mode}
             duration={player.duration}
+            currentTime={player.currentTime}
+            viewport={player.viewport}
             containerRef={player.containerRef}
             revealedTarget={isReviewing ? feedback?.result.target ?? null : null}
             tapTime={isReviewing ? feedback?.tapTime ?? null : null}
@@ -297,8 +282,9 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
               {isReviewing ? "↺" : player.isPlaying ? "Ⅱ" : "▶"}
             </button>
             <div className="transport-time"><strong>{formatTime(player.currentTime)}</strong><span>/ {formatTime(player.duration)}</span></div>
-            <span className="transport-hint">Pulsa la onda para moverte</span>
+            <button type="button" className="restart-button" onClick={restartPractice} disabled={!player.isReady}>↺ Reiniciar ejercicio</button>
           </div>
+          {preparationSeconds !== null && <p className="entry-guide"><strong>{player.isPlaying || player.currentTime > 0 ? `${preparationSeconds}…` : "3 · 2 · 1"}</strong><span>{player.isPlaying ? "La bolita avanza. Prepárate: la música entra después." : player.currentTime > 0 ? "Entrada en pausa. Continúa o reinicia para empezar de nuevo." : "Pulsa Play: la bolita recorre primero 3 segundos en silencio."}</span></p>}
           {!player.isReady && !player.error && <p className="save-notice" role="status">Preparando audio y waveform…</p>}
           {player.error && <p className="audio-error" role="alert">{player.error}</p>}
         </section>
@@ -308,7 +294,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
           <div className="practice-content">
             <div className="practice-transport">
               <button type="button" className="continue-button" onClick={togglePlayback} disabled={!player.isReady}>{playbackLabel}</button>
-              <button type="button" className="text-button" onClick={restartPractice} disabled={!player.isReady}>Desde el principio</button>
+              <button type="button" className="restart-button" onClick={restartPractice} disabled={!player.isReady}>↺ Reiniciar ejercicio</button>
             </div>
             <span className="field-label">ESCUCHA Y CUENTA</span>
             {mode === "teach" ? (
@@ -321,10 +307,10 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
             <p className="count-caption">{mode === "teach" && activeCount === 1 ? `Compás ${activeBar} · ${isReferencePending ? "1 de la referencia" : "aquí cae el 1"}` : mode === "teach" ? "El siguiente 1 llega después del 4." : "Busca dónde vuelve a empezar el grupo."}</p>
 
             <div className="tap-area">
-              <p className="preparation-notice" role="status">{preparationSeconds !== null ? `Prepara el dedo: empezamos en ${preparationSeconds}… Después, escucha dos compases sin pulsar.` : isReviewing ? "Escucha la referencia sin marcar. Vuelve a practicar cuando quieras." : player.isPlaying && isListening ? "Primero escucha dos veces 1-2-3-4. Estos primeros compases no se puntúan." : player.isPlaying ? "Marca los siguientes 1 cuando los reconozcas. No tienes que acertar el primero." : `Tienes ${PREPARATION_SECONDS} segundos para prepararte; después, dos compases solo para escuchar.`}</p>
+              <p className="preparation-notice" role="status">{isReviewing ? "Escucha la referencia sin marcar. Vuelve a practicar cuando quieras." : preparationSeconds !== null ? player.isPlaying ? `La barra avanza en silencio. La música entra en ${preparationSeconds}…` : player.currentTime > 0 ? `Entrada en pausa: quedan ${preparationSeconds} segundos de silencio.` : "Al iniciar, la barra avanza 3 segundos en silencio antes de la música." : player.isPlaying && isListening ? "Primero escucha dos veces 1-2-3-4. Estos primeros compases no se puntúan." : player.isPlaying ? "Marca los siguientes 1 cuando los reconozcas. No tienes que acertar el primero." : "Continúa donde lo dejaste o reinicia el ejercicio para preparar otra entrada."}</p>
               <p className="keyboard-hint"><kbd>Espacio</kbd> inicia o pausa · clic o <kbd>Enter</kbd> sobre TAP marca el 1.</p>
               <button ref={tapButtonRef} type="button" className="tap-button" onClick={tap} disabled={!canTap}>
-                <span className="tap-symbol">↘</span><strong>{preparationSeconds !== null ? `LISTO EN ${preparationSeconds}…` : player.isPlaying && isListening && !isReviewing ? "SOLO ESCUCHA" : "MARCAR EL 1"}</strong><small>{preparationSeconds !== null ? "COLOCA EL RATÓN AQUÍ · EL AUDIO SIGUE PARADO" : isReviewing ? "REVISIÓN GUIADA · SIN PUNTUAR" : player.isPlaying && isListening ? "COGE EL RITMO · TODAVÍA NO PULSES" : player.isPlaying ? "SIGUE MARCANDO: LA MÚSICA NO SE PARA" : "PULSA CONTINUAR PRÁCTICA PARA EMPEZAR"}</small>
+                <span className="tap-symbol">↘</span><strong>{preparationSeconds !== null && player.isPlaying && !isReviewing ? `LISTO EN ${preparationSeconds}…` : player.isPlaying && isListening && !isReviewing ? "SOLO ESCUCHA" : "MARCAR EL 1"}</strong><small>{isReviewing ? "REVISIÓN GUIADA · SIN PUNTUAR" : preparationSeconds !== null && player.isPlaying ? "COLOCA EL RATÓN AQUÍ · LA BARRA YA AVANZA" : player.isPlaying && isListening ? "COGE EL RITMO · TODAVÍA NO PULSES" : player.isPlaying ? "SIGUE MARCANDO: LA MÚSICA NO SE PARA" : "PULSA CONTINUAR PRÁCTICA PARA EMPEZAR"}</small>
               </button>
             </div>
 
