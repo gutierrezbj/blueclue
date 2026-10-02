@@ -6,6 +6,7 @@ import { WAVEFORM_SECONDS, waveformPosition, type WaveformWindow } from "@/lib/w
 type Props = {
   track: TrainingTrack;
   mode: TrainingMode;
+  targetLabel: string;
   duration: number;
   currentTime: number;
   viewport: WaveformWindow;
@@ -14,7 +15,7 @@ type Props = {
   tapTime: number | null;
 };
 
-export function WaveformDisplay({ track, mode, duration, currentTime, viewport, containerRef, revealedTarget, tapTime }: Props) {
+export function WaveformDisplay({ track, mode, targetLabel, duration, currentTime, viewport, containerRef, revealedTarget, tapTime }: Props) {
   const position = (time: number) => waveformPosition(time, viewport);
   const playheadPosition = position(currentTime);
   const answerPosition = revealedTarget === null ? null : position(revealedTarget);
@@ -23,7 +24,7 @@ export function WaveformDisplay({ track, mode, duration, currentTime, viewport, 
 
   return (
     <div className="waveform-frame">
-      <div className="waveform-labels"><span>VISTA AMPLIADA · {WAVEFORM_SECONDS} S</span><span>{Math.floor(viewport.start)}–{Math.round(Math.min(duration, viewport.end))} S</span></div>
+      <div className="waveform-labels"><span>VISTA AMPLIADA · {WAVEFORM_SECONDS} S DE PISTA</span><span>{Math.floor(viewport.start)}–{Math.round(Math.min(duration, viewport.end))} S</span></div>
       <div className="waveform-surface">
         <div ref={containerRef} className="waveform" aria-label={`Forma de onda de ${track.title}`} />
         {duration > 0 && (
@@ -38,7 +39,7 @@ export function WaveformDisplay({ track, mode, duration, currentTime, viewport, 
             ))}
             {answerPosition !== null && (
               <span className="answer-marker" style={{ left: `${answerPosition}%` }}>
-                <span>EL 1</span>
+                <span>{targetLabel}</span>
               </span>
             )}
             {tapPosition !== null && <span className="tap-marker" style={{ left: `${tapPosition}%` }} />}
@@ -47,11 +48,11 @@ export function WaveformDisplay({ track, mode, duration, currentTime, viewport, 
         {duration > 0 && playheadPosition !== null && <span className="playhead-dot" aria-hidden="true" style={{ left: `${playheadPosition}%` }} />}
       </div>
       <div className="marker-legend">
-        {revealedTarget !== null ? <span><i className="legend-downbeat" /> Revisión guiada: aquí cae el 1. Sin puntuar.</span> : (
+        {revealedTarget !== null ? <span><i className="legend-downbeat" /> Revisión guiada: {targetLabel.toLowerCase()}. Sin puntuar.</span> : (
           <>
             {mode === "teach" && <><span><i className="legend-beat" /> Beat</span><span><i className="legend-downbeat" /> El 1</span></>}
             {mode === "assist" && <span><i className="legend-beat" /> Pulso, sin señalar el 1</span>}
-            {mode === "train" && <span>Sin marcas: escucha y cuenta por dentro.</span>}
+            {mode === "train" && <span>Sin marcas: escucha el ritmo.</span>}
           </>
         )}
       </div>

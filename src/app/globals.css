@@ -36,6 +36,18 @@ button:disabled { opacity: 0.5; }
 .journey-overview h2 { margin: 8px 0; font-size: 24px; letter-spacing: -0.035em; }
 .journey-overview p, .save-notice, .journey-hint { margin: 8px 0 0; color: #a3bac1; font-size: 13px; line-height: 1.5; }
 .journey-track { min-width: 0; }
+.module-selector { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.module-button { min-height: 72px; padding: 14px; border: 1px solid #41636b; border-radius: 10px; background: #10222c; color: #bed3d8; text-align: left; font-size: 14px; font-weight: 700; }
+.module-button small { display: block; margin-bottom: 7px; color: #92b3ba; font-size: 10px; letter-spacing: 0.1em; }
+.module-button.active { background: #275a58; border-color: #79e5c9; color: #effff8; }
+.module-button:hover:not(:disabled) { border-color: #a0f3db; }
+.speed-control { min-width: 0; margin: 22px 0; padding: 12px; border: 1px solid #36515b; border-radius: 10px; }
+.speed-control legend { padding: 0 5px; color: #9cb3b9; font-size: 11px; letter-spacing: 0.1em; }
+.speed-control > div { display: flex; gap: 6px; }
+.speed-control button { flex: 1; min-width: 0; min-height: 48px; padding: 8px 6px; border: 1px solid #41636b; border-radius: 7px; background: #10222c; color: #bed3d8; font-size: 13px; }
+.speed-control button[aria-pressed="true"] { border-color: #79e5c9; background: #275a58; color: #effff8; }
+.speed-control small { display: block; margin-top: 4px; font-size: 10px; }
+.speed-control p { margin: 10px 0 0; color: #9cb3b9; font-size: 12px; line-height: 1.5; }
 .section-links { display: flex; flex-wrap: wrap; gap: 4px 20px; margin-top: 8px; }
 .section-links a { display: inline-flex; align-items: center; min-height: 44px; color: #75e5c6; font-size: 13px; text-underline-offset: 4px; }
 .mode-caption { display: block; margin-top: 4px; font-size: 11px; font-weight: 400; letter-spacing: 0; }
@@ -137,6 +149,7 @@ button:disabled { opacity: 0.5; }
 .practice-footer { display: flex; align-items: center; gap: 8px; padding: 22px 27px; border-top: 1px solid #29414b; color: #829ea8; font-size: 10px; }
 .practice-footer strong { margin-left: auto; color: #79e5c9; font-size: 20px; font-variant-numeric: tabular-nums; letter-spacing: -0.04em; }
 .practice-footer span:last-child { max-width: 60px; line-height: 1.2; letter-spacing: 0.06em; }
+.practice-footer .provisional-summary { margin: 0; color: #c2d6dc; line-height: 1.7; letter-spacing: 0.04em; }
 .page-footer { display: flex; justify-content: space-between; gap: 10px; padding: 33px 0 45px; color: #6d8a96; font-size: 10px; }
 
 @media (max-width: 900px) {
@@ -155,6 +168,9 @@ button:disabled { opacity: 0.5; }
   .intro h1 { font-size: 51px; }
   .intro p { font-size: 15px; }
   .journey-card { padding: 20px 17px; }
+  .module-selector { grid-template-columns: 1fr; gap: 8px; }
+  .module-button { min-height: 60px; padding: 10px 13px; }
+  .module-button small { margin-bottom: 4px; }
   .player-card { padding: 20px 17px; }
   .section-topline { font-size: 9px; }
   .track-heading { margin: 30px 0 25px; }

@@ -101,13 +101,17 @@ V0.1 puede usar almacenamiento local para:
 
 No añadir base de datos todavía.
 
-`src/lib/practice.ts` define el orden navegable Teach → Assist → Train por pista y valida la sesión guardada. Los datos antiguos sin posición se recuperan desde el inicio; las entradas inválidas se descartan sin bloquear la práctica. El avance es voluntario y no acredita dominio pedagógico.
+`src/lib/practice.ts` define el orden navegable Pulso → Cuenta → Encuentra el 1 por pista y valida la sesión guardada, incluidos módulo y velocidad. Las sesiones antiguas sin módulo mantienen el ejercicio de downbeat; sin posición se recuperan desde el inicio. Las entradas inválidas se descartan sin bloquear la práctica. El avance es voluntario y no acredita dominio pedagógico.
+
+`src/lib/learningModules.ts` separa las consignas y objetivos de la UI. El motor compara contra todos los beats en Pulso y contra downbeats en Cuenta y Encuentra el 1. Los tres módulos comparten preparación, scoring y replay. Teach / Assist / Train son ayudas independientes, no módulos adicionales.
+
+`src/lib/playbackSpeed.ts` define las velocidades 65 %, 80 % y 100 %, su valor sugerido por dificultad y la conversión del reloj a tiempo de escucha. El reproductor mantiene el silencio inicial a velocidad normal y aplica la velocidad elegida a la música, conservando el tono. El scoring calcula `(tapTime - target) * 1000 / playbackRate`: las tolerancias siguen siendo 85, 180 y 450 milisegundos reales. El historial separa módulo y velocidad; los intentos antiguos corresponden a downbeat al 100 %.
 
 `src/lib/localPilot.ts` lee y valida un catálogo JSON privado preparado previamente. Si no está disponible, mantiene las cinco pistas de demostración. `src/lib/beatGrid.ts` vincula el contador y las marcas a `downbeats`, también con un inicio a mitad de compás. Las referencias pendientes de escucha no generan aciertos persistidos. No se analiza audio en tiempo de ejecución.
 
 `src/lib/playbackPreparation.ts` calcula la preparación restante a partir del reloj del audio y `leadInSeconds`; no programa una reproducción diferida. Los preparadores añaden tres segundos de muestras silenciosas a los archivos de ejercicio y desplazan beats/downbeats y duración en la misma cantidad. WaveSurfer mueve la barra sobre ese silencio real. Pausar, reiniciar, seek y replay comparten una única línea temporal sin timers de inicio que puedan dispararse después de navegar.
 
-`src/lib/practiceEntry.ts` reserva los dos primeros compases de cada fragmento para escucha. Usa los downbeats y el tiempo real del audio; antes de la ventana temprana del tercer downbeat no devuelve intentos. Excluye los downbeats de escucha del scoring y comparte su tolerancia de temprano. No cambia el tempo, la posición al reanudar ni las ayudas de Teach / Assist / Train. El foco pasa a TAP cuando se habilita, no durante la escucha inicial.
+`src/lib/practiceEntry.ts` reserva los dos primeros compases de cada fragmento para escucha. Usa los downbeats y el reloj del audio; antes de la ventana temprana del tercer downbeat no devuelve intentos. Excluye los objetivos de escucha del scoring y convierte su tolerancia temprana a segundos del archivo según la velocidad de reproducción. No cambia la posición al reanudar ni las ayudas de Teach / Assist / Train. El foco pasa a TAP cuando se habilita, no durante la escucha inicial.
 
 ## Audio
 

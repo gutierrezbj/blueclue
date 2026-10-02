@@ -1,5 +1,7 @@
 import type { AttemptClassification } from "./scoring";
 import type { TrainingMode } from "./tracks";
+import { getLearningModule, isLearningModuleId, learningModules, type LearningModuleId } from "./learningModules.ts";
+import { isPlaybackSpeed, type PlaybackSpeed } from "./playbackSpeed.ts";
 
 export const practiceModes: readonly TrainingMode[] = ["teach", "assist", "train"];
 export const modeLabels: Record<TrainingMode, string> = {
@@ -8,9 +10,9 @@ export const modeLabels: Record<TrainingMode, string> = {
   train: "Train · Solo oído"
 };
 
-export type PracticeLocation = { trackId: string; mode: TrainingMode };
-export type SavedAttempt = { trackId: string; classification: AttemptClassification; errorMs: number | null };
-export type PracticeSession = PracticeLocation & { position: number; progress: { attempts: SavedAttempt[] } };
+export type PracticeLocation = { trackId: string; moduleId: LearningModuleId; mode: TrainingMode };
+export type SavedAttempt = { trackId: string; moduleId?: LearningModuleId; playbackSpeed?: PlaybackSpeed; classification: AttemptClassification; errorMs: number | null };
+export type PracticeSession = PracticeLocation & { playbackSpeed?: PlaybackSpeed; position: number; progress: { attempts: SavedAttempt[] } };
 
 export function getPracticeNeighbor(
   trackIds: readonly string[],
@@ -18,13 +20,15 @@ export function getPracticeNeighbor(
   direction: -1 | 1
 ): PracticeLocation | null {
   const trackIndex = trackIds.indexOf(location.trackId);
-  const modeIndex = practiceModes.indexOf(location.mode);
-  if (trackIndex < 0 || modeIndex < 0) return null;
-  const nextIndex = trackIndex * practiceModes.length + modeIndex + direction;
-  if (nextIndex < 0 || nextIndex >= trackIds.length * practiceModes.length) return null;
+  const moduleIndex = learningModules.findIndex((module) => module.id === location.moduleId);
+  if (trackIndex < 0 || moduleIndex < 0) return null;
+  const nextIndex = trackIndex * learningModules.length + moduleIndex + direction;
+  if (nextIndex < 0 || nextIndex >= trackIds.length * learningModules.length) return null;
+  const nextModule = learningModules[nextIndex % learningModules.length];
   return {
-    trackId: trackIds[Math.floor(nextIndex / practiceModes.length)],
-    mode: practiceModes[nextIndex % practiceModes.length]
+    trackId: trackIds[Math.floor(nextIndex / learningModules.length)],
+    moduleId: nextModule.id,
+    mode: nextModule.defaultMode
   };
 }
 
@@ -34,23 +38,29 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function isSavedAttempt(value: unknown): value is SavedAttempt {
   return isRecord(value) && typeof value.trackId === "string" &&
+    (value.moduleId === undefined || isLearningModuleId(value.moduleId)) &&
+    (value.playbackSpeed === undefined || isPlaybackSpeed(value.playbackSpeed)) &&
     ["clavado", "cerca", "temprano", "tarde", "otra-vez"].includes(String(value.classification)) &&
     (value.errorMs === null || (typeof value.errorMs === "number" && Number.isFinite(value.errorMs)));
 }
 
 export function readPracticeSession(saved: string | null, trackIds: readonly string[]): PracticeSession {
-  const fallback: PracticeSession = { trackId: trackIds[0], mode: "teach", position: 0, progress: { attempts: [] } };
+  const fallback: PracticeSession = { trackId: trackIds[0], moduleId: "pulse", mode: "teach", position: 0, progress: { attempts: [] } };
   try {
     const parsed: unknown = JSON.parse(saved ?? "null");
     if (!isRecord(parsed)) return fallback;
     const hasTrack = typeof parsed.trackId === "string" && trackIds.includes(parsed.trackId);
+    const hasModule = parsed.moduleId === undefined || isLearningModuleId(parsed.moduleId);
+    const moduleId = hasTrack ? isLearningModuleId(parsed.moduleId) ? parsed.moduleId : parsed.moduleId === undefined ? "downbeat" : "pulse" : "pulse";
     const attempts = isRecord(parsed.progress) && Array.isArray(parsed.progress.attempts)
       ? parsed.progress.attempts.filter(isSavedAttempt).slice(-100)
       : [];
     return {
       trackId: hasTrack ? parsed.trackId as string : fallback.trackId,
-      mode: hasTrack && practiceModes.includes(parsed.mode as TrainingMode) ? parsed.mode as TrainingMode : "teach",
-      position: hasTrack && typeof parsed.position === "number" && Number.isFinite(parsed.position) && parsed.position >= 0
+      moduleId,
+      mode: hasTrack && hasModule && practiceModes.includes(parsed.mode as TrainingMode) ? parsed.mode as TrainingMode : getLearningModule(moduleId).defaultMode,
+      ...(hasTrack && isPlaybackSpeed(parsed.playbackSpeed) ? { playbackSpeed: parsed.playbackSpeed } : {}),
+      position: hasTrack && hasModule && typeof parsed.position === "number" && Number.isFinite(parsed.position) && parsed.position >= 0
         ? parsed.position : 0,
       progress: { attempts }
     };
