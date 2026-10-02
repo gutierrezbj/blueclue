@@ -6,13 +6,15 @@ Fecha: 2 de octubre de 2026. Estado: cinco fragmentos locales integrados; valida
 
 | Ejercicio | Archivo del pack | BPM de referencia | Fragmento original aproximado | Objetivo propuesto |
 | --- | --- | --- | --- | --- |
-| Encuentra el pulso | 10 Steps 2 DJ — Practice Track 01 | 122 | 0,457–12,760 s | Contar cuatro sobre una base de práctica |
-| Mantén cuatro pulsos | 10 Steps 2 DJ — Practice Track 02 | 124 | 0,261–12,474 s | Sostener el conteo y retirar ayudas |
-| Entra en la cuenta | Nightcrawlers — Push The Feeling On (Max Chapman, Kodewerk Remix) | 128 | 29,350–45,000 s | Orientarse en un fragmento que empieza antes de un downbeat |
-| Conserva la cuenta | The Shapeshifters — Lola's Theme (Mistrix Dub) | 124 | 119,421–135,555 s | Mantener la cuenta durante un cambio de acompañamiento |
-| No persigas cada golpe | FreeBeats.io — Shook (Beatmatch Edit 90 BPM) | 90 | 0,729–17,329 s | Separar el pulso regular de otros golpes |
+| Encuentra el pulso | 10 Steps 2 DJ — Practice Track 01 | 122 | 0,457–63,908 s | Contar cuatro sobre una base de práctica |
+| Mantén cuatro pulsos | 10 Steps 2 DJ — Practice Track 02 | 124 | 0,261–62,796 s | Sostener el conteo y retirar ayudas |
+| Entra en la cuenta | Nightcrawlers — Push The Feeling On (Max Chapman, Kodewerk Remix) | 128 | 29,350–90,000 s | Orientarse en un fragmento que empieza antes de un downbeat |
+| Conserva la cuenta | The Shapeshifters — Lola's Theme (Mistrix Dub) | 124 | 119,421–182,007 s | Mantener la cuenta durante un cambio de acompañamiento |
+| No persigas cada golpe | FreeBeats.io — Shook (Beatmatch Edit 90 BPM) | 90 | 0,729–65,329 s | Separar el pulso regular de otros golpes |
 
 La dificultad y los objetivos son propuestas de curación, no resultados de una prueba con alumnos. Los dos primeros recursos son pistas de práctica del curso, no canciones comerciales completas.
+
+Tras la prueba del alumno, se amplían los fragmentos de 12–16 segundos a 60–65 segundos continuos del mismo original, sin bucles artificiales ni cambio de tempo. Los primeros dos compases se dedican a escuchar antes de marcar. Las referencias de toda la extensión siguen pendientes de validación auditiva.
 
 ## Procedencia y comprobaciones
 

@@ -10,7 +10,7 @@
       "bpm": 122,
       "firstDownbeat": 0.9567630290985107,
       "startBar": 0,
-      "bars": 6,
+      "bars": 32,
       "leadSeconds": 0.5,
       "difficulty": "very-easy",
       "description": "Empieza con una base de práctica. Cuenta 1-2-3-4 en voz alta y marca solo el inicio de cada grupo."
@@ -24,7 +24,7 @@
       "bpm": 124,
       "firstDownbeat": 0.8606909513473511,
       "startBar": 0,
-      "bars": 6,
+      "bars": 32,
       "leadSeconds": 0.6,
       "difficulty": "easy",
       "description": "Repite el conteo sin acelerarte. Mantén el mismo pulso durante varios compases y después reduce las ayudas."
@@ -38,7 +38,7 @@
       "bpm": 128,
       "firstDownbeat": 0,
       "startBar": 16,
-      "bars": 8,
+      "bars": 32,
       "leadSeconds": 0.65,
       "difficulty": "medium",
       "description": "La música ya está en marcha: el primer golpe del fragmento no tiene por qué ser el 1. Encuentra el inicio del grupo."
@@ -52,7 +52,7 @@
       "bpm": 124,
       "firstDownbeat": 0.07102607935667038,
       "startBar": 62,
-      "bars": 8,
+      "bars": 32,
       "leadSeconds": 0.65,
       "difficulty": "medium",
       "description": "Sigue contando cuando cambie el acompañamiento. No reinicies la cuenta en cada acento: espera al siguiente 1."
@@ -66,7 +66,7 @@
       "bpm": 90,
       "firstDownbeat": 1.32878577709198,
       "startBar": 0,
-      "bars": 6,
+      "bars": 24,
       "leadSeconds": 0.6,
       "difficulty": "hard",
       "description": "Mantén cuatro pulsos regulares aunque aparezcan golpes entre ellos. Prueba Train sin seguir las marcas visuales."

@@ -81,10 +81,20 @@ test("prepared pilot aligns overlay, count and scoring with every reference down
     return;
   }
   for (const track of parseLocalPilot(JSON.parse(manifest))) {
+    assert.ok(track.duration! >= 60 && track.duration! <= 70, `${track.id}: allow a full minute of practice`);
     for (const downbeat of track.downbeats) {
       assert.equal(getBeatPosition(downbeat, track.beats, track.downbeats).count, 1, track.id);
       assert.ok(isDownbeat(downbeat, track.downbeats), track.id);
       assert.equal(scoreAttempt(downbeat, track.downbeats, track.duration!).classification, "clavado", track.id);
     }
+  }
+});
+
+test("all five pilot recipes allow about a minute of continuous listening", async () => {
+  const selection = JSON.parse(await readFile(new URL("../../data/pilots/course-pack.json", import.meta.url), "utf8"));
+  assert.equal(selection.tracks.length, 5);
+  for (const track of selection.tracks) {
+    const seconds = track.leadSeconds + track.bars * 240 / track.bpm;
+    assert.ok(seconds >= 60 && seconds <= 70, track.id);
   }
 });
