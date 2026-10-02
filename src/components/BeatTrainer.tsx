@@ -2,12 +2,13 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { WaveformDisplay } from "./WaveformDisplay";
-import { scoreAttempt, type AttemptClassification, type AttemptResult } from "@/lib/scoring";
+import { type AttemptClassification, type AttemptResult } from "@/lib/scoring";
 import { difficultyLabels, type TrainingMode, type TrainingTrack } from "@/lib/tracks";
 import { useWaveformPlayer } from "@/lib/useWaveformPlayer";
 import { getPracticeNeighbor, getResumePosition, modeLabels, practiceModes, readPracticeSession, type PracticeLocation, type PracticeSession } from "@/lib/practice";
 import { getBeatPosition } from "@/lib/beatGrid";
 import { PREPARATION_SECONDS, preparePlayback } from "@/lib/playbackPreparation";
+import { getPracticeEntry, scorePracticeAttempt } from "@/lib/practiceEntry";
 
 type Progress = PracticeSession["progress"];
 type Feedback = { result: AttemptResult; tapTime: number };
@@ -47,6 +48,9 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
   const track = tracks.find((item) => item.id === trackId) ?? tracks[0];
   const isReferencePending = track.referenceStatus === "pending-listening";
   const player = useWaveformPlayer(track, hydrated);
+  const practiceEntry = getPracticeEntry(track.downbeats, player.duration);
+  const isListening = practiceEntry !== null && player.currentTime < practiceEntry.opensAt;
+  const canTap = player.isPlaying && player.isReady && !isReviewing && preparationSeconds === null && practiceEntry !== null && !isListening;
 
   useEffect(() => () => cancelPreparationRef.current?.(), []);
 
@@ -66,11 +70,11 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
   });
 
   useEffect(() => {
-    if (player.isPlaying && focusTapRef.current) {
+    if (canTap && focusTapRef.current) {
       tapButtonRef.current?.focus({ preventScroll: true });
       focusTapRef.current = false;
     }
-  }, [player.isPlaying]);
+  }, [canTap]);
 
   useEffect(() => {
     try {
@@ -189,9 +193,10 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
   }
 
   function tap() {
-    if (!player.isReady || !player.isPlaying || isReviewing) return;
+    if (!canTap) return;
     const tapTime = player.getTime();
-    const result = scoreAttempt(tapTime, track.downbeats, player.duration);
+    const result = scorePracticeAttempt(tapTime, track.downbeats, player.duration, practiceEntry);
+    if (!result) return;
     setFeedback({ result, tapTime });
     replayEndRef.current = null;
     if (isReferencePending) return;
@@ -316,10 +321,10 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
             <p className="count-caption">{mode === "teach" && activeCount === 1 ? `Compás ${activeBar} · ${isReferencePending ? "1 de la referencia" : "aquí cae el 1"}` : mode === "teach" ? "El siguiente 1 llega después del 4." : "Busca dónde vuelve a empezar el grupo."}</p>
 
             <div className="tap-area">
-              <p className="preparation-notice" role="status">{preparationSeconds !== null ? `Prepara el dedo: empezamos en ${preparationSeconds}…` : `Tienes ${PREPARATION_SECONDS} segundos para prepararte antes de empezar.`}</p>
+              <p className="preparation-notice" role="status">{preparationSeconds !== null ? `Prepara el dedo: empezamos en ${preparationSeconds}… Después, escucha dos compases sin pulsar.` : isReviewing ? "Escucha la referencia sin marcar. Vuelve a practicar cuando quieras." : player.isPlaying && isListening ? "Primero escucha dos veces 1-2-3-4. Estos primeros compases no se puntúan." : player.isPlaying ? "Marca los siguientes 1 cuando los reconozcas. No tienes que acertar el primero." : `Tienes ${PREPARATION_SECONDS} segundos para prepararte; después, dos compases solo para escuchar.`}</p>
               <p className="keyboard-hint"><kbd>Espacio</kbd> inicia o pausa · clic o <kbd>Enter</kbd> sobre TAP marca el 1.</p>
-              <button ref={tapButtonRef} type="button" className="tap-button" onClick={tap} disabled={!player.isPlaying || !player.isReady || isReviewing || preparationSeconds !== null}>
-                <span className="tap-symbol">↘</span><strong>{preparationSeconds !== null ? `LISTO EN ${preparationSeconds}…` : "MARCAR EL 1"}</strong><small>{preparationSeconds !== null ? "COLOCA EL RATÓN AQUÍ · EL AUDIO SIGUE PARADO" : isReviewing ? "REVISIÓN GUIADA · SIN PUNTUAR" : player.isPlaying ? "SIGUE MARCANDO: LA MÚSICA NO SE PARA" : "PULSA CONTINUAR PRÁCTICA PARA EMPEZAR"}</small>
+              <button ref={tapButtonRef} type="button" className="tap-button" onClick={tap} disabled={!canTap}>
+                <span className="tap-symbol">↘</span><strong>{preparationSeconds !== null ? `LISTO EN ${preparationSeconds}…` : player.isPlaying && isListening && !isReviewing ? "SOLO ESCUCHA" : "MARCAR EL 1"}</strong><small>{preparationSeconds !== null ? "COLOCA EL RATÓN AQUÍ · EL AUDIO SIGUE PARADO" : isReviewing ? "REVISIÓN GUIADA · SIN PUNTUAR" : player.isPlaying && isListening ? "COGE EL RITMO · TODAVÍA NO PULSES" : player.isPlaying ? "SIGUE MARCANDO: LA MÚSICA NO SE PARA" : "PULSA CONTINUAR PRÁCTICA PARA EMPEZAR"}</small>
               </button>
             </div>
 
@@ -333,7 +338,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
                   {isReviewing && <small>Observa dónde cae el 1. «Volver a practicar» repite el fragmento sin mostrar la respuesta.</small>}
                 </>
               ) : (
-                <><span className="field-label">{hasEnded ? "FIN DEL FRAGMENTO" : "ESCUCHA → MARCA → REPITE"}</span><p>{hasEnded ? "Repite esta pista o continúa al siguiente paso. Tú decides cuándo retirar ayudas." : "Marca el 1 de varios compases seguidos. El feedback cambia con cada intento, sin cortar la música."}</p></>
+                <><span className="field-label">{hasEnded ? "FIN DEL FRAGMENTO" : "ESCUCHA → MARCA → REPITE"}</span><p>{hasEnded ? "Repite esta pista o continúa al siguiente paso. Tú decides cuándo retirar ayudas." : !practiceEntry && player.isReady ? "Este fragmento es demasiado corto para preparar la escucha. Elige otra pista." : isListening ? "Deja pasar los primeros dos compases. Escucha y cuenta; después marca los 1 que reconozcas, sin prisa." : "Marca el 1 de varios compases seguidos. El feedback cambia con cada intento, sin cortar la música."}</p></>
               )}
             </div>
             <nav className="journey-actions" aria-label="Navegar entre pasos de práctica">

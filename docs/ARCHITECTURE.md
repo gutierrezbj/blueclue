@@ -107,6 +107,8 @@ No añadir base de datos todavía.
 
 `src/lib/playbackPreparation.ts` proporciona una cuenta atrás cancelable de cuatro segundos. No desplaza la posición del audio ni genera intentos y se cancela al navegar o desmontar el entrenador.
 
+`src/lib/practiceEntry.ts` reserva los dos primeros compases de cada fragmento para escucha. Usa los downbeats y el tiempo real del audio; antes de la ventana temprana del tercer downbeat no devuelve intentos. Excluye los downbeats de escucha del scoring y comparte su tolerancia de temprano. No cambia el tempo, la posición al reanudar ni las ayudas de Teach / Assist / Train. El foco pasa a TAP cuando se habilita, no durante la escucha inicial.
+
 ## Audio
 
 Prioridades:
