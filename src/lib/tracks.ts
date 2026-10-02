@@ -19,6 +19,7 @@ export type TrainingTrack = {
   description: string;
   sourceTitle?: string;
   duration?: number;
+  leadInSeconds?: number;
   referenceStatus?: "pending-listening" | "listening-verified";
   referenceSource?: string;
   sourceStart?: number;

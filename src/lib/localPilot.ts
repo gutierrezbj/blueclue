@@ -19,6 +19,7 @@ export function parseLocalPilot(value: unknown): TrainingTrack[] {
   return value.tracks.map((track) => {
     if (!isRecord(track) || typeof track.id !== "string" || !/^local-[a-z0-9-]{1,60}$/.test(track.id) || identifiers.has(track.id) ||
       typeof track.duration !== "number" || !Number.isFinite(track.duration) || track.duration <= 0 || track.duration > 90 ||
+      (track.leadInSeconds !== undefined && (typeof track.leadInSeconds !== "number" || !Number.isFinite(track.leadInSeconds) || track.leadInSeconds < 0 || track.leadInSeconds >= track.duration)) ||
       typeof track.bpm !== "number" || !Number.isFinite(track.bpm) || track.bpm < 40 || track.bpm > 240 || track.timeSignature !== "4/4" ||
       !["very-easy", "easy", "medium", "hard"].includes(String(track.difficulty)) ||
       !["pending-listening", "listening-verified"].includes(String(track.referenceStatus)) ||
@@ -29,6 +30,9 @@ export function parseLocalPilot(value: unknown): TrainingTrack[] {
       throw new Error("Invalid local pilot track");
     }
     identifiers.add(track.id);
+    if (track.leadInSeconds !== undefined && track.beats[0] < (track.leadInSeconds as number)) {
+      throw new Error("Beats cannot fall inside the silent lead-in");
+    }
     const downbeatIndices = track.downbeats.map((downbeat) => (track.beats as number[]).findIndex((beat) => Math.abs(beat - downbeat) < 0.001));
     if (downbeatIndices.some((beatIndex, index) => index > 0 && beatIndex - downbeatIndices[index - 1] !== 4)) {
       throw new Error("Downbeats must agree with the 4/4 beat timeline");

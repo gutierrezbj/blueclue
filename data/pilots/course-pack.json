@@ -1,5 +1,6 @@
 {
   "version": 1,
+  "leadInSeconds": 3,
   "tracks": [
     {
       "id": "local-practice-122",

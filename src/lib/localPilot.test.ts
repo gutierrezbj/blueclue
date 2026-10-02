@@ -49,6 +49,14 @@ test("pilot rejects timing references that disagree with the counter or audio bo
   }
 });
 
+test("pilot rejects invalid lead-ins and references that fall inside the silence", () => {
+  for (const leadInSeconds of [-1, NaN, Infinity, 4, 0.5]) {
+    const invalid = fixture();
+    Object.assign(invalid.tracks[0], { leadInSeconds });
+    assert.throws(() => parseLocalPilot(invalid));
+  }
+});
+
 test("catalog loading falls back safely if its manifest or audio is missing", async () => {
   const workspace = await mkdtemp(path.join(os.tmpdir(), "blueclue-pilot-test-"));
   try {
@@ -94,7 +102,7 @@ test("all five pilot recipes allow about a minute of continuous listening", asyn
   const selection = JSON.parse(await readFile(new URL("../../data/pilots/course-pack.json", import.meta.url), "utf8"));
   assert.equal(selection.tracks.length, 5);
   for (const track of selection.tracks) {
-    const seconds = track.leadSeconds + track.bars * 240 / track.bpm;
+    const seconds = selection.leadInSeconds + track.leadSeconds + track.bars * 240 / track.bpm;
     assert.ok(seconds >= 60 && seconds <= 70, track.id);
   }
 });

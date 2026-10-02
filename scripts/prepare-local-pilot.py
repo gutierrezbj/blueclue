@@ -27,14 +27,18 @@ def prepare_pilot(source_directory, workspace):
                 raise ValueError(f"Excerpt exceeds source duration: {item['sourceFile']}")
             recording.setpos(start_frame)
             frames = recording.readframes(end_frame - start_frame)
+            silence_frames = round(selection['leadInSeconds'] * rate)
+            lead_in = silence_frames / rate
+            silent_sample = b'\x80' if recording.getsampwidth() == 1 else b'\x00'
+            frames = silent_sample * (silence_frames * recording.getsampwidth() * recording.getnchannels()) + frames
             start = start_frame / rate
-            duration = (end_frame - start_frame) / rate
+            duration = (end_frame - start_frame + silence_frames) / rate
             beats = []
             downbeats = []
             first_index = max(0, math.ceil((start - item['firstDownbeat']) / beat_length))
             beat_index = first_index
             while True:
-                position = item['firstDownbeat'] + beat_index * beat_length - start
+                position = item['firstDownbeat'] + beat_index * beat_length - start + lead_in
                 if position >= duration - 0.02:
                     break
                 beats.append(round(position, 6))
@@ -48,6 +52,7 @@ def prepare_pilot(source_directory, workspace):
                 'beats': beats,
                 'downbeats': downbeats,
                 'duration': round(duration, 6),
+                'leadInSeconds': lead_in,
                 'referenceStatus': 'pending-listening',
                 'referenceSource': 'Serato BeatGrid del archivo original',
                 'sourceStart': round(start, 6),

@@ -16,6 +16,8 @@ La dificultad y los objetivos son propuestas de curación, no resultados de una 
 
 Tras la prueba del alumno, se amplían los fragmentos de 12–16 segundos a 60–65 segundos continuos del mismo original, sin bucles artificiales ni cambio de tempo. Los primeros dos compases se dedican a escuchar antes de marcar. Las referencias de toda la extensión siguen pendientes de validación auditiva.
 
+Cada copia de ejercicio añade además tres segundos de silencio al principio, fijados por `leadInSeconds` en la receta. La barra recorre ese espacio vacío antes de entrar la música; no es una espera con el reproductor parado. Todas las referencias se desplazan esos tres segundos. La primera copia dura aproximadamente 1:06; los rangos de la tabla siguen indicando el material original, sin el silencio añadido. Los originales del pendrive permanecen intactos.
+
 ## Procedencia y comprobaciones
 
 - Los originales están en el pack del pendrive. No se modifican ni se necesitan una vez preparados los fragmentos.
