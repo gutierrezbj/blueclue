@@ -142,6 +142,7 @@ V1.0  ANALYSE MY TRACK
 - [Especificación V0.1](docs/V0.1.md)
 - [Arquitectura](docs/ARCHITECTURE.md)
 - [Roadmap](docs/ROADMAP.md)
+- [Operación ligera, reserva de puertos y estado PWA](docs/OPERATIONS.md)
 - [Instrucciones para el agente](AGENTS.md)
 
 ## Principio rector
