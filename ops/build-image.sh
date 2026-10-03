@@ -14,7 +14,8 @@ image_context=$(mktemp -d "$release/.image-XXXXXX")
 trap '[[ "$image_context" == "$release"/.image-* ]] && rm -rf -- "$image_context"' EXIT
 mkdir -p "$image_context/app/.next"
 cp -a .next/standalone/. "$image_context/app/"
-cp -a .next/static "$image_context/app/.next/static"
-cp -a public "$image_context/app/public"
+mkdir -p "$image_context/app/.next/static" "$image_context/app/public"
+cp -a .next/static/. "$image_context/app/.next/static/"
+cp -a public/. "$image_context/app/public/"
 docker build --network=none --file "$release/ops/Dockerfile.runtime" --build-arg "APP_REVISION=$revision" --tag "$image" "$image_context"
 printf '\nBuilt %s. No service has been restarted.\n' "$image"
