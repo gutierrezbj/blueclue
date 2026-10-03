@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import WaveSurfer from "wavesurfer.js";
 import type { TrainingTrack } from "./tracks";
 import { WAVEFORM_SECONDS, type WaveformWindow } from "./waveformWindow";
-import { audioPlaybackRate, type PlaybackSpeed } from "./playbackSpeed";
+import type { PlaybackSpeed } from "./playbackSpeed";
 
 export function useWaveformPlayer(track: TrainingTrack, enabled = true, playbackSpeed: PlaybackSpeed = 1) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -16,13 +16,14 @@ export function useWaveformPlayer(track: TrainingTrack, enabled = true, playback
   const [isReady, setIsReady] = useState(false);
   const [loadedTrackId, setLoadedTrackId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [interaction, setInteraction] = useState<{ time: number } | null>(null);
   const [viewport, setViewport] = useState<WaveformWindow>({ start: 0, end: WAVEFORM_SECONDS });
 
   useEffect(() => {
     speedRef.current = playbackSpeed;
     const player = playerRef.current;
-    if (player) player.setPlaybackRate(audioPlaybackRate(player.getCurrentTime(), track.leadInSeconds ?? 0, playbackSpeed), true);
-  }, [playbackSpeed, track.leadInSeconds]);
+    if (player) player.setPlaybackRate(playbackSpeed, true);
+  }, [playbackSpeed]);
 
   useEffect(() => {
     if (!containerRef.current || !enabled) return;
@@ -56,10 +57,8 @@ export function useWaveformPlayer(track: TrainingTrack, enabled = true, playback
       backend: "MediaElement"
     });
     playerRef.current = player;
-    function syncSpeed(time: number) {
-      const rate = audioPlaybackRate(time, track.leadInSeconds ?? 0, speedRef.current);
-      if (player.getPlaybackRate() !== rate) player.setPlaybackRate(rate, true);
-    }
+    player.setPlaybackRate(speedRef.current, true);
+    player.on("interaction", (time) => setInteraction({ time }));
     function syncViewport() {
       const width = player.getWrapper().scrollWidth;
       const secondsPerPixel = width > 0 ? player.getDuration() / width : 0;
@@ -76,17 +75,16 @@ export function useWaveformPlayer(track: TrainingTrack, enabled = true, playback
       syncViewport();
     }
     player.on("ready", (loadedDuration) => {
+      player.setPlaybackRate(speedRef.current, true);
       setDuration(loadedDuration);
       setLoadedTrackId(track.id);
       setIsReady(true);
       resizeViewport();
-      syncSpeed(player.getCurrentTime());
     });
     player.on("scroll", (start, end) => { if (end > start) setViewport({ start, end }); });
     player.on("redrawcomplete", syncViewport);
     player.on("resize", resizeViewport);
     player.on("timeupdate", (time) => {
-      syncSpeed(time);
       setCurrentTime(time);
     });
     player.on("play", () => setIsPlaying(true));
@@ -126,5 +124,5 @@ export function useWaveformPlayer(track: TrainingTrack, enabled = true, playback
   const getTime = useCallback(() => playerRef.current?.getCurrentTime() ?? 0, []);
 
   const isCurrentTrack = loadedTrackId === track.id;
-  return { containerRef, currentTime, duration, viewport, isPlaying: isPlaying && isCurrentTrack, isReady: isReady && isCurrentTrack, error, play, pause, seek, getTime };
+  return { containerRef, currentTime, duration, viewport, interaction, isPlaying: isPlaying && isCurrentTrack, isReady: isReady && isCurrentTrack, error, play, pause, seek, getTime };
 }

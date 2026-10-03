@@ -2,18 +2,20 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { WaveformDisplay } from "./WaveformDisplay";
+import { RoundSummary } from "./RoundSummary";
 import { type AttemptClassification, type AttemptResult } from "@/lib/scoring";
 import { difficultyLabels, type TrainingMode, type TrainingTrack } from "@/lib/tracks";
 import { useWaveformPlayer } from "@/lib/useWaveformPlayer";
 import { getPracticeNeighbor, getResumePosition, modeLabels, practiceModes, readPracticeSession, type PracticeLocation, type PracticeSession } from "@/lib/practice";
 import { getBeatPosition } from "@/lib/beatGrid";
-import { getPreparationSeconds } from "@/lib/playbackPreparation";
+import { getCountIn } from "@/lib/countIn";
+import { recordRoundTap, reviewOutcome, summarizeRound, type ExerciseRound, type RoundOutcome } from "@/lib/exerciseRound";
 import { getPracticeEntry } from "@/lib/practiceEntry";
 import { getLearningModule, learningModules, scoreExerciseAttempt, type LearningModuleId } from "@/lib/learningModules";
 import { listeningSeconds, playbackSpeeds, speedLabels, suggestedSpeed, type PlaybackSpeed } from "@/lib/playbackSpeed";
 
 type Progress = PracticeSession["progress"];
-type Feedback = { result: AttemptResult; tapTime: number };
+type Feedback = { result: AttemptResult; tapTime: number | null };
 
 const modeDescriptions: Record<TrainingMode, string> = {
   teach: "Mira cómo el 1 abre cada grupo de cuatro. Cuenta en voz alta: el golpe más fuerte no siempre es el 1.",
@@ -39,6 +41,8 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
   const [hydrated, setHydrated] = useState(false);
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const [isReviewing, setIsReviewing] = useState(false);
+  const [round, setRound] = useState<ExerciseRound | null>(null);
+  const [summaryOpen, setSummaryOpen] = useState(false);
   const [storageUnavailable, setStorageUnavailable] = useState(false);
   const [resumed, setResumed] = useState(false);
   const tapButtonRef = useRef<HTMLButtonElement>(null);
@@ -54,10 +58,26 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
   const visualMode = isPulseExercise && mode === "teach" ? "assist" : mode;
   const practiceBpm = (track.bpm * playbackSpeed).toLocaleString("es-ES", { maximumFractionDigits: 1 });
   const player = useWaveformPlayer(track, hydrated, playbackSpeed);
-  const preparationSeconds = getPreparationSeconds(player.currentTime, track.leadInSeconds);
+  const countIn = getCountIn(player.currentTime, track.downbeats[0], track.bpm);
+  const isPreparing = countIn !== null && countIn.phase !== "landing";
   const practiceEntry = getPracticeEntry(track.downbeats, player.duration, playbackSpeed);
   const isListening = practiceEntry !== null && player.currentTime < practiceEntry.opensAt;
-  const canTap = player.isPlaying && player.isReady && !isReviewing && preparationSeconds === null && practiceEntry !== null && !isListening;
+  const canTap = player.isPlaying && player.isReady && !isReviewing && !isPreparing && practiceEntry !== null && !isListening;
+
+  useEffect(() => {
+    if (!player.interaction) return;
+    setRound(null);
+    setSummaryOpen(false);
+    setFeedback(null);
+    setIsReviewing(false);
+    replayEndRef.current = null;
+  }, [player.interaction]);
+
+  useEffect(() => {
+    if (!player.isReady || isReviewing || summaryOpen) return;
+    if (player.isPlaying) setRound(current => current ? { ...current, end: Math.max(current.end, player.currentTime) } : { start: player.currentTime, end: player.currentTime, taps: [] });
+    else if (player.currentTime >= player.duration) setRound(current => current ? { ...current, end: player.duration } : null);
+  }, [player.currentTime, player.isPlaying, player.isReady, player.duration, isReviewing, summaryOpen]);
 
   useEffect(() => {
     function handleSpace(event: KeyboardEvent) {
@@ -145,10 +165,15 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
   const previousStep = getPracticeNeighbor(trackIds, { trackId, moduleId, mode }, -1);
   const nextStep = getPracticeNeighbor(trackIds, { trackId, moduleId, mode }, 1);
   const hasEnded = player.isReady && player.currentTime >= player.duration - 0.05;
+  const roundSummary = summarizeRound(round ?? { start: 0, end: 0, taps: [] }, track, moduleId, playbackSpeed, player.duration);
+  const showSummary = summaryOpen || hasEnded;
   const playbackLabel = isReviewing ? "Volver a practicar" : player.isPlaying ? "Pausar práctica" : hasEnded ? "Repetir esta pista" : "Continuar práctica";
 
   function startPracticePlayback() {
     if (!player.isReady) return;
+    const time = player.getTime() >= player.duration - 0.05 ? 0 : player.getTime();
+    setRound(current => time === 0 || !current ? { start: time, end: time, taps: [] } : current);
+    setSummaryOpen(false);
     focusTapRef.current = true;
     void player.play();
   }
@@ -160,6 +185,8 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
   function navigatePractice(location: PracticeLocation) {
     if (location.trackId === trackId && location.moduleId === moduleId && location.mode === mode) return;
     focusTapRef.current = false;
+    setRound(null);
+    setSummaryOpen(false);
     player.pause();
     replayEndRef.current = null;
     resumePositionRef.current = null;
@@ -177,6 +204,8 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
   function changeSpeed(speed: PlaybackSpeed) {
     if (speed === playbackSpeed) return;
     player.pause();
+    setRound(null);
+    setSummaryOpen(false);
     focusTapRef.current = false;
     replayEndRef.current = null;
     setIsReviewing(false);
@@ -189,6 +218,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
     replayEndRef.current = null;
     if (isReviewing && feedback?.result.replayStart !== null && feedback?.result.replayStart !== undefined) {
       player.seek(feedback.result.replayStart);
+      setRound(null);
     }
     setIsReviewing(false);
     setFeedback(null);
@@ -203,6 +233,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
     const result = scoreExerciseAttempt(tapTime, track, player.duration, moduleId, playbackSpeed);
     if (!result) return;
     setFeedback({ result, tapTime });
+    setRound(current => recordRoundTap(current ?? { start: tapTime, end: tapTime, taps: [] }, tapTime, track, moduleId, playbackSpeed, player.duration));
     replayEndRef.current = null;
     if (isReferencePending) return;
     setProgress((current) => ({
@@ -225,13 +256,33 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
     replayEndRef.current = null;
     setIsReviewing(false);
     setFeedback(null);
+    setRound(null);
+    setSummaryOpen(false);
     setResumed(false);
     player.seek(0);
     startPracticePlayback();
   }
 
   const listeningInstruction = isPulseExercise ? "Primero escucha el pulso regular. Todavía no pulses: deja que el ritmo se te haga familiar." : "Primero escucha dos veces 1-2-3-4. Estos primeros compases no se puntúan.";
-  const preparationNotice = isReviewing ? "Escucha la referencia sin marcar." : preparationSeconds !== null ? player.isPlaying ? `La barra avanza en silencio. La música entra en ${preparationSeconds}…` : player.currentTime > 0 ? `Entrada en pausa: quedan ${preparationSeconds} segundos de silencio.` : "Al iniciar, la barra avanza 3 segundos en silencio antes de la música." : player.isPlaying && isListening ? listeningInstruction : player.isPlaying ? isPulseExercise ? "Acompaña cada pulso. Si te pierdes, escucha y vuelve a entrar sin prisa." : "Marca los siguientes 1 cuando los reconozcas. No tienes que acertar el primero." : "Continúa donde lo dejaste o reinicia el ejercicio para preparar otra entrada.";
+  function finishRound() {
+    player.pause();
+    setRound(current => current ? { ...current, end: player.getTime() } : null);
+    setSummaryOpen(true);
+  }
+
+  function replayOutcome(outcome: RoundOutcome) {
+    const result = reviewOutcome(outcome);
+    setFeedback({ result, tapTime: outcome.tapTime });
+    player.seek(result.replayStart ?? 0);
+    replayEndRef.current = Math.min(player.duration, outcome.target + 1.2);
+    focusTapRef.current = false;
+    setIsReviewing(true);
+    setSummaryOpen(true);
+    document.getElementById("listening")?.focus();
+    void player.play();
+  }
+
+  const preparationNotice = isReviewing ? "Escucha la referencia sin marcar." : isPreparing ? countIn?.phase === "settle" ? "Acomódate. La bolita avanza por la línea plana; después cuenta al ritmo de la música." : "4… 3… 2… ¡1! Ese 1 coincide con el comienzo del compás. Primero solo escucha." : player.isPlaying && isListening ? listeningInstruction : player.isPlaying ? isPulseExercise ? "Acompaña cada pulso. Si te pierdes, escucha y vuelve a entrar sin prisa." : "Marca los siguientes 1 cuando los reconozcas. No tienes que acertar el primero." : "Continúa donde lo dejaste o reinicia el ejercicio para preparar otra entrada.";
 
   const feedbackLabel: Record<AttemptClassification, string> = {
     clavado: "CLAVADO",
@@ -314,15 +365,16 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
             containerRef={player.containerRef}
             revealedTarget={isReviewing ? feedback?.result.target ?? null : null}
             tapTime={isReviewing ? feedback?.tapTime ?? null : null}
+            outcomes={mode !== "train" || showSummary || isReviewing ? roundSummary.outcomes : []}
           />
           <div className="transport">
             <button type="button" className="play-button" onClick={togglePlayback} disabled={!player.isReady} aria-label={playbackLabel}>
               {isReviewing ? "↺" : player.isPlaying ? "Ⅱ" : "▶"}
             </button>
-            <div className="transport-time"><strong>{formatTime(listeningSeconds(player.currentTime, track.leadInSeconds ?? 0, playbackSpeed))}</strong><span>/ {formatTime(listeningSeconds(player.duration, track.leadInSeconds ?? 0, playbackSpeed))}</span></div>
+            <div className="transport-time"><strong>{formatTime(listeningSeconds(player.currentTime, playbackSpeed))}</strong><span>/ {formatTime(listeningSeconds(player.duration, playbackSpeed))}</span></div>
             <button type="button" className="restart-button" onClick={restartPractice} disabled={!player.isReady}>↺ Reiniciar ejercicio</button>
           </div>
-          {preparationSeconds !== null && <p className="entry-guide"><strong>{player.isPlaying || player.currentTime > 0 ? `${preparationSeconds}…` : "3 · 2 · 1"}</strong><span>{player.isPlaying ? "La bolita avanza. Prepárate: la música entra después." : player.currentTime > 0 ? "Entrada en pausa. Continúa o reinicia para empezar de nuevo." : "Pulsa Play: la bolita recorre primero 3 segundos en silencio."}</span></p>}
+          {countIn && <p className="entry-guide"><strong>{countIn.count ?? "Prepárate"}</strong><span>{!player.isPlaying ? "Pulsa Play para avanzar: tramo plano → 4 · 3 · 2 · ¡1!" : countIn.phase === "landing" ? "¡Aquí empieza! Ahora sigue 2 · 3 · 4, sin repetir el 1." : "La cuenta sigue el tempo del ejercicio, no los segundos del reloj."}</span></p>}
           {!player.isReady && !player.error && <p className="save-notice" role="status">Preparando audio y waveform…</p>}
           {player.error && <p className="audio-error" role="alert">{player.error}</p>}
         </section>
@@ -335,7 +387,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
               <button type="button" className="restart-button" onClick={restartPractice} disabled={!player.isReady}>↺ Reiniciar ejercicio</button>
             </div>
             <span className="field-label">{isPulseExercise ? "ESCUCHA Y ACOMPAÑA" : "ESCUCHA Y CUENTA"}</span>
-            {mode === "teach" && !isPulseExercise ? (
+            {countIn && !isReviewing ? <div className="count-in" aria-label={countIn.count ? `Entrada ${countIn.count}` : "Prepárate"}><strong>{countIn.count ?? "Prepárate"}</strong><span>{countIn.phase === "landing" ? "¡Aquí cae el 1! Sigue 2 · 3 · 4" : countIn.phase === "settle" ? "Acomódate · el ritmo viene después" : "Al ritmo de la música · todavía no pulses"}</span></div> : mode === "teach" && !isPulseExercise ? (
               <div className="count-row" aria-label={activeCount ? `Golpe ${activeCount} de 4` : "Espera al primer golpe"}>
                 {[1, 2, 3, 4].map((count) => <span key={count} className={activeCount === count ? "count active" : "count"}>{count}</span>)}
               </div>
@@ -348,7 +400,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
               <p className="preparation-notice" role="status">{preparationNotice}</p>
               <p className="keyboard-hint"><kbd>Espacio</kbd> inicia o pausa · clic o <kbd>Enter</kbd> sobre el botón grande responde.</p>
               <button ref={tapButtonRef} type="button" className="tap-button" onClick={tap} disabled={!canTap}>
-                <span className="tap-symbol">↘</span><strong>{preparationSeconds !== null && player.isPlaying && !isReviewing ? `LISTO EN ${preparationSeconds}…` : player.isPlaying && isListening && !isReviewing ? "SOLO ESCUCHA" : lesson.tapLabel}</strong><small>{isReviewing ? "REVISIÓN GUIADA · SIN PUNTUAR" : preparationSeconds !== null && player.isPlaying ? "COLOCA EL RATÓN AQUÍ · LA BARRA YA AVANZA" : player.isPlaying && isListening ? "COGE EL RITMO · TODAVÍA NO PULSES" : player.isPlaying ? "SIGUE MARCANDO: LA MÚSICA NO SE PARA" : "PULSA CONTINUAR PRÁCTICA PARA EMPEZAR"}</small>
+                <span className="tap-symbol">↘</span><strong>{isPreparing && player.isPlaying && !isReviewing ? countIn?.count ? `${countIn.count}…` : "PREPÁRATE" : player.isPlaying && isListening && !isReviewing ? "SOLO ESCUCHA" : lesson.tapLabel}</strong><small>{isReviewing ? "REVISIÓN GUIADA · SIN PUNTUAR" : isPreparing && player.isPlaying ? "COLOCA EL RATÓN AQUÍ · LA BARRA YA AVANZA" : player.isPlaying && isListening ? "COGE EL RITMO · TODAVÍA NO PULSES" : player.isPlaying ? "SIGUE MARCANDO: LA MÚSICA NO SE PARA" : "PULSA CONTINUAR PRÁCTICA PARA EMPEZAR"}</small>
               </button>
             </div>
 
@@ -357,7 +409,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
                 <>
                   <span className={`result-badge ${feedback.result.classification}`}>{feedbackLabel[feedback.result.classification]}{isReferencePending ? " · PROVISIONAL" : ""}</span>
                   <p>{isReferencePending ? "Comparado con la marca del archivo, pendiente de revisión por oído. Es una orientación, no una nota." : feedback.result.message}</p>
-                  {feedback.result.errorMs !== null && <small>{feedback.result.errorMs < 0 ? "−" : "+"}{Math.abs(feedback.result.errorMs)} ms respecto {isPulseExercise ? "al pulso" : "al 1"}</small>}
+                  {feedback.result.errorMs !== null && <small>{Math.abs(feedback.result.errorMs)} ms · {feedback.result.errorMs < 0 ? "temprano" : feedback.result.errorMs > 0 ? "tarde" : "exacto"} respecto {isPulseExercise ? "al pulso" : "al 1"}</small>}
                   <button type="button" className="replay-button" onClick={replay} disabled={!player.isReady || (isReviewing && player.isPlaying)}>{isReviewing && player.isPlaying ? "Reproduciendo fragmento…" : "↺  Escuchar otra vez"}</button>
                   {isReviewing && <small>Observa la marca {isPulseExercise ? "del pulso" : "del 1"}. «Volver a practicar» repite el fragmento sin mostrar la respuesta.</small>}
                 </>
@@ -365,6 +417,8 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
                 <><span className="field-label">{hasEnded ? "FIN DEL FRAGMENTO" : "ESCUCHA → MARCA → REPITE"}</span><p>{hasEnded ? "Repite este ejercicio o continúa al siguiente módulo cuando te sientas cómodo." : !practiceEntry && player.isReady ? "Este fragmento es demasiado corto para preparar la escucha. Elige otra pista." : isListening ? listeningInstruction : lesson.instruction}</p></>
               )}
             </div>
+            <button type="button" className="replay-button" disabled={!round || isReviewing} onClick={finishRound}>Ver resumen de esta ronda</button>
+            {showSummary && <RoundSummary summary={roundSummary} provisional={isReferencePending} onReview={replayOutcome} />}
             <nav className="journey-actions" aria-label="Navegar entre pasos de práctica">
               <button type="button" className="previous-button" disabled={!hydrated || !previousStep} onClick={() => previousStep && navigatePractice(previousStep)}>← Anterior</button>
               {nextStep ? <button type="button" className="next-button" disabled={!hydrated} onClick={() => navigatePractice(nextStep)}>{nextStep.trackId === trackId ? `Continuar: ${getLearningModule(nextStep.moduleId).title} →` : "Siguiente pista →"}</button> : <a className="next-button" href="#track-select">Volver a elegir pista ↑</a>}

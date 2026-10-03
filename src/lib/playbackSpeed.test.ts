@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { audioPlaybackRate, isPlaybackSpeed, listeningSeconds, suggestedSpeed } from "./playbackSpeed.ts";
+import { isPlaybackSpeed, listeningSeconds, suggestedSpeed } from "./playbackSpeed.ts";
 import { calculateTimingError, DEFAULT_THRESHOLDS, scoreAttempt } from "./scoring.ts";
 
 test("beginner levels suggest slower practice without preventing the original tempo", () => {
@@ -13,14 +13,11 @@ test("beginner levels suggest slower practice without preventing the original te
   assert.ok(!isPlaybackSpeed("0.65"));
 });
 
-test("three silent seconds stay three real seconds at every supported practice speed", () => {
+test("preparation and music share the same tempo without a rate jump", () => {
   for (const speed of [0.65, 0.8, 1] as const) {
-    assert.equal(audioPlaybackRate(0, 3, speed), 1);
-    assert.equal(audioPlaybackRate(2.999, 3, speed), 1);
-    assert.equal(audioPlaybackRate(3, 3, speed), speed);
-    assert.equal(audioPlaybackRate(0, 0, speed), speed);
-    assert.equal(listeningSeconds(3, 3, speed), 3);
-    assert.equal(listeningSeconds(3 + 10 * speed, 3, speed), 13);
+    assert.equal(listeningSeconds(0, speed), 0);
+    assert.equal(listeningSeconds(3, speed), 3 / speed);
+    assert.equal(listeningSeconds(10 * speed, speed), 10);
   }
 });
 

@@ -12,10 +12,6 @@ export function suggestedSpeed(difficulty: Difficulty): PlaybackSpeed {
   return difficulty === "very-easy" ? 0.65 : difficulty === "easy" ? 0.8 : 1;
 }
 
-export function audioPlaybackRate(time: number, leadInSeconds: number, speed: PlaybackSpeed): number {
-  return time < leadInSeconds ? 1 : speed;
-}
-
-export function listeningSeconds(time: number, leadInSeconds: number, speed: PlaybackSpeed): number {
-  return Math.min(time, leadInSeconds) + Math.max(0, time - leadInSeconds) / speed;
+export function listeningSeconds(time: number, speed: PlaybackSpeed): number {
+  return time / speed;
 }
