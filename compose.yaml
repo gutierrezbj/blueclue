@@ -1,0 +1,22 @@
+services:
+  web:
+    image: ${BLUECLUE_IMAGE:?Set BLUECLUE_IMAGE to an explicit version}
+    container_name: blueclue-web
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3280:3000"
+    mem_limit: 512m
+    cpus: 0.50
+    pids_limit: 100
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m,noexec,nosuid
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "3"

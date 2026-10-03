@@ -1,0 +1,13 @@
+.git
+.next
+node_modules
+.local
+public/tracks/local-pilot
+public/offline-assets.json
+.env
+.env.*
+*.log
+*.tsbuildinfo
+docs
+tests
+coverage
