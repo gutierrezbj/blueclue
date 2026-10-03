@@ -8,8 +8,10 @@ BlueClue es una app de bolsillo. Conserva el orden y la estructura JRGB sin
 replicar el protocolo enterprise completo. No añadir BD, autenticación, Redis,
 workers ni servicios de monitorización propios por obligación de plantilla.
 
-El Beat Trainer funciona en local. La PWA/offline y la prueba en iPhone físico
-siguen pendientes. No hay despliegue ni monitorización de BlueClue verificados.
+El Beat Trainer y la PWA/offline están implementados. Se comprobaron arranque desde
+una pestaña nueva y cinco pistas con el servidor local apagado; falta iPhone físico.
+El propietario eligió **web pública con los cinco patrones sintéticos**. Tailscale
+es acceso administrativo al VPS, no un requisito para los alumnos.
 
 ## Registro canónico
 
@@ -29,15 +31,16 @@ la excepción ligera autorizada; no modifica las plantillas maestras.
 | API | 4280 sin uso |
 | Internos | 5280 sin uso |
 | Datos | 6280–6289 sin uso; no hay BD |
-| VPS | Servidor 2 previsto, pendiente comprobación real |
-| Directorio | `/opt/apps/blueclue` previsto |
-| Contenedor | `blueclue-web` previsto |
-| Bind | `127.0.0.1:3280:3000` previsto; nunca puerto público directo |
-| Dominio | `blueclue.jrgblanco.com` propuesto; sin DNS/HTTPS configurados |
+| VPS | Servidor 2, comprobado por Tailscale |
+| Directorio | `/opt/apps/blueclue`, release `6860fd1`, enlace `current` |
+| Contenedor | `blueclue-web`, imagen `blueclue:6860fd1`, healthy |
+| Bind | `127.0.0.1:3280:3000` verificado; nunca puerto público directo |
+| Dominio | `https://blueclue.jrgblanco.com`, HTTPS verificado |
 
-La reserva no abre puertos ni certifica que estén libres en el sistema operativo.
-Antes del despliegue hay que comprobar listeners, contenedores y capacidad real.
-La autenticación SSH desde este PC falló; no se cambiaron los servidores.
+El 3 de octubre se verificó SSH por Tailscale en `srs-staging` (100.110.52.21),
+hostname `srv1369522`. Antes de desplegar: 3911 MiB RAM total, 2320 MiB disponible,
+27 GB libres en disco y puertos reservados sin listeners. El fallo anterior de SSH
+por IP pública no bloquea esta ruta autorizada. Se conserva verificación de host.
 
 ## Peso medido
 
@@ -54,13 +57,13 @@ de la PWA. La medición web no incluye HTML, runtime ni futuros componentes PWA.
 
 ## Puerta de despliegue
 
-1. Confirmar acceso SSH autorizado y puertos/capacidad reales.
-2. Decidir catálogo móvil: demo o acceso privado autorizado. No subir los audios
-   privados por defecto; conservar las exclusiones de Git y del futuro empaquetado.
-3. Implementar PWA, descarga y recuperación offline; probar Safari en un iPhone
-   físico, modo avión, vuelta del segundo plano y conservación de progreso.
-4. Construir la imagen fuera del VPS de 1 vCPU y desplegar un solo servicio con
-   versión identificable y procedimiento de rollback.
+1. Acceso y reserva comprobados; volver a comprobar antes de cada despliegue.
+2. Catálogo público confirmado: demo. No subir `.local` ni los audios privados.
+3. PWA y offline comprobados en escritorio. Probar Safari en un iPhone físico,
+   modo avión, vuelta del segundo plano y conservación de progreso.
+4. Preferir construir fuera del VPS. Sin Docker local, la alternativa acotada
+   `ops/build-image.sh` usa un contenedor efímero de 0,6 CPU / 1400 MiB, un worker
+   Next y pruebas antes de generar la imagen. El contenedor se elimina al terminar.
 5. Configurar DNS, Nginx y HTTPS; no publicar los puertos internos ni cambiar
    reglas de otros proyectos.
 6. Añadir `/health`, healthcheck del contenedor, límites y rotación de logs.
@@ -76,3 +79,68 @@ No activar una falsa alarma de caída de un servicio todavía inexistente.
 Reutilizar healthcheck y SA99; no introducir una plataforma adicional.
 El progreso es local al dispositivo: no hay sincronización ordenador/iPhone
 ni respaldo de una base de datos de usuarios.
+
+## Release reproducible y rollback
+
+La publicación se prepara con `git archive HEAD`: solo archivos versionados.
+`.dockerignore` y `ops/build-image.sh` impiden incluir el catálogo privado.
+Las imágenes llevan el hash del commit; no se publica `latest`.
+
+En un equipo con Docker, `docker build --build-arg APP_REVISION=<commit> -t
+blueclue:<commit> .` compila la imagen completa. En el VPS, extraer el archivo de
+release dentro de `/opt/apps/blueclue/releases/<commit>` y ejecutar:
+
+```bash
+bash ops/build-image.sh <commit>
+BLUECLUE_IMAGE=blueclue:<commit> docker compose -p blueclue up -d --wait
+curl --fail http://127.0.0.1:3280/health
+```
+
+El servicio usa usuario `node`, filesystem de solo lectura, tmpfs limitado,
+512 MiB RAM, 0,5 CPU y logs rotados. `/health` comprueba catálogo y manifiesto;
+no devuelve rutas privadas ni credenciales. Solo se publica por proxy HTTPS.
+
+Rollback: conservar la última imagen saludable y su directorio; desde esa release,
+repetir `BLUECLUE_IMAGE=blueclue:<commit-anterior> docker compose -p blueclue up -d
+--wait`. Comprobar `/health` y HTTPS antes de cambiar el enlace `current`. No usar
+las imágenes fallidas `c0cf7f5` ni `e70ef0f` como rollback. Para la primera entrega,
+si no existe otra versión saludable, detener únicamente `blueclue-web` y retirar
+solo su vhost; nunca ejecutar una limpieza global de Docker.
+
+`ops/blueclue.nginx.conf` es la base HTTP para emitir el certificado del dominio.
+No declarar la PWA accesible por iPhone hasta tener DNS y HTTPS válidos.
+`ops/register-monitor.py` añade exclusivamente BlueClue (contenedor y `/health`)
+al monitor existente después de comprobar salud, guarda backup y valida Bash.
+`ops/register-sa99.py` añade solo `projects.BlueClue` en `vps-staging` y actualiza
+el seed del host para futuras imágenes de SA99, sin reiniciar ese servicio.
+
+## Despliegue verificado — 3 octubre 2026
+
+- [Web pública](https://blueclue.jrgblanco.com) y `/health` verificados desde fuera
+  del VPS; catálogo `demo`, revisión `6860fd1`. HTTP redirige a HTTPS.
+- Certificado emitido hasta 1 enero 2027 y `certbot.timer` activo.
+- Imagen sin `.local` ni `public/tracks/local-pilot`; música privada no transferida.
+- Cinco pistas verificadas reproduciendo por HTTPS. Paquete descargado completo
+  aproximado **5,4 MB** (app + cinco sintéticas), no 65 MB del piloto privado.
+- Esa misma release reabre desde pestaña nueva y reproduce las cinco pistas con
+  el túnel de prueba cerrado, sin acceso al servidor. El servicio público no se apagó.
+- Cron existente de las 21:45 UTC: `BlueClue=up` y `BlueClue-HTTP=up`.
+- SA99: registro Mongo acotado, seed del host guardado y escaneo `online` con
+  `blueclue-web` healthy. Sin reiniciar SA99; panel visual no inspeccionado.
+- Runtime observado: **36,63 MiB RAM en reposo**. Imagen: **297.821.337 bytes**.
+- Compilación Linux completada; 51 tests pasan, 2 privados omitidos por diseño.
+  En local pasan los 53. Git guarda commits locales; no se hizo push.
+- Pendientes: instalación y pruebas en iPhone físico, validación pedagógica y
+  revisión auditiva de referencias privadas. Web LIVE no significa V0.1 terminada.
+
+Durante el primer empaquetado, el healthcheck detectó un manifiesto offline mal
+copiado y evitó declarar la release saludable. Se corrigió antes de habilitar el
+vhost público; `6860fd1` es la primera release saludable, no las imágenes anteriores.
+
+## Prueba de salida
+
+- Confirmar `catalog: demo` y revisión esperada en `/health`.
+- Confirmar ausencia de `/app/.local` y `/app/public/tracks/local-pilot` en imagen.
+- Verificar cinco descargas, HTTPS, reapertura offline y controles móviles.
+- Verificar estado `healthy`, checks BlueClue del cron y escaneo de SA99.
+- Registrar pruebas y pendientes del iPhone real en Notion sin marcarlos completados.

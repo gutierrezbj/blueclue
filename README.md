@@ -105,6 +105,9 @@ El resumen de ronda vive en memoria: pausar lo conserva; reiniciar, cambiar pist
 
 ## iPhone y modo bolsillo
 
+Versión pública: **[blueclue.jrgblanco.com](https://blueclue.jrgblanco.com)**,
+con cinco pistas sintéticas; la música privada del curso no está publicada.
+
 La versión de producción incluye manifiesto PWA, icono de inicio y descarga
 explícita de las cinco pistas del catálogo activo. Abre **BlueClue en tu bolsillo**
 para ver instrucciones y estado. En iPhone: Safari → Compartir → Añadir a pantalla

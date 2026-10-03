@@ -10,7 +10,7 @@ Tailscale se usa solo para administrar el VPS, no para acceder como alumno.
 
 ## Instalación
 
-1. Abrir la dirección HTTPS en Safari del iPhone.
+1. Abrir [blueclue.jrgblanco.com](https://blueclue.jrgblanco.com) en Safari del iPhone.
 2. Compartir → Añadir a pantalla de inicio; activar Abrir como app si se muestra.
 3. Abrir BlueClue desde el icono, no continuar en la pestaña de Safari.
 4. Desplegar «BlueClue en tu bolsillo» y descargar las cinco pistas con Wi-Fi.
