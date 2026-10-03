@@ -13,7 +13,7 @@ Tailscale se usa solo para administrar el VPS, no para acceder como alumno.
 1. Abrir [blueclue.jrgblanco.com](https://blueclue.jrgblanco.com) en Safari del iPhone.
 2. Compartir → Añadir a pantalla de inicio; activar Abrir como app si se muestra.
 3. Abrir BlueClue desde el icono, no continuar en la pestaña de Safari.
-4. Desplegar «BlueClue en tu bolsillo» y descargar las cinco pistas con Wi-Fi.
+4. Abrir Ajustes → «BlueClue en tu bolsillo» y descargar las cinco pistas con Wi-Fi.
 5. Esperar «5 pistas disponibles sin conexión» antes de cambiar de app.
 6. Activar modo avión, cerrar y abrir BlueClue y comprobar cada pista.
 
@@ -23,6 +23,22 @@ eliminar datos por presión de almacenamiento; se solicita persistencia sin prom
 Eliminar la descarga libera solo cachés BlueClue, nunca el progreso de ejercicios.
 
 ## Diseño técnico
+
+### Navegación móvil compacta
+
+- La pantalla inicial es la práctica: ejercicio actual, onda, Play/Pausa, Reiniciar,
+  guía, botón grande y feedback breve. Sin portada ni controles duplicados.
+- Ajustes pausa el audio y reúne pista, módulo, velocidad, Teach/Assist/Train e
+  instalación/descarga. Volver a practicar no arranca música por sorpresa.
+- «Ver mi ronda» abre un resumen separado; también aparece al terminar. Desde él
+  se puede repetir, revisar un intento o avanzar al siguiente paso.
+- El audio permanece montado al cambiar de pantalla; la onda recupera su posición
+  al volver. El progreso y los tiempos de preparación no cambian.
+- Controles de al menos 44 px, zona segura y onda adaptada a la altura disponible.
+  En pantallas muy pequeñas se permite desplazamiento, nunca se recortan controles.
+- El escritorio conserva su vista completa. No se añaden módulos ni gamificación.
+
+### Audio y disponibilidad offline
 
 - `trainingCatalog.ts`: catálogo vigente, revisión de metadatos/tamaño/mtime de los
   archivos y URLs de audio versionadas. No cambiar contenidos conservando tamaño y

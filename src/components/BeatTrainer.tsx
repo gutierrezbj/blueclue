@@ -47,6 +47,8 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
   const [summaryOpen, setSummaryOpen] = useState(false);
   const [storageUnavailable, setStorageUnavailable] = useState(false);
   const [resumed, setResumed] = useState(false);
+  const [mobileScreen, setMobileScreen] = useState<"practice" | "settings" | "summary">("practice");
+  const mobileHeadingRef = useRef<HTMLHeadingElement>(null);
   const tapButtonRef = useRef<HTMLButtonElement>(null);
   const focusTapRef = useRef(false);
   const replayEndRef = useRef<number | null>(null);
@@ -84,6 +86,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
   useEffect(() => {
     function handleSpace(event: KeyboardEvent) {
       if (event.code !== "Space" || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+      if (window.matchMedia("(max-width: 900px)").matches && mobileScreen !== "practice") return;
       const target = event.target;
       if (target instanceof HTMLElement) {
         if (target.isContentEditable || target.closest("input, select, textarea")) return;
@@ -171,11 +174,29 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
   const showSummary = summaryOpen || hasEnded;
   const playbackLabel = isReviewing ? "Volver a practicar" : player.isPlaying ? "Pausar práctica" : hasEnded ? "Repetir esta pista" : "Continuar práctica";
 
+  useEffect(() => {
+    if (hasEnded && !isReviewing) setMobileScreen("summary");
+  }, [hasEnded, isReviewing]);
+
+  useEffect(() => {
+    if (window.matchMedia("(max-width: 900px)").matches) {
+      mobileHeadingRef.current?.focus({ preventScroll: true });
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+  }, [mobileScreen]);
+
+  function openMobileSettings() {
+    player.pause();
+    focusTapRef.current = false;
+    setMobileScreen("settings");
+  }
+
   function startPracticePlayback() {
     if (!player.isReady) return;
     const time = player.getTime() >= player.duration - 0.05 ? 0 : player.getTime();
     setRound(current => time === 0 || !current ? { start: time, end: time, taps: [] } : current);
     setSummaryOpen(false);
+    setMobileScreen("practice");
     focusTapRef.current = true;
     void player.play();
   }
@@ -249,6 +270,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
     player.seek(feedback.result.replayStart);
     replayEndRef.current = Math.min(player.duration, feedback.result.target + 1.2);
     setIsReviewing(true);
+    setMobileScreen("practice");
     void player.play();
   }
 
@@ -270,6 +292,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
     player.pause();
     setRound(current => current ? { ...current, end: player.getTime() } : null);
     setSummaryOpen(true);
+    setMobileScreen("summary");
   }
 
   function replayOutcome(outcome: RoundOutcome) {
@@ -280,11 +303,13 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
     focusTapRef.current = false;
     setIsReviewing(true);
     setSummaryOpen(true);
+    setMobileScreen("practice");
     document.getElementById("listening")?.focus();
     void player.play();
   }
 
   const preparationNotice = isReviewing ? "Escucha la referencia sin marcar." : isPreparing ? countIn?.phase === "settle" ? "Acomódate. La bolita avanza por la línea plana; después cuenta al ritmo de la música." : "4… 3… 2… ¡1! Ese 1 coincide con el comienzo del compás. Primero solo escucha." : player.isPlaying && isListening ? listeningInstruction : player.isPlaying ? isPulseExercise ? "Acompaña cada pulso. Si te pierdes, escucha y vuelve a entrar sin prisa." : "Marca los siguientes 1 cuando los reconozcas. No tienes que acertar el primero." : "Continúa donde lo dejaste o reinicia el ejercicio para preparar otra entrada.";
+  const mobileInstruction = isReviewing ? "Revisión · escucha, no se puntúa." : !player.isPlaying ? hasEnded ? "Repite cuando quieras, sin prisa." : isPreparing || isListening ? "Pulsa ▶. Primero solo escucharás." : "Pulsa ▶ para continuar marcando." : isPreparing ? "Acomódate. Sigue la cuenta de entrada." : isListening ? "Solo escucha. Tu turno llega después." : isPulseExercise ? "Toca el botón en cada pulso." : "Toca el botón al pasar del 4 al 1.";
 
   const feedbackLabel: Record<AttemptClassification, string> = {
     clavado: "CLAVADO",
@@ -295,12 +320,21 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
   };
 
   return (
-    <main className="app-shell">
+    <main className="app-shell" data-mobile-screen={mobileScreen}>
       <a className="skip-link" href="#practice-controls">Ir a los controles de práctica</a>
       <header className="site-header">
         <div className="brand"><span className="brand-mark">B<span>.</span></span><span>BlueClue</span></div>
         <div className="header-tag">ENTRENA TU OÍDO <span>·</span> V0.1</div>
+        <button type="button" className="mobile-only mobile-settings-button" onClick={() => mobileScreen === "practice" ? openMobileSettings() : setMobileScreen("practice")}>{mobileScreen === "practice" ? "Ajustes" : "← Practicar"}</button>
       </header>
+
+      <section className="mobile-only mobile-context" aria-label="Ejercicio actual">
+        <h1 ref={mobileHeadingRef} tabIndex={-1}>{mobileScreen === "settings" ? "Tu ejercicio" : mobileScreen === "summary" ? "Tu ronda" : lesson.title}</h1>
+        <p>Pista {trackIndex + 1}/{tracks.length} · {track.title}</p>
+        <span>{mode.toUpperCase()} · {speedLabels[playbackSpeed]} · {practiceBpm} BPM</span>
+        {isReferencePending && <small>Referencia provisional · sin nota</small>}
+        {storageUnavailable && <small role="status">No se puede guardar el progreso en este navegador.</small>}
+      </section>
 
       <PocketMode pack={offlinePack} />
 
@@ -336,6 +370,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
       <div className="trainer-grid">
         <section id="listening" className="player-card" aria-label="Entrenador de beat" tabIndex={-1}>
           <div className="section-topline"><span>01 / ESCUCHA</span><span>ENTRENAMIENTO ACTIVO</span></div>
+          <div className="player-settings">
           <div className="track-heading">
             <div><span className="field-label">PISTA DE ENTRENAMIENTO</span><h2>{track.title}</h2>{track.sourceTitle && <p className="source-title">{track.sourceTitle}</p>}<p>{isPulseExercise ? "Acompaña el pulso regular de esta pista. En este módulo todos los beats cuentan, no solo el 1." : track.description}</p></div>
             <div className="bpm"><strong>{practiceBpm}</strong><span>BPM DE PRÁCTICA</span><span>Original: {track.bpm} · 4/4</span></div>
@@ -358,6 +393,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
             ))}
           </div>
           <p className="mode-description">{isPulseExercise ? mode === "train" ? "Sin marcas: acompaña el pulso regular con cada toque." : mode === "assist" ? "Sigue el destello del pulso; la onda ya no muestra las marcas." : "Cada marca es un pulso. Acompaña todos por igual; todavía no necesitas contar." : modeDescriptions[mode]}</p>
+          </div>
 
           <WaveformDisplay
             track={track}
@@ -374,9 +410,10 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
           <div className="transport">
             <button type="button" className="play-button" onClick={togglePlayback} disabled={!player.isReady} aria-label={playbackLabel}>
               {isReviewing ? "↺" : player.isPlaying ? "Ⅱ" : "▶"}
+              <span className="mobile-only">{isReviewing ? "Practicar" : player.isPlaying ? "Pausa" : hasEnded ? "Repetir" : player.currentTime > 0 ? "Seguir" : "Play"}</span>
             </button>
             <div className="transport-time"><strong>{formatTime(listeningSeconds(player.currentTime, playbackSpeed))}</strong><span>/ {formatTime(listeningSeconds(player.duration, playbackSpeed))}</span></div>
-            <button type="button" className="restart-button" onClick={restartPractice} disabled={!player.isReady}>↺ Reiniciar ejercicio</button>
+            <button type="button" className="restart-button" onClick={restartPractice} disabled={!player.isReady}>↺ Reiniciar<span className="desktop-only"> ejercicio</span></button>
           </div>
           {countIn && <p className="entry-guide"><strong>{countIn.count ?? "Prepárate"}</strong><span>{!player.isPlaying ? "Pulsa Play para avanzar: tramo plano → 4 · 3 · 2 · ¡1!" : countIn.phase === "landing" ? "¡Aquí empieza! Ahora sigue 2 · 3 · 4, sin repetir el 1." : "La cuenta sigue el tempo del ejercicio, no los segundos del reloj."}</span></p>}
           {!player.isReady && !player.error && <p className="save-notice" role="status">Preparando audio y waveform…</p>}
@@ -401,38 +438,42 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
             <p className="count-caption">{isPulseExercise ? "Pulsa el botón grande en cada beat, no en los números ni en la onda." : mode === "teach" && activeCount === 1 ? `Compás ${activeBar} · ${isReferencePending ? "1 de la referencia" : "aquí cae el 1"}` : mode === "teach" ? "Pulsa el botón grande al pasar del 4 al 1." : "Busca dónde vuelve a empezar el grupo."}</p>
 
             <div className="tap-area">
+              <p className="mobile-only mobile-instruction" role="status">{mobileInstruction}</p>
               <p className="preparation-notice" role="status">{preparationNotice}</p>
               <p className="keyboard-hint"><kbd>Espacio</kbd> inicia o pausa · clic o <kbd>Enter</kbd> sobre el botón grande responde.</p>
               <button ref={tapButtonRef} type="button" className="tap-button" onPointerDown={event => { if (event.isPrimary && event.button === 0) tap(); }} onClick={event => { if (event.detail === 0) tap(); }} disabled={!canTap}>
-                <span className="tap-symbol">↘</span><strong>{isPreparing && player.isPlaying && !isReviewing ? countIn?.count ? `${countIn.count}…` : "PREPÁRATE" : player.isPlaying && isListening && !isReviewing ? "SOLO ESCUCHA" : lesson.tapLabel}</strong><small>{isReviewing ? "REVISIÓN GUIADA · SIN PUNTUAR" : isPreparing && player.isPlaying ? "PREPARA TU MANO AQUÍ · LA BARRA YA AVANZA" : player.isPlaying && isListening ? "COGE EL RITMO · TODAVÍA NO PULSES" : player.isPlaying ? "SIGUE MARCANDO: LA MÚSICA NO SE PARA" : "PULSA CONTINUAR PRÁCTICA PARA EMPEZAR"}</small>
+                <span className="tap-symbol">↘</span><strong>{isPreparing && player.isPlaying && !isReviewing ? countIn?.count ? `${countIn.count}…` : "PREPÁRATE" : player.isPlaying && isListening && !isReviewing ? "SOLO ESCUCHA" : lesson.tapLabel}</strong><small>{isReviewing ? "REVISIÓN GUIADA · SIN PUNTUAR" : isPreparing && player.isPlaying ? "PREPARA TU MANO AQUÍ · LA BARRA YA AVANZA" : player.isPlaying && isListening ? "COGE EL RITMO · TODAVÍA NO PULSES" : player.isPlaying ? "SIGUE MARCANDO: LA MÚSICA NO SE PARA" : "INICIA O REANUDA CON ▶"}</small>
               </button>
             </div>
 
-            <div className="feedback-panel" aria-live="polite">
+            <div className={`feedback-panel${feedback ? " has-feedback" : ""}`} aria-live="polite">
               {feedback ? (
                 <>
                   <span className={`result-badge ${feedback.result.classification}`}>{feedbackLabel[feedback.result.classification]}{isReferencePending ? " · PROVISIONAL" : ""}</span>
-                  <p>{isReferencePending ? "Comparado con la marca del archivo, pendiente de revisión por oído. Es una orientación, no una nota." : feedback.result.message}</p>
+                  <p className="feedback-explanation">{isReferencePending ? "Comparado con la marca del archivo, pendiente de revisión por oído. Es una orientación, no una nota." : feedback.result.message}</p>
                   {feedback.result.errorMs !== null && <small>{Math.abs(feedback.result.errorMs)} ms · {feedback.result.errorMs < 0 ? "temprano" : feedback.result.errorMs > 0 ? "tarde" : "exacto"} respecto {isPulseExercise ? "al pulso" : "al 1"}</small>}
                   <button type="button" className="replay-button" onClick={replay} disabled={!player.isReady || (isReviewing && player.isPlaying)}>{isReviewing && player.isPlaying ? "Reproduciendo fragmento…" : "↺  Escuchar otra vez"}</button>
-                  {isReviewing && <small>Observa la marca {isPulseExercise ? "del pulso" : "del 1"}. «Volver a practicar» repite el fragmento sin mostrar la respuesta.</small>}
+                  {isReviewing && <small className="feedback-explanation">Observa la marca {isPulseExercise ? "del pulso" : "del 1"}. «Volver a practicar» repite el fragmento sin mostrar la respuesta.</small>}
                 </>
               ) : (
-                <><span className="field-label">{hasEnded ? "FIN DEL FRAGMENTO" : "ESCUCHA → MARCA → REPITE"}</span><p>{hasEnded ? "Repite este ejercicio o continúa al siguiente módulo cuando te sientas cómodo." : !practiceEntry && player.isReady ? "Este fragmento es demasiado corto para preparar la escucha. Elige otra pista." : isListening ? listeningInstruction : lesson.instruction}</p></>
+                <><span className="field-label">{hasEnded ? "FIN DEL FRAGMENTO" : "ESCUCHA → MARCA → REPITE"}</span><p className="feedback-explanation">{hasEnded ? "Repite este ejercicio o continúa al siguiente módulo cuando te sientas cómodo." : !practiceEntry && player.isReady ? "Este fragmento es demasiado corto para preparar la escucha. Elige otra pista." : isListening ? listeningInstruction : lesson.instruction}</p></>
               )}
             </div>
-            <button type="button" className="replay-button" disabled={!round || isReviewing} onClick={finishRound}>Ver resumen de esta ronda</button>
+            <button type="button" className="replay-button desktop-only" disabled={!round || isReviewing} onClick={finishRound}>Ver resumen de esta ronda</button>
             {showSummary && <RoundSummary summary={roundSummary} provisional={isReferencePending} onReview={replayOutcome} />}
+            <div className="mobile-only mobile-summary-actions"><button type="button" className="continue-button" onClick={restartPractice} disabled={!player.isReady}>↺ Repetir ejercicio</button><button type="button" className="previous-button" onClick={() => setMobileScreen("practice")}>Volver a practicar</button></div>
             <nav className="journey-actions" aria-label="Navegar entre pasos de práctica">
-              <button type="button" className="previous-button" disabled={!hydrated || !previousStep} onClick={() => previousStep && navigatePractice(previousStep)}>← Anterior</button>
-              {nextStep ? <button type="button" className="next-button" disabled={!hydrated} onClick={() => navigatePractice(nextStep)}>{nextStep.trackId === trackId ? `Continuar: ${getLearningModule(nextStep.moduleId).title} →` : "Siguiente pista →"}</button> : <a className="next-button" href="#track-select">Volver a elegir pista ↑</a>}
+              <button type="button" className="previous-button" disabled={!hydrated || !previousStep} onClick={() => { if (previousStep) { navigatePractice(previousStep); setMobileScreen("practice"); } }}>← Anterior</button>
+              {nextStep ? <button type="button" className="next-button" disabled={!hydrated} onClick={() => { navigatePractice(nextStep); setMobileScreen("practice"); }}>{nextStep.trackId === trackId ? `Continuar: ${getLearningModule(nextStep.moduleId).title} →` : "Siguiente pista →"}</button> : <a className="next-button" href="#track-select" onClick={() => setMobileScreen("settings")}>Volver a elegir pista ↑</a>}
             </nav>
             <p className="journey-hint">{lesson.readiness} Avanzar es voluntario, no una certificación.</p>
           </div>
           <div className="practice-footer">{isReferencePending ? <p className="provisional-summary">PRÁCTICA SIN NOTA<br />Las referencias están por validar. No significa que tengas cero aciertos.</p> : <><span>ESTE MÓDULO · {Math.round(playbackSpeed * 100)} %</span><strong>{accurateCount} / {trackAttempts.length}</strong><span>CLAVADOS O CERCA</span></>}</div>
         </aside>
       </div>
-      <nav className="mobile-navigation" aria-label="Navegación de bolsillo"><a href="#journey-heading">Ejercicio</a><a href="#listening">Escuchar</a><a href="#practice-controls">Practicar ↓</a></nav>
+      <nav className="mobile-only mobile-actions" aria-label="Acciones del ejercicio">
+        {mobileScreen === "settings" ? <button type="button" className="next-button" onClick={() => setMobileScreen("practice")}>Listo · volver a practicar</button> : mobileScreen === "practice" ? <><button type="button" onClick={openMobileSettings}>Cambiar ejercicio</button><button type="button" disabled={!round || isReviewing} onClick={finishRound}>Ver mi ronda</button></> : null}
+      </nav>
       <footer className="page-footer"><span>BLUECLUE · APRENDE ESCUCHANDO</span><span>TEACH → ASSIST → TRAIN</span></footer>
     </main>
   );

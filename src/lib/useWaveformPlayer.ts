@@ -44,7 +44,7 @@ export function useWaveformPlayer(track: TrainingTrack, enabled = true, playback
       progressColor: "#68e0c4",
       cursorColor: "#f7fcf9",
       cursorWidth: 2,
-      height: 144,
+      height: "auto",
       barWidth: 2,
       barGap: 1,
       barRadius: 2,
@@ -66,6 +66,7 @@ export function useWaveformPlayer(track: TrainingTrack, enabled = true, playback
     player.setPlaybackRate(speedRef.current, true);
     player.on("interaction", (time) => setInteraction({ time }));
     function syncViewport() {
+      if (player.getWidth() === 0) return;
       const width = player.getWrapper().scrollWidth;
       const secondsPerPixel = width > 0 ? player.getDuration() / width : 0;
       if (secondsPerPixel > 0) {
@@ -73,11 +74,13 @@ export function useWaveformPlayer(track: TrainingTrack, enabled = true, playback
       }
     }
     function resizeViewport() {
+      if (player.getWidth() === 0) return;
       const nextPixelsPerSecond = Math.max(1, player.getWidth() / WAVEFORM_SECONDS);
       if (Math.abs(pixelsPerSecond - nextPixelsPerSecond) > 0.01 && player.getDecodedData()) {
         pixelsPerSecond = nextPixelsPerSecond;
         player.zoom(pixelsPerSecond);
       }
+      player.setScrollTime(Math.max(0, player.getCurrentTime() - WAVEFORM_SECONDS / 2));
       syncViewport();
     }
     player.on("ready", (loadedDuration) => {

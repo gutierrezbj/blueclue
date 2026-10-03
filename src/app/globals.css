@@ -94,7 +94,7 @@ button, a, summary { touch-action: manipulation; }
 .waveform-frame { padding: 16px 17px 7px; border: 1px solid #304c54; border-radius: 11px; background: #0b1c25; }
 .waveform-labels { display: flex; justify-content: space-between; color: #7796a0; font-size: 10px; }
 .waveform-surface { position: relative; margin-top: 5px; min-height: 144px; }
-.waveform { width: 100%; min-height: 144px; }
+.waveform { width: 100%; height: 144px; }
 .beat-markers { position: absolute; inset: 0; pointer-events: none; }
 .lead-in-line { position: absolute; left: 0; top: 50%; height: 2px; background: #93b4b8; }
 .playhead-dot { position: absolute; z-index: 2; top: 50%; width: 14px; height: 14px; border: 2px solid #eafff8; border-radius: 50%; background: #67e0c3; transform: translate(-50%, -50%); box-shadow: 0 0 12px #67e0c366; pointer-events: none; }
@@ -176,7 +176,7 @@ button, a, summary { touch-action: manipulation; }
 .pocket-content { padding: 0 16px 16px; font-size: 14px; line-height: 1.6; color: #bed3d8; }
 .pocket-actions { display: flex; flex-wrap: wrap; gap: 10px; }
 .pocket-content progress { width: 100%; accent-color: #67e0c3; margin-bottom: 14px; }
-.mobile-navigation { display: none; }
+.mobile-only { display: none; }
 
 @media (pointer: coarse) {
   .keyboard-hint { display: none; }
@@ -225,7 +225,87 @@ button, a, summary { touch-action: manipulation; }
   .tap-button { min-height: 140px; }
   .tap-button small { line-height: 1.5; letter-spacing: 0.04em; }
   .feedback-panel { margin-top: 14px; padding: 14px; min-height: 140px; }
-  .mobile-navigation { position: fixed; z-index: 5; bottom: 0; left: 0; right: 0; display: flex; padding: 6px max(8px, env(safe-area-inset-right)) calc(6px + env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left)); gap: 8px; border-top: 1px solid #36515b; background: #09141cf5; }
-  .mobile-navigation a { flex: 1; display: grid; place-items: center; min-height: 44px; border-radius: 8px; color: #bed3d8; text-decoration: none; font-size: 13px; }
-  .mobile-navigation a:last-child { background: #275a58; color: #eafff8; }
+}
+
+@media (max-width: 900px) {
+  .mobile-only { display: block; }
+  .desktop-only, .intro, .header-tag, .catalog-notice, .page-footer { display: none; }
+  .app-shell { display: flex; flex-direction: column; max-width: 580px; padding: env(safe-area-inset-top) max(14px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left)); }
+  .site-header { order: 0; height: 48px; flex-shrink: 0; }
+  .brand { font-size: 17px; gap: 8px; }
+  .brand-mark { display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; font-size: 20px; }
+  .mobile-settings-button { min-height: 44px; padding: 8px 4px 8px 16px; border: 0; background: transparent; color: #85e7cf; font-size: 14px; }
+  .mobile-context { order: 1; padding: 8px 0 6px; }
+  .mobile-context h1 { margin: 0 0 4px; font-size: 23px; line-height: 1.15; letter-spacing: -0.045em; }
+  .mobile-context p { margin: 0 0 5px; color: #c2d6dc; font-size: 12px; line-height: 1.4; }
+  .mobile-context > span { color: #75e1c5; font-size: 11px; letter-spacing: 0.025em; }
+  .mobile-context small { display: block; margin-top: 5px; color: #eed69d; font-size: 11px; }
+  .journey-card { order: 2; }
+  .trainer-grid { order: 3; display: block; }
+  .pocket-card { order: 4; }
+  .mobile-actions { order: 5; display: flex; gap: 8px; padding-top: 4px; }
+  .mobile-actions:empty { display: none; }
+  .mobile-actions > button { flex: 1; min-height: 44px; border: 1px solid #36515b; border-radius: 10px; padding: 8px; background: #10222c; color: #bad2d7; font-size: 13px; }
+  .mobile-actions > .next-button { background: #67e0c3; color: #09272c; }
+  .player-card, .practice-card { padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; overflow: visible; }
+  .player-card > .section-topline, .practice-card > .section-topline, .practice-content > .field-label, .practice-footer, .practice-transport, .count-caption, .entry-guide, .keyboard-hint, .preparation-notice { display: none; }
+  .practice-content { padding: 0; }
+  .waveform-frame { padding: 9px 10px 4px; }
+  .waveform-surface { min-height: 0; margin-top: 5px; }
+  .waveform { height: clamp(48px, 9svh, 76px); }
+  .waveform-labels { font-size: 9px; letter-spacing: 0.05em; }
+  .marker-legend { min-height: 21px; font-size: 10px; }
+  .outcome-legend { display: none; }
+  .transport { margin: 8px 0 0; flex-wrap: nowrap; gap: 8px; }
+  .transport .play-button { display: flex; align-items: center; justify-content: center; gap: 7px; min-width: 83px; width: auto; height: 44px; border-radius: 10px; padding: 8px 12px; font-size: 14px; }
+  .transport .restart-button { flex-basis: auto; margin-left: auto; padding: 8px 10px; font-size: 12px; }
+  .transport-time { gap: 3px; }
+  .transport-time strong { font-size: 13px; }
+  .transport-time span { font-size: 11px; }
+  .count-in, .count-row, .count-hidden { height: 58px; min-height: 58px; margin: 10px 0 0; }
+  .count-in { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 8px 12px; text-align: left; }
+  .count-in strong { font-size: 27px; }
+  .count-in span { font-size: 11px; line-height: 1.4; max-width: 150px; }
+  .count { padding: 8px 0; font-size: 28px; }
+  .count-hidden { justify-content: center; border: 1px solid #36515b; border-radius: 10px; font-size: 19px; }
+  .pulse-dot { width: 18px; height: 18px; }
+  .tap-area { margin-top: 8px; }
+  .mobile-instruction { margin: 0 0 8px; min-height: 18px; font-size: 12px; line-height: 1.5; text-align: center; color: #bad2d7; }
+  .tap-button { min-height: clamp(100px, 17svh, 146px); padding: 12px; box-shadow: 0 6px 22px #41ccb019; }
+  .tap-symbol { display: none; }
+  .tap-button strong { font-size: 24px; }
+  .tap-button small { font-size: 9px; line-height: 1.4; letter-spacing: 0.03em; max-width: 260px; }
+  .feedback-panel { display: grid; align-content: center; grid-template-columns: 1fr auto; gap: 3px 8px; min-height: 66px; margin-top: 8px; padding: 8px 12px; }
+  .feedback-panel .result-badge { align-self: end; line-height: 1.4; font-size: 11px; }
+  .feedback-panel > small { grid-column: 1; margin: 0; font-size: 11px; }
+  .feedback-panel .replay-button { grid-column: 2; grid-row: 1 / 3; align-self: center; min-height: 44px; margin: 0; font-size: 12px; }
+  .feedback-panel .feedback-explanation { display: none; }
+  .feedback-panel:not(.has-feedback) { display: flex; align-items: center; justify-content: center; }
+  .feedback-panel:not(.has-feedback) .field-label { font-size: 10px; }
+  [data-mobile-screen="practice"] .pocket-card, [data-mobile-screen="practice"] .journey-card, [data-mobile-screen="practice"] .player-settings, [data-mobile-screen="practice"] .round-summary, [data-mobile-screen="practice"] .journey-actions, [data-mobile-screen="practice"] .journey-hint, [data-mobile-screen="practice"] .mobile-summary-actions { display: none; }
+  [data-mobile-screen="settings"] .practice-card, [data-mobile-screen="settings"] .player-card > :not(.player-settings), [data-mobile-screen="settings"] .journey-overview .section-links { display: none; }
+  [data-mobile-screen="settings"] .journey-card { margin: 0; padding: 16px; gap: 16px; }
+  [data-mobile-screen="settings"] .journey-overview h2, [data-mobile-screen="settings"] .journey-overview .field-label { display: none; }
+  [data-mobile-screen="settings"] .journey-overview p { margin: 0; }
+  [data-mobile-screen="settings"] .track-heading { display: none; }
+  [data-mobile-screen="settings"] .module-selector { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  [data-mobile-screen="settings"] .module-button { padding: 10px 6px; min-height: 72px; font-size: 12px; }
+  [data-mobile-screen="settings"] .track-select { font-size: 16px; }
+  [data-mobile-screen="settings"] .speed-control { margin: 16px 0; }
+  [data-mobile-screen="settings"] .mode-heading { margin-top: 16px; }
+  [data-mobile-screen="settings"] .mode-description { min-height: 0; margin-bottom: 0; }
+  [data-mobile-screen="settings"] .mobile-actions { position: sticky; bottom: 0; padding-bottom: max(8px, env(safe-area-inset-bottom)); background: #09141c; }
+  [data-mobile-screen="summary"] .pocket-card, [data-mobile-screen="summary"] .journey-card, [data-mobile-screen="summary"] .player-card, [data-mobile-screen="summary"] .practice-content > :not(.round-summary):not(.mobile-summary-actions):not(.journey-actions):not(.journey-hint) { display: none; }
+  [data-mobile-screen="summary"] .round-summary { margin-top: 0; }
+  .mobile-summary-actions { display: flex; gap: 8px; }
+  .mobile-summary-actions > button { flex: 1; }
+}
+
+@media (max-width: 900px) and (max-height: 620px) {
+  .waveform { height: 48px; }
+  .marker-legend { display: none; }
+  .count-in, .count-row, .count-hidden { height: 46px; min-height: 46px; }
+  .count-in strong { font-size: 23px; }
+  .count { font-size: 24px; }
+  .feedback-panel { min-height: 58px; }
 }
