@@ -290,7 +290,9 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
   const listeningInstruction = isPulseExercise ? "Primero escucha el pulso regular. Todavía no pulses: deja que el ritmo se te haga familiar." : "Primero escucha dos veces 1-2-3-4. Estos primeros compases no se puntúan.";
   function finishRound() {
     player.pause();
-    setRound(current => current ? { ...current, end: player.getTime() } : null);
+    replayEndRef.current = null;
+    focusTapRef.current = false;
+    if (!isReviewing) setRound(current => current ? { ...current, end: player.getTime() } : null);
     setSummaryOpen(true);
     setMobileScreen("summary");
   }
@@ -472,7 +474,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
         </aside>
       </div>
       <nav className="mobile-only mobile-actions" aria-label="Acciones del ejercicio">
-        {mobileScreen === "settings" ? <button type="button" className="next-button" onClick={() => setMobileScreen("practice")}>Listo · volver a practicar</button> : mobileScreen === "practice" ? <><button type="button" onClick={openMobileSettings}>Cambiar ejercicio</button><button type="button" disabled={!round || isReviewing} onClick={finishRound}>Ver mi ronda</button></> : null}
+        {mobileScreen === "settings" ? <button type="button" className="next-button" onClick={() => setMobileScreen("practice")}>Listo · volver a practicar</button> : mobileScreen === "practice" ? <><button type="button" onClick={openMobileSettings}>Cambiar ejercicio</button><button type="button" disabled={!round} onClick={finishRound}>{isReviewing ? "Volver a mi ronda" : "Ver mi ronda"}</button></> : null}
       </nav>
       <footer className="page-footer"><span>BLUECLUE · APRENDE ESCUCHANDO</span><span>TEACH → ASSIST → TRAIN</span></footer>
     </main>
