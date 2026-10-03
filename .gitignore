@@ -12,3 +12,4 @@ coverage/
 .local/
 public/tracks/local-pilot/
 *.tsbuildinfo
+public/offline-assets.json
