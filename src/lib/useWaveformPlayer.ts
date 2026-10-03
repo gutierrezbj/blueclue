@@ -57,6 +57,12 @@ export function useWaveformPlayer(track: TrainingTrack, enabled = true, playback
       backend: "MediaElement"
     });
     playerRef.current = player;
+    function pauseWhenHidden() {
+      if (document.visibilityState === "hidden") player.pause();
+    }
+    const pauseOnPageHide = () => player.pause();
+    document.addEventListener("visibilitychange", pauseWhenHidden);
+    window.addEventListener("pagehide", pauseOnPageHide);
     player.setPlaybackRate(speedRef.current, true);
     player.on("interaction", (time) => setInteraction({ time }));
     function syncViewport() {
@@ -96,6 +102,8 @@ export function useWaveformPlayer(track: TrainingTrack, enabled = true, playback
     });
 
     return () => {
+      document.removeEventListener("visibilitychange", pauseWhenHidden);
+      window.removeEventListener("pagehide", pauseOnPageHide);
       playerRef.current = null;
       player.destroy();
     };

@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { WaveformDisplay } from "./WaveformDisplay";
 import { RoundSummary } from "./RoundSummary";
+import { PocketMode } from "./PocketMode";
+import type { OfflinePack } from "@/lib/offlineTypes";
 import { type AttemptClassification, type AttemptResult } from "@/lib/scoring";
 import { difficultyLabels, type TrainingMode, type TrainingTrack } from "@/lib/tracks";
 import { useWaveformPlayer } from "@/lib/useWaveformPlayer";
@@ -28,9 +30,9 @@ function formatTime(seconds: number): string {
   return `${Math.floor(totalSeconds / 60)}:${String(totalSeconds % 60).padStart(2, "0")}`;
 }
 
-type Props = { tracks: TrainingTrack[]; catalogKind: "local" | "demo"; catalogNotice: string | null };
+type Props = { tracks: TrainingTrack[]; catalogKind: "local" | "demo"; catalogNotice: string | null; offlinePack: OfflinePack | null };
 
-export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
+export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }: Props) {
   const trackIds = useMemo(() => tracks.map((track) => track.id), [tracks]);
   const storageKey = catalogKind === "local" ? "blueclue-v0.1-local-pilot" : "blueclue-v0.1";
   const [trackId, setTrackId] = useState(tracks[0].id);
@@ -300,6 +302,8 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
         <div className="header-tag">ENTRENA TU OÍDO <span>·</span> V0.1</div>
       </header>
 
+      <PocketMode pack={offlinePack} />
+
       <section className="intro">
         <div className="eyebrow"><span className="eyebrow-line" /> BEAT TRAINER / TU RECORRIDO</div>
         <h1>Encuentra <em>el 1.</em></h1>
@@ -399,8 +403,8 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
             <div className="tap-area">
               <p className="preparation-notice" role="status">{preparationNotice}</p>
               <p className="keyboard-hint"><kbd>Espacio</kbd> inicia o pausa · clic o <kbd>Enter</kbd> sobre el botón grande responde.</p>
-              <button ref={tapButtonRef} type="button" className="tap-button" onClick={tap} disabled={!canTap}>
-                <span className="tap-symbol">↘</span><strong>{isPreparing && player.isPlaying && !isReviewing ? countIn?.count ? `${countIn.count}…` : "PREPÁRATE" : player.isPlaying && isListening && !isReviewing ? "SOLO ESCUCHA" : lesson.tapLabel}</strong><small>{isReviewing ? "REVISIÓN GUIADA · SIN PUNTUAR" : isPreparing && player.isPlaying ? "COLOCA EL RATÓN AQUÍ · LA BARRA YA AVANZA" : player.isPlaying && isListening ? "COGE EL RITMO · TODAVÍA NO PULSES" : player.isPlaying ? "SIGUE MARCANDO: LA MÚSICA NO SE PARA" : "PULSA CONTINUAR PRÁCTICA PARA EMPEZAR"}</small>
+              <button ref={tapButtonRef} type="button" className="tap-button" onPointerDown={event => { if (event.isPrimary && event.button === 0) tap(); }} onClick={event => { if (event.detail === 0) tap(); }} disabled={!canTap}>
+                <span className="tap-symbol">↘</span><strong>{isPreparing && player.isPlaying && !isReviewing ? countIn?.count ? `${countIn.count}…` : "PREPÁRATE" : player.isPlaying && isListening && !isReviewing ? "SOLO ESCUCHA" : lesson.tapLabel}</strong><small>{isReviewing ? "REVISIÓN GUIADA · SIN PUNTUAR" : isPreparing && player.isPlaying ? "PREPARA TU MANO AQUÍ · LA BARRA YA AVANZA" : player.isPlaying && isListening ? "COGE EL RITMO · TODAVÍA NO PULSES" : player.isPlaying ? "SIGUE MARCANDO: LA MÚSICA NO SE PARA" : "PULSA CONTINUAR PRÁCTICA PARA EMPEZAR"}</small>
               </button>
             </div>
 
@@ -428,6 +432,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice }: Props) {
           <div className="practice-footer">{isReferencePending ? <p className="provisional-summary">PRÁCTICA SIN NOTA<br />Las referencias están por validar. No significa que tengas cero aciertos.</p> : <><span>ESTE MÓDULO · {Math.round(playbackSpeed * 100)} %</span><strong>{accurateCount} / {trackAttempts.length}</strong><span>CLAVADOS O CERCA</span></>}</div>
         </aside>
       </div>
+      <nav className="mobile-navigation" aria-label="Navegación de bolsillo"><a href="#journey-heading">Ejercicio</a><a href="#listening">Escuchar</a><a href="#practice-controls">Practicar ↓</a></nav>
       <footer className="page-footer"><span>BLUECLUE · APRENDE ESCUCHANDO</span><span>TEACH → ASSIST → TRAIN</span></footer>
     </main>
   );

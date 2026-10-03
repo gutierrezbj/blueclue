@@ -13,6 +13,7 @@ button { cursor: pointer; }
 button:disabled { cursor: not-allowed; }
 button:focus-visible, select:focus-visible, a:focus-visible, [tabindex="-1"]:focus-visible { outline: 2px solid #72e8c8; outline-offset: 3px; }
 button:disabled { opacity: 0.5; }
+button, a, summary { touch-action: manipulation; }
 [id] { scroll-margin-top: 20px; }
 .skip-link { position: absolute; top: 8px; left: 8px; z-index: 10; padding: 14px; border-radius: 8px; background: #67e0c3; color: #09272c; transform: translateY(-150%); }
 .skip-link:focus { transform: translateY(0); }
@@ -168,6 +169,19 @@ button:disabled { opacity: 0.5; }
 .outcome-marker.clavado { color: #77edc6; }
 .outcome-marker.cerca { color: #efce88; }
 .outcome-legend { margin: 8px 0 0; color: #c2d6dc; font-size: 11px; line-height: 1.5; }
+.tap-button { touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; padding: 14px; }
+.pocket-card { margin-top: 18px; border: 1px solid #36515b; border-radius: 12px; background: #10222c; }
+.pocket-card summary { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; cursor: pointer; min-height: 48px; padding: 16px; color: #75e1c5; font-size: 14px; }
+.pocket-card summary span:last-child { color: #bed3d8; font-size: 12px; }
+.pocket-content { padding: 0 16px 16px; font-size: 14px; line-height: 1.6; color: #bed3d8; }
+.pocket-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.pocket-content progress { width: 100%; accent-color: #67e0c3; margin-bottom: 14px; }
+.mobile-navigation { display: none; }
+
+@media (pointer: coarse) {
+  .keyboard-hint { display: none; }
+  .tap-button:hover:not(:disabled) { transform: none; filter: none; }
+}
 
 @media (max-width: 900px) {
   .app-shell { padding: 0 24px; }
@@ -177,7 +191,7 @@ button:disabled { opacity: 0.5; }
 }
 
 @media (max-width: 580px) {
-  .app-shell { padding: 0 16px; }
+  .app-shell { padding: env(safe-area-inset-top) max(12px, env(safe-area-inset-right)) calc(76px + env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)); }
   .site-header { height: 70px; }
   .brand { font-size: 19px; }
   .header-tag { font-size: 9px; letter-spacing: 0.05em; }
@@ -198,4 +212,20 @@ button:disabled { opacity: 0.5; }
   .waveform-frame { padding-left: 9px; padding-right: 9px; }
   .transport .restart-button { flex-basis: 100%; margin-left: 0; }
   .page-footer { font-size: 8px; letter-spacing: 0.07em; }
+  .track-select { font-size: 16px; }
+  .practice-card > .section-topline { padding: 18px 16px 0; }
+  .practice-content { padding: 16px; }
+  .practice-transport { flex-direction: row; margin-bottom: 14px; }
+  .practice-transport > button { flex: 1; padding: 10px 6px; }
+  .count-in { margin: 10px 0; padding: 12px; min-height: 96px; }
+  .count-hidden { min-height: 69px; margin: 10px 0; }
+  .count-row { margin: 10px 0; }
+  .count-caption { min-height: 36px; font-size: 12px; }
+  .tap-area { margin-top: 12px; }
+  .tap-button { min-height: 140px; }
+  .tap-button small { line-height: 1.5; letter-spacing: 0.04em; }
+  .feedback-panel { margin-top: 14px; padding: 14px; min-height: 140px; }
+  .mobile-navigation { position: fixed; z-index: 5; bottom: 0; left: 0; right: 0; display: flex; padding: 6px max(8px, env(safe-area-inset-right)) calc(6px + env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left)); gap: 8px; border-top: 1px solid #36515b; background: #09141cf5; }
+  .mobile-navigation a { flex: 1; display: grid; place-items: center; min-height: 44px; border-radius: 8px; color: #bed3d8; text-decoration: none; font-size: 13px; }
+  .mobile-navigation a:last-child { background: #275a58; color: #eafff8; }
 }

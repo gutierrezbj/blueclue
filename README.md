@@ -103,6 +103,34 @@ Al terminar, o pulsar **Ver resumen de esta ronda**, aparecen oportunidades clav
 
 El resumen de ronda vive en memoria: pausar lo conserva; reiniciar, cambiar pista, módulo, ayuda o velocidad, mover la onda o volver a practicar desde un replay empieza otro. Recargar conserva tu punto de práctica, pero no el resumen de la ronda anterior. El historial local de intentos validados permanece. Las referencias pendientes muestran un **resumen provisional**, nunca una nota ni aciertos persistidos.
 
+## iPhone y modo bolsillo
+
+La versión de producción incluye manifiesto PWA, icono de inicio y descarga
+explícita de las cinco pistas del catálogo activo. Abre **BlueClue en tu bolsillo**
+para ver instrucciones y estado. En iPhone: Safari → Compartir → Añadir a pantalla
+de inicio; abre desde el icono y descarga allí, con Wi-Fi. Safari y la app instalada
+pueden usar almacenamientos separados. Comprueba la descarga en modo avión antes
+de salir. No se descarga la biblioteca ni se sincroniza progreso entre dispositivos.
+
+`npm run build` genera también el inventario offline; después ejecuta `npm start`.
+La descarga no está habilitada en `npm run dev`. Fuera de localhost requiere HTTPS.
+No sirve abrir la IP del ordenador por HTTP para validar instalación en iPhone.
+
+La barra inferior permite volver a elegir ejercicio, escuchar o practicar. TAP
+registra al apoyar el dedo (o pulsar el ratón), no al soltarlo; Enter sigue disponible.
+Cambiar de app o bloquear la pantalla pausa la práctica, sin reanudar automáticamente.
+El zoom sigue permitido y se respetan las zonas seguras de pantalla.
+
+Si una descarga se corta, no se presenta como completa y se conserva la anterior.
+Actualizar el paquete no borra el progreso; eliminar la descarga tampoco. iOS puede
+liberar la caché: revisa su estado antes de viajar. Usa altavoz o cable para practicar
+con precisión; el retardo Bluetooth no se calibra en esta versión.
+
+Pruebas locales: apertura desde una pestaña nueva y reproducción de las cinco pistas
+con el servidor apagado, vista de 375 px sin desbordamiento, TAP/Enter, 53 tests y
+build. **Pendiente:** instalación y prueba de interrupciones/audio en iPhone físico.
+Consulta [validación móvil](docs/MOBILE.md) y [operación](docs/OPERATIONS.md).
+
 ## Regla de alcance
 
 V0.1 **no** debe incluir todavía:
