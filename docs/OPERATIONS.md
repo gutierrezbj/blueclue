@@ -139,6 +139,24 @@ vhost público; `6860fd1` es la primera release saludable, no las imágenes ante
 
 ## Prueba de salida
 
+### Actualización móvil — 4 octubre 2026
+
+- Release pública `9a94de7`: práctica compacta, Ajustes y resumen separados.
+  La revisión de un fallo permite volver a la misma ronda sin alterar el resultado.
+- `/health` por HTTPS: `ok`, `demo`, revisión `9a94de7`; Docker healthy.
+  Sigue el único listener `127.0.0.1:3280`. Sin cambios de proxy ni puertos.
+- Imagen verificada sin catálogo privado. 53 tests locales; 51 en Linux y dos
+  omitidos por ausencia del piloto privado. Compilaciones correctas.
+- Validación UI: controles/TAP/feedback juntos a 375 × 667; tamaños 320 × 568,
+  390 × 844 y escritorio; ajustes, resumen automático, replay y continuidad.
+  Revisar dos fallos conserva las 12 oportunidades de la ronda de prueba.
+- Descarga pública actualizada desde Ajustes: app + cinco pistas, 5,4 MB.
+  En el iPhone, recargar con conexión y actualizar el paquete desde Ajustes.
+- Se conservan `6860fd1` y `1f3918b` para rollback. Notion registra el rediseño;
+  instalación, latencia y aceptación pedagógica en iPhone físico siguen pendientes.
+
+### Comprobaciones
+
 - Confirmar `catalog: demo` y revisión esperada en `/health`.
 - Confirmar ausencia de `/app/.local` y `/app/public/tracks/local-pilot` en imagen.
 - Verificar cinco descargas, HTTPS, reapertura offline y controles móviles.

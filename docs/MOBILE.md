@@ -31,7 +31,8 @@ Eliminar la descarga libera solo cachés BlueClue, nunca el progreso de ejercici
 - Ajustes pausa el audio y reúne pista, módulo, velocidad, Teach/Assist/Train e
   instalación/descarga. Volver a practicar no arranca música por sorpresa.
 - «Ver mi ronda» abre un resumen separado; también aparece al terminar. Desde él
-  se puede repetir, revisar un intento o avanzar al siguiente paso.
+  se puede repetir, revisar un intento o avanzar al siguiente paso. «Volver a mi
+  ronda» permite revisar otro fallo sin recortar las oportunidades ya escuchadas.
 - El audio permanece montado al cambiar de pantalla; la onda recupera su posición
   al volver. El progreso y los tiempos de preparación no cambian.
 - Controles de al menos 44 px, zona segura y onda adaptada a la altura disponible.
@@ -64,6 +65,11 @@ Comprobado en navegador de escritorio con servidor local apagado: arranque desde
 una pestaña nueva, hidratación, cinco pistas reproduciendo, waveform, velocidad,
 TAP y Enter sin doble registro, resumen provisional y restauración del ejercicio.
 Vista 375 px: contador, controles y TAP visibles juntos y sin desbordamiento horizontal.
+Rediseño compacto del 4 octubre: práctica y feedback comprobados sin scroll a
+375 × 667; vistas adicionales a 390 × 844 y 320 × 568. El tamaño pequeño mantiene
+TAP y feedback accesibles y permite un desplazamiento breve para el resto.
+Probados Ajustes (pausa y retorno), velocidad, módulos, Train, reinicio, resumen
+automático al terminar y replay. Descarga pública actualizada desde Ajustes: 5,4 MB.
 53 tests incluyen scoring, entrada y diez casos del worker (rangos, atomicidad,
 fallos de descarga, pérdida de caché, navegación offline y separación de versiones).
 
