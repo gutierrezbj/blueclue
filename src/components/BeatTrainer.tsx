@@ -167,8 +167,8 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
   const trackAttempts = progress.attempts.filter((attempt) => attempt.trackId === track.id && (attempt.moduleId ?? "downbeat") === moduleId && (attempt.playbackSpeed ?? 1) === playbackSpeed);
   const accurateCount = trackAttempts.filter((attempt) => attempt.classification === "clavado" || attempt.classification === "cerca").length;
   const trackIndex = trackIds.indexOf(trackId);
-  const previousStep = getPracticeNeighbor(trackIds, { trackId, moduleId, mode }, -1);
-  const nextStep = getPracticeNeighbor(trackIds, { trackId, moduleId, mode }, 1);
+  const previousStep = getPracticeNeighbor(trackIds, { trackId, moduleId, mode, playbackSpeed }, -1);
+  const nextStep = getPracticeNeighbor(trackIds, { trackId, moduleId, mode, playbackSpeed }, 1);
   const hasEnded = player.isReady && player.currentTime >= player.duration - 0.05;
   const roundSummary = summarizeRound(round ?? { start: 0, end: 0, taps: [] }, track, moduleId, playbackSpeed, player.duration);
   const showSummary = summaryOpen || hasEnded;
@@ -205,8 +205,8 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
     if (nextTrackId !== trackId) navigatePractice({ trackId: nextTrackId, moduleId: "pulse", mode: "teach" });
   }
 
-  function navigatePractice(location: PracticeLocation) {
-    if (location.trackId === trackId && location.moduleId === moduleId && location.mode === mode) return;
+  function navigatePractice(location: PracticeLocation & { playbackSpeed?: PlaybackSpeed }, fromBeginning = false) {
+    if (location.trackId === trackId && location.moduleId === moduleId && location.mode === mode && (location.playbackSpeed === undefined || location.playbackSpeed === playbackSpeed)) return;
     focusTapRef.current = false;
     setRound(null);
     setSummaryOpen(false);
@@ -217,8 +217,9 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
     setFeedback(null);
     setResumed(false);
     focusJourneyRef.current = true;
-    if (location.moduleId !== moduleId && location.trackId === trackId) player.seek(0);
-    if (location.trackId !== trackId) setPlaybackSpeed(suggestedSpeed((tracks.find((item) => item.id === location.trackId) ?? tracks[0]).difficulty));
+    if ((fromBeginning || location.moduleId !== moduleId) && location.trackId === trackId) player.seek(0);
+    if (location.playbackSpeed !== undefined) setPlaybackSpeed(location.playbackSpeed);
+    else if (location.trackId !== trackId) setPlaybackSpeed(suggestedSpeed((tracks.find((item) => item.id === location.trackId) ?? tracks[0]).difficulty));
     setTrackId(location.trackId);
     setModuleId(location.moduleId);
     setMode(location.mode);
@@ -465,8 +466,8 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
             {showSummary && <RoundSummary summary={roundSummary} provisional={isReferencePending} onReview={replayOutcome} />}
             <div className="mobile-only mobile-summary-actions"><button type="button" className="continue-button" onClick={restartPractice} disabled={!player.isReady}>↺ Repetir ejercicio</button><button type="button" className="previous-button" onClick={() => setMobileScreen("practice")}>Volver a practicar</button></div>
             <nav className="journey-actions" aria-label="Navegar entre pasos de práctica">
-              <button type="button" className="previous-button" disabled={!hydrated || !previousStep} onClick={() => { if (previousStep) { navigatePractice(previousStep); setMobileScreen("practice"); } }}>← Anterior</button>
-              {nextStep ? <button type="button" className="next-button" disabled={!hydrated} onClick={() => { navigatePractice(nextStep); setMobileScreen("practice"); }}>{nextStep.trackId === trackId ? `Continuar: ${getLearningModule(nextStep.moduleId).title} →` : "Siguiente pista →"}</button> : <a className="next-button" href="#track-select" onClick={() => setMobileScreen("settings")}>Volver a elegir pista ↑</a>}
+              <button type="button" className="previous-button" disabled={!hydrated || !previousStep} onClick={() => { if (previousStep) { navigatePractice(previousStep, true); setMobileScreen("practice"); } }}>← Anterior</button>
+              {nextStep ? <button type="button" className="next-button" disabled={!hydrated} onClick={() => { navigatePractice(nextStep, true); setMobileScreen("practice"); }}>{nextStep.trackId !== trackId ? "Siguiente pista · Teach / Despacio →" : nextStep.moduleId !== moduleId ? `${getLearningModule(nextStep.moduleId).title} · Despacio →` : `Continuar: ${nextStep.mode.toUpperCase()} · ${speedLabels[nextStep.playbackSpeed]} →`}</button> : <a className="next-button" href="#track-select" onClick={() => setMobileScreen("settings")}>Volver a elegir pista ↑</a>}
             </nav>
             <p className="journey-hint">{lesson.readiness} Avanzar es voluntario, no una certificación.</p>
           </div>

@@ -101,7 +101,7 @@ V0.1 puede usar almacenamiento local para:
 
 No añadir base de datos todavía.
 
-`src/lib/practice.ts` define el orden navegable Pulso → Cuenta → Encuentra el 1 por pista y valida la sesión guardada, incluidos módulo y velocidad. Las sesiones antiguas sin módulo mantienen el ejercicio de downbeat; sin posición se recuperan desde el inicio. Las entradas inválidas se descartan sin bloquear la práctica. El avance es voluntario y no acredita dominio pedagógico.
+`src/lib/practice.ts` define el orden navegable por pista: módulos Pulso → Cuenta → Encuentra el 1; dentro de cada módulo, velocidades 65 → 80 → 100 %; dentro de cada velocidad, Teach → Assist → Train. `PracticeStep` incluye velocidad y permite navegación reversible desde cualquier selección libre, sin un índice adicional persistido. Anterior/siguiente reinician pausados; las selecciones manuales mantienen su comportamiento propio. La sesión guardada conserva compatibilidad: sin módulo mantiene downbeat; sin velocidad usa la sugerida por dificultad; sin posición vuelve al inicio. Las entradas inválidas se descartan sin bloquear la práctica. El avance es voluntario y no acredita dominio pedagógico.
 
 `src/lib/learningModules.ts` separa las consignas y objetivos de la UI. El motor compara contra todos los beats en Pulso y contra downbeats en Cuenta y Encuentra el 1. Los tres módulos comparten preparación, scoring y replay. Teach / Assist / Train son ayudas independientes, no módulos adicionales.
 

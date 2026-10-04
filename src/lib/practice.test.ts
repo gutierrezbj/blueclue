@@ -1,32 +1,51 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { getPracticeNeighbor, getResumePosition, readPracticeSession, type PracticeLocation } from "./practice.ts";
+import { getPracticeNeighbor, getResumePosition, readPracticeSession, type PracticeStep } from "./practice.ts";
 
 const trackIds = ["pulse", "four-count"];
 
-test("practice advances from pulse to counting to downbeat before changing track", () => {
-  assert.deepEqual(getPracticeNeighbor(trackIds, { trackId: "pulse", moduleId: "pulse", mode: "teach" }, 1), { trackId: "pulse", moduleId: "count", mode: "teach" });
-  assert.deepEqual(getPracticeNeighbor(trackIds, { trackId: "pulse", moduleId: "count", mode: "teach" }, 1), { trackId: "pulse", moduleId: "downbeat", mode: "assist" });
-  assert.deepEqual(getPracticeNeighbor(trackIds, { trackId: "pulse", moduleId: "downbeat", mode: "train" }, 1), { trackId: "four-count", moduleId: "pulse", mode: "teach" });
+test("practice removes help before increasing speed", () => {
+  const start: PracticeStep = { trackId: "pulse", moduleId: "pulse", mode: "teach", playbackSpeed: 0.65 };
+  const assist = { ...start, mode: "assist" as const };
+  const train = { ...start, mode: "train" as const };
+  assert.deepEqual(getPracticeNeighbor(trackIds, start, 1), assist);
+  assert.deepEqual(getPracticeNeighbor(trackIds, assist, 1), train);
+  assert.deepEqual(getPracticeNeighbor(trackIds, train, 1), { ...start, playbackSpeed: 0.8 });
+  assert.deepEqual(getPracticeNeighbor(trackIds, { ...train, playbackSpeed: 0.8 }, 1), { ...start, playbackSpeed: 1 });
+  assert.deepEqual(getPracticeNeighbor(trackIds, { ...train, playbackSpeed: 1 }, 1), { ...start, moduleId: "count" });
 });
 
 test("previous step works across track boundaries without wrapping", () => {
-  assert.deepEqual(getPracticeNeighbor(trackIds, { trackId: "four-count", moduleId: "pulse", mode: "teach" }, -1), { trackId: "pulse", moduleId: "downbeat", mode: "assist" });
-  assert.equal(getPracticeNeighbor(trackIds, { trackId: "pulse", moduleId: "pulse", mode: "teach" }, -1), null);
-  assert.equal(getPracticeNeighbor(trackIds, { trackId: "four-count", moduleId: "downbeat", mode: "train" }, 1), null);
-  assert.equal(getPracticeNeighbor(trackIds, { trackId: "missing", moduleId: "pulse", mode: "teach" }, 1), null);
+  const first: PracticeStep = { trackId: "pulse", moduleId: "pulse", mode: "teach", playbackSpeed: 0.65 };
+  const last: PracticeStep = { trackId: "four-count", moduleId: "downbeat", mode: "train", playbackSpeed: 1 };
+  assert.deepEqual(getPracticeNeighbor(trackIds, { ...first, trackId: "four-count" }, -1), { ...last, trackId: "pulse" });
+  assert.equal(getPracticeNeighbor(trackIds, first, -1), null);
+  assert.equal(getPracticeNeighbor(trackIds, last, 1), null);
+  assert.equal(getPracticeNeighbor(trackIds, { ...first, trackId: "missing" }, 1), null);
+  assert.equal(getPracticeNeighbor([], first, 1), null);
 });
 
-test("all five pilot tracks form a reversible fifteen-step route", () => {
+test("five tracks cover every module, speed and help combination reversibly", () => {
   const pilotIds = ["pulse", "four-count", "offbeat", "return", "subtle-one"];
-  let location: PracticeLocation = { trackId: pilotIds[0], moduleId: "pulse", mode: "teach" };
-  for (let step = 0; step < 14; step += 1) {
+  let location: PracticeStep = { trackId: pilotIds[0], moduleId: "pulse", mode: "teach", playbackSpeed: 0.65 };
+  const visited = new Set([JSON.stringify(location)]);
+  for (let step = 0; step < 134; step += 1) {
     const next = getPracticeNeighbor(pilotIds, location, 1)!;
     assert.deepEqual(getPracticeNeighbor(pilotIds, next, -1), location);
+    assert.equal(visited.has(JSON.stringify(next)), false);
+    visited.add(JSON.stringify(next));
     location = next;
   }
-  assert.deepEqual(location, { trackId: "subtle-one", moduleId: "downbeat", mode: "assist" });
+  assert.equal(visited.size, 135);
+  assert.deepEqual(location, { trackId: "subtle-one", moduleId: "downbeat", mode: "train", playbackSpeed: 1 });
   assert.equal(getPracticeNeighbor(pilotIds, location, 1), null);
+});
+
+test("a freely chosen or restored step keeps its position in the route", () => {
+  const saved = readPracticeSession(JSON.stringify({ trackId: "four-count", moduleId: "count", mode: "assist", playbackSpeed: 0.8, position: 12 }), trackIds);
+  const location: PracticeStep = { ...saved, playbackSpeed: saved.playbackSpeed! };
+  assert.deepEqual(getPracticeNeighbor(trackIds, location, 1), { trackId: "four-count", moduleId: "count", mode: "train", playbackSpeed: 0.8 });
+  assert.deepEqual(getPracticeNeighbor(trackIds, location, -1), { trackId: "four-count", moduleId: "count", mode: "teach", playbackSpeed: 0.8 });
 });
 
 test("session restores module, speed, mode, playhead and previous attempts", () => {

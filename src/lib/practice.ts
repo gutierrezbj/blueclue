@@ -1,7 +1,7 @@
 import type { AttemptClassification } from "./scoring";
 import type { TrainingMode } from "./tracks";
 import { getLearningModule, isLearningModuleId, learningModules, type LearningModuleId } from "./learningModules.ts";
-import { isPlaybackSpeed, type PlaybackSpeed } from "./playbackSpeed.ts";
+import { isPlaybackSpeed, playbackSpeeds, type PlaybackSpeed } from "./playbackSpeed.ts";
 
 export const practiceModes: readonly TrainingMode[] = ["teach", "assist", "train"];
 export const modeLabels: Record<TrainingMode, string> = {
@@ -11,24 +11,29 @@ export const modeLabels: Record<TrainingMode, string> = {
 };
 
 export type PracticeLocation = { trackId: string; moduleId: LearningModuleId; mode: TrainingMode };
+export type PracticeStep = PracticeLocation & { playbackSpeed: PlaybackSpeed };
 export type SavedAttempt = { trackId: string; moduleId?: LearningModuleId; playbackSpeed?: PlaybackSpeed; classification: AttemptClassification; errorMs: number | null };
 export type PracticeSession = PracticeLocation & { playbackSpeed?: PlaybackSpeed; position: number; progress: { attempts: SavedAttempt[] } };
 
 export function getPracticeNeighbor(
   trackIds: readonly string[],
-  location: PracticeLocation,
+  location: PracticeStep,
   direction: -1 | 1
-): PracticeLocation | null {
+): PracticeStep | null {
   const trackIndex = trackIds.indexOf(location.trackId);
   const moduleIndex = learningModules.findIndex((module) => module.id === location.moduleId);
-  if (trackIndex < 0 || moduleIndex < 0) return null;
-  const nextIndex = trackIndex * learningModules.length + moduleIndex + direction;
-  if (nextIndex < 0 || nextIndex >= trackIds.length * learningModules.length) return null;
-  const nextModule = learningModules[nextIndex % learningModules.length];
+  const speedIndex = playbackSpeeds.indexOf(location.playbackSpeed);
+  const modeIndex = practiceModes.indexOf(location.mode);
+  if (trackIndex < 0 || moduleIndex < 0 || speedIndex < 0 || modeIndex < 0) return null;
+  const stepsPerModule = playbackSpeeds.length * practiceModes.length;
+  const stepsPerTrack = learningModules.length * stepsPerModule;
+  const nextIndex = trackIndex * stepsPerTrack + moduleIndex * stepsPerModule + speedIndex * practiceModes.length + modeIndex + direction;
+  if (nextIndex < 0 || nextIndex >= trackIds.length * stepsPerTrack) return null;
   return {
-    trackId: trackIds[Math.floor(nextIndex / learningModules.length)],
-    moduleId: nextModule.id,
-    mode: nextModule.defaultMode
+    trackId: trackIds[Math.floor(nextIndex / stepsPerTrack)],
+    moduleId: learningModules[Math.floor(nextIndex / stepsPerModule) % learningModules.length].id,
+    mode: practiceModes[nextIndex % practiceModes.length],
+    playbackSpeed: playbackSpeeds[Math.floor(nextIndex / practiceModes.length) % playbackSpeeds.length]
   };
 }
 
