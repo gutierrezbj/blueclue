@@ -494,7 +494,6 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
             ))}
           </div>
           <p className="mode-description">{isPulseExercise ? mode === "train" ? "Sin marcas: acompaña el pulso regular con cada toque." : mode === "assist" ? "Sigue el destello del pulso; la onda ya no muestra las marcas." : "Cada marca es un pulso. Acompaña todos por igual; todavía no necesitas contar." : modeDescriptions[mode]}</p>
-          {(!showSummary || mobileScreen === "settings") && challengePanel}
           </div>
 
           <div className={isChallenge && !isReviewing && !isPreparing ? "challenge-wave-hidden" : undefined}>
@@ -567,7 +566,6 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
             </div>
             <button type="button" className="replay-button desktop-only" disabled={!round || isReviewing} onClick={finishRound}>Ver resumen de esta ronda</button>
             {showSummary && <RoundSummary summary={roundSummary} moduleId={moduleId} provisional={isReferencePending} onReview={replayOutcome} />}
-            {showSummary && challengePanel}
             {!isChallenge && <div className="mobile-only mobile-summary-actions"><button type="button" className="continue-button" onClick={restartPractice} disabled={!player.isReady}>↺ Repetir ejercicio</button><button type="button" className="previous-button" onClick={() => setMobileScreen("practice")}>Volver a practicar</button></div>}
             {!isChallenge && <nav className="journey-actions" aria-label="Navegar entre pasos de práctica">
               <button type="button" className="previous-button" disabled={!hydrated || !previousStep} onClick={() => { if (previousStep) { navigatePractice(previousStep, true); setMobileScreen("practice"); } }}>← Anterior</button>
@@ -581,6 +579,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
       <nav className="mobile-only mobile-actions" aria-label="Acciones del ejercicio">
         {mobileScreen === "settings" ? <button type="button" className="next-button" onClick={() => setMobileScreen("practice")}>Listo · volver a practicar</button> : mobileScreen === "practice" ? <><button type="button" onClick={openMobileSettings}>Cambiar ejercicio</button><button type="button" disabled={!round} onClick={finishRound}>{isReviewing ? "Volver a mi ronda" : "Ver mi ronda"}</button></> : null}
       </nav>
+      <div className="challenge-next-step">{challengePanel}</div>
       <footer className="page-footer"><span>BLUECLUE · APRENDE ESCUCHANDO</span><span>TEACH → ASSIST → TRAIN</span></footer>
     </main>
   );

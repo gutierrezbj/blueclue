@@ -111,7 +111,9 @@ El resumen de ronda vive en memoria: pausar lo conserva; reiniciar, cambiar pist
 
 ## Challenge y récords
 
-En **Ajustes** o al terminar una ronda, pulsa **Empezar Challenge**. Conserva
+**Empezar Challenge** aparece al final, después de los controles de práctica y
+continuación, como siguiente paso cuando te sientas preparado. En móvil queda al
+final de **Ajustes** y del resumen, nunca en la pantalla limpia de práctica. Conserva
 pista, nivel y velocidad, pasa a Train y queda preparado en 0:00: pulsa Play.
 Tras la entrada, escucha sin onda ni contador y marca hasta el final. La respuesta
 se revela al terminar. Puedes pausar; terminar antes no guarda récord.

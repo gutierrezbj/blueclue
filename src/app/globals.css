@@ -294,7 +294,8 @@ button, a, summary { touch-action: manipulation; }
   .feedback-panel:not(.has-feedback) { display: flex; align-items: center; justify-content: center; }
   .feedback-panel:not(.has-feedback) .field-label { font-size: 10px; }
   [data-mobile-screen="practice"] .pocket-card, [data-mobile-screen="practice"] .journey-card, [data-mobile-screen="practice"] .player-settings, [data-mobile-screen="practice"] .round-summary, [data-mobile-screen="practice"] .journey-actions, [data-mobile-screen="practice"] .journey-hint, [data-mobile-screen="practice"] .mobile-summary-actions { display: none; }
-  [data-mobile-screen="practice"] .practice-content > .challenge-panel { display: none; }
+  .challenge-next-step { order: 6; }
+  [data-mobile-screen="practice"] .challenge-next-step { display: none; }
   [data-mobile-screen="settings"] .practice-card, [data-mobile-screen="settings"] .player-card > :not(.player-settings), [data-mobile-screen="settings"] .journey-overview .section-links { display: none; }
   [data-mobile-screen="settings"] .journey-card { margin: 0; padding: 16px; gap: 16px; }
   [data-mobile-screen="settings"] .journey-overview h2, [data-mobile-screen="settings"] .journey-overview .field-label { display: none; }
@@ -306,8 +307,8 @@ button, a, summary { touch-action: manipulation; }
   [data-mobile-screen="settings"] .speed-control { margin: 16px 0; }
   [data-mobile-screen="settings"] .mode-heading { margin-top: 16px; }
   [data-mobile-screen="settings"] .mode-description { min-height: 0; margin-bottom: 0; }
-  [data-mobile-screen="settings"] .mobile-actions { position: sticky; bottom: 0; padding-bottom: max(8px, env(safe-area-inset-bottom)); background: var(--level-background); }
-  [data-mobile-screen="summary"] .pocket-card, [data-mobile-screen="summary"] .journey-card, [data-mobile-screen="summary"] .player-card, [data-mobile-screen="summary"] .practice-content > :not(.round-summary):not(.challenge-panel):not(.mobile-summary-actions):not(.journey-actions):not(.journey-hint) { display: none; }
+  [data-mobile-screen="settings"] .mobile-actions { padding-bottom: max(8px, env(safe-area-inset-bottom)); background: var(--level-background); }
+  [data-mobile-screen="summary"] .pocket-card, [data-mobile-screen="summary"] .journey-card, [data-mobile-screen="summary"] .player-card, [data-mobile-screen="summary"] .practice-content > :not(.round-summary):not(.mobile-summary-actions):not(.journey-actions):not(.journey-hint) { display: none; }
   [data-mobile-screen="summary"] .round-summary { margin-top: 0; }
   .mobile-summary-actions { display: flex; gap: 8px; }
   .mobile-summary-actions > button { flex: 1; }

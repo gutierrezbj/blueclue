@@ -28,6 +28,7 @@ export function ChallengePanel({ track, tracks, moduleId, speed, records, result
   return (
     <section className="challenge-panel" aria-label="Challenge y récord personal">
       <h3>{result ? "Tu Challenge" : "Challenge · ponlo a prueba"}</h3>
+      {!active && <p>Primero practica a tu ritmo. Cuando te sientas preparado, este es el siguiente paso.</p>}
       <p>{getLearningModule(moduleId).title} · {speedLabels[speed]} · Train</p>
       {result && <p className="challenge-score"><strong>{challengePercent(result)} %</strong> · {result.perfect} clavados + {result.close} cerca de {result.total}</p>}
       {result && result.extra + result.offTarget > 0 && <p>{result.extra + result.offTarget} toques adicionales reducen el porcentaje: cuenta acertar y no marcar golpes de más.</p>}
