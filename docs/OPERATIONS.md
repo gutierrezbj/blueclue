@@ -1,6 +1,6 @@
 # Operación ligera — BlueClue
 
-Estado registrado el 3 de octubre de 2026.
+Estado actualizado el 4 de octubre de 2026.
 
 ## Decisión del propietario
 
@@ -32,8 +32,8 @@ la excepción ligera autorizada; no modifica las plantillas maestras.
 | Internos | 5280 sin uso |
 | Datos | 6280–6289 sin uso; no hay BD |
 | VPS | Servidor 2, comprobado por Tailscale |
-| Directorio | `/opt/apps/blueclue`, release `6860fd1`, enlace `current` |
-| Contenedor | `blueclue-web`, imagen `blueclue:6860fd1`, healthy |
+| Directorio | `/opt/apps/blueclue`, release `22efcbf`, enlace `current` |
+| Contenedor | `blueclue-web`, imagen `blueclue:22efcbf`, healthy |
 | Bind | `127.0.0.1:3280:3000` verificado; nunca puerto público directo |
 | Dominio | `https://blueclue.jrgblanco.com`, HTTPS verificado |
 
@@ -156,6 +156,14 @@ vhost público; `6860fd1` es la primera release saludable, no las imágenes ante
   instalación, latencia y aceptación pedagógica en iPhone físico siguen pendientes.
 
 ### Comprobaciones
+
+Actualización del recorrido: release `22efcbf`, 4 octubre 2026. Teach → Assist →
+Train por velocidad antes del siguiente módulo/pista; sin controles nuevos.
+54 tests locales; 52 pasan en Linux y dos privados omitidos. Build, HTTPS `/health`
+y Docker saludables; catálogo demo, imagen sin música privada y bind 3280 sin
+cambios. Verificados avance/retroceso, restauración y retorno a 0:00 pausado en
+navegador; producción confirma Teach → Assist despacio. Se conserva `9a94de7`
+para rollback. Notion actualizado; aceptación pedagógica/iPhone físico pendiente.
 
 - Confirmar `catalog: demo` y revisión esperada en `/health`.
 - Confirmar ausencia de `/app/.local` y `/app/public/tracks/local-pilot` en imagen.

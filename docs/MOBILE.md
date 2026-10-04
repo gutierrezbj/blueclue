@@ -39,6 +39,20 @@ Eliminar la descarga libera solo cachés BlueClue, nunca el progreso de ejercici
   En pantallas muy pequeñas se permite desplazamiento, nunca se recortan controles.
 - El escritorio conserva su vista completa. No se añaden módulos ni gamificación.
 
+### Continuidad del aprendizaje
+
+«Continuar» en el resumen retira ayudas antes de subir el tempo: Teach → Assist →
+Train en Despacio, después Intermedio y Original. Al completar esas combinaciones,
+propone el siguiente módulo y luego la siguiente pista, desde Teach y Despacio.
+Cada paso comienza pausado en 0:00; Play repite la preparación completa. «Anterior»
+recorre el mismo orden al revés. La elección libre desde Ajustes sigue disponible;
+no hay bloqueos, notas mínimas ni obligación de recorrer todas las combinaciones.
+
+Comprobado: Teach → Assist → Train despacio, transición a Teach intermedio,
+restauración tras recargar, anterior y salto de Train original al siguiente módulo
+en Teach despacio. La prueba automática recorre las 135 combinaciones existentes
+en ambos sentidos; no representa 135 lecciones nuevas ni certifica aprendizaje.
+
 ### Audio y disponibilidad offline
 
 - `trainingCatalog.ts`: catálogo vigente, revisión de metadatos/tamaño/mtime de los
@@ -70,7 +84,7 @@ Rediseño compacto del 4 octubre: práctica y feedback comprobados sin scroll a
 TAP y feedback accesibles y permite un desplazamiento breve para el resto.
 Probados Ajustes (pausa y retorno), velocidad, módulos, Train, reinicio, resumen
 automático al terminar y replay. Descarga pública actualizada desde Ajustes: 5,4 MB.
-53 tests incluyen scoring, entrada y diez casos del worker (rangos, atomicidad,
+54 tests incluyen scoring, recorrido, entrada y diez casos del worker (rangos, atomicidad,
 fallos de descarga, pérdida de caché, navegación offline y separación de versiones).
 
 Antes de declarar móvil terminado, probar en el iPhone real:
