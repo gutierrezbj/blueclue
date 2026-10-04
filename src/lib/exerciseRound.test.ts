@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { recordRoundTap, summarizeRound, reviewOutcome, type ExerciseRound } from "./exerciseRound.ts";
+import { firstTargetTap, recordRoundTap, summarizeRound, reviewOutcome, type ExerciseRound } from "./exerciseRound.ts";
 import type { TrainingTrack } from "./tracks.ts";
 
 const track: TrainingTrack = { id: "test", title: "Test", bpm: 120, timeSignature: "4/4", audioFile: "test.wav", difficulty: "very-easy", description: "", beats: Array.from({ length: 40 }, (_, index) => 3.5 + index * 0.5), downbeats: [3.5, 5.5, 7.5, 9.5, 11.5, 13.5, 15.5, 17.5, 19.5, 21.5] };
@@ -41,4 +41,31 @@ test("repeated presses cannot replace a poor first attempt with a perfect one", 
   assert.equal(summary.outside, 1);
   assert.equal(summary.extra, 1);
   assert.equal(summary.outcomes[0].result?.errorMs, -300);
+  assert.equal(firstTargetTap(round, 7.5)?.result.classification, "temprano");
+});
+
+test("far taps no longer steal the next downbeat from a later accurate tap", () => {
+  let round: ExerciseRound = { start: 0, end: 0, taps: [] };
+  for (const time of [7.5, 8, 8.5, 9, 9.667]) round = recordRoundTap(round, time, track, "downbeat", 1, 24);
+  const summary = summarizeRound({ ...round, end: 10 }, track, "downbeat", 1, 24);
+  assert.equal(summary.perfect, 1);
+  assert.equal(summary.close, 1);
+  assert.equal(summary.outside, 0);
+  assert.equal(summary.extra, 0);
+  assert.equal(summary.offTarget, 3);
+  assert.equal(firstTargetTap(round, 9.5)?.result.errorMs, 167);
+});
+
+test("off-target taps are separate from repeated attempts at all speeds", () => {
+  for (const speed of [0.65, 0.8, 1] as const) {
+    let round: ExerciseRound = { start: 0, end: 0, taps: [] };
+    round = recordRoundTap(round, 9.5 - 0.6 * speed, track, "downbeat", speed, 24);
+    round = recordRoundTap(round, 9.5 + 0.167 * speed, track, "downbeat", speed, 24);
+    round = recordRoundTap(round, 9.5 + 0.17 * speed, track, "downbeat", speed, 24);
+    const summary = summarizeRound({ ...round, end: 10 }, track, "downbeat", speed, 24);
+    assert.equal(summary.close, 1);
+    assert.equal(summary.offTarget, 1);
+    assert.equal(summary.extra, 1);
+    assert.equal(summary.outcomes.find(outcome => outcome.target === 9.5)?.result?.errorMs, 167);
+  }
 });

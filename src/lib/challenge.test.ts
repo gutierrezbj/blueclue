@@ -43,6 +43,18 @@ test("duplicate taps do not improve the first response or the challenge score", 
   assert.equal(result.perfect, 0);
   assert.equal(result.outside, 1);
   assert.equal(result.missed, 21);
+  assert.equal(result.extra, 1);
+});
+
+test("tapping every beat cannot pass a downbeat Challenge by chance", () => {
+  const base = input(0);
+  let round = base.round;
+  for (const target of track.beats.filter(beat => beat >= 8)) round = recordRoundTap(round, target, track, "downbeat", 1, 52);
+  const result = completeChallenge({ ...base, round: { ...round, end: 52 } })!;
+  assert.equal(result.perfect, 22);
+  assert.equal(result.offTarget, 66);
+  assert.equal(challengePercent(result), 25);
+  assert.equal(passesChallenge(result), false);
 });
 
 test("records retain the best comparable round, breaking ties by nailed targets", () => {

@@ -1,7 +1,7 @@
 import type { RoundOutcome } from "@/lib/exerciseRound";
 
 type Props = {
-  summary: { outcomes: RoundOutcome[]; total: number; perfect: number; close: number; outside: number; missed: number; extra: number };
+  summary: { outcomes: RoundOutcome[]; total: number; perfect: number; close: number; outside: number; missed: number; extra: number; offTarget: number };
   provisional: boolean;
   onReview: (outcome: RoundOutcome) => void;
 };
@@ -19,6 +19,8 @@ export function RoundSummary({ summary, provisional, onReview }: Props) {
         <div><dt>Sin marcar</dt><dd>{summary.missed}</dd></div>
       </dl>
       {summary.extra > 0 && <p>{summary.extra} pulsaciones repetidas: se conserva la primera, sin sumar aciertos extra.</p>}
+      {summary.offTarget > 0 && <p>{summary.offTarget} toques lejos del objetivo: no ocupan ni bloquean el siguiente. No se cuentan como repetidos.</p>}
+      {(summary.extra > summary.total || summary.offTarget > summary.total) && <p>Si buscas el 1, pulsa una vez por grupo: 1, deja pasar 2-3-4. Para tocar todos los golpes, elige Nivel 1 · Sigue el pulso.</p>}
       {summary.total === 0 ? <p>Todavía no has escuchado una oportunidad completa. Continúa después de la preparación.</p> : (
         <details>
           <summary>Ver dónde acertaste o te costó · pulsa para escuchar</summary>

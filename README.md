@@ -105,7 +105,7 @@ Se guardan localmente la pista, el módulo, las ayudas, la velocidad, los últim
 
 La waveform muestra una ventana ampliada de unos ocho segundos de pista, no toda la canción comprimida. La línea plana ocupa aproximadamente un tercio del ancho y la bolita sigue el reloj del audio. La vista se desplaza automáticamente y adapta su escala al ancho de pantalla; beats, respuesta del replay y bolita usan la misma ventana visible.
 
-Al terminar, o pulsar **Ver resumen de esta ronda**, aparecen oportunidades clavadas, cerca, fuera de tiempo y sin marcar. Suman el total de oportunidades completas escuchadas después de los dos compases de preparación: no se penalizan los objetivos futuros, saltados o a medio escuchar. Cada objetivo cuenta una vez, con la primera pulsación; las repetidas se informan aparte. En Teach y Assist se marcan los objetivos pasados con ✓, ≈ o ×; Train los revela solo al revisar. El detalle muestra el tiempo, temprano/tarde y permite escuchar cada fragmento con su referencia y tu pulsación.
+Al terminar, o pulsar **Ver resumen de esta ronda**, aparecen oportunidades clavadas, cerca, fuera de tiempo y sin marcar. Suman el total de oportunidades completas escuchadas después de los dos compases de preparación: no se penalizan los objetivos futuros, saltados o a medio escuchar. Cada objetivo cuenta una vez, con la primera pulsación dentro de su ventana de ±450 ms reales; las repetidas se informan aparte y el feedback conserva ese primer resultado con la etiqueta REPETIDA. Los toques más alejados se muestran por separado y no bloquean un acierto posterior. En Teach y Assist se marcan los objetivos pasados con ✓, ≈ o ×; Train los revela solo al revisar. El detalle muestra el tiempo, temprano/tarde y permite escuchar cada fragmento con su referencia y tu pulsación.
 
 El resumen de ronda vive en memoria: pausar lo conserva; reiniciar, cambiar pista, módulo, ayuda o velocidad, mover la onda o volver a practicar desde un replay empieza otro. Recargar conserva tu punto de práctica, pero no el resumen de la ronda anterior. El historial local de intentos validados permanece. Las referencias pendientes muestran un **resumen provisional**, nunca una nota ni aciertos persistidos.
 
@@ -117,7 +117,9 @@ Tras la entrada, escucha sin onda ni contador y marca hasta el final. La respues
 se revela al terminar. Puedes pausar; terminar antes no guarda récord.
 
 Se guarda tu mejor ronda completa por pista, nivel y velocidad, separada del
-historial de práctica. El porcentaje incluye los objetivos sin marcar. La app
+historial de práctica. El porcentaje divide clavados+cerca entre oportunidades
+más toques adicionales (repetidos o lejos del objetivo), para no premiar pulsar
+en todos los golpes cuando solo se pide el 1. Incluye los objetivos sin marcar. La app
 recomienda probar el siguiente nivel con **80 % entre clavados y cerca en dos
 pistas distintas a la misma velocidad**; mínimo 20 oportunidades por ronda.
 Es una orientación inicial, no un aprobado obligatorio. Puedes avanzar libremente.
@@ -159,7 +161,7 @@ liberar la caché: revisa su estado antes de viajar. Usa altavoz o cable para pr
 con precisión; el retardo Bluetooth no se calibra en esta versión.
 
 Pruebas locales: apertura desde una pestaña nueva y reproducción de las cinco pistas
-con el servidor apagado, vista de 375 px sin desbordamiento, TAP/Enter, 64 tests y
+con el servidor apagado, vista de 375 px sin desbordamiento, TAP/Enter, 67 tests y
 build. **Aceptación del usuario, 4 octubre 2026:** Juan confirma funcionamiento
 correcto, incluido modo avión, en el contexto de su iPhone. El nuevo Challenge
 necesita su primera prueba tras actualizar; no se ha medido latencia Bluetooth.

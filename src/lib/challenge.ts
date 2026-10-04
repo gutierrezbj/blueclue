@@ -16,6 +16,8 @@ export type ChallengeRecord = {
   close: number;
   outside: number;
   missed: number;
+  extra: number;
+  offTarget: number;
   completedAt: string;
 };
 
@@ -27,11 +29,11 @@ export function challengeReference(track: TrainingTrack): string {
 }
 
 export function challengePercent(record: ChallengeRecord): number {
-  return Math.floor((record.perfect + record.close) * 100 / record.total);
+  return Math.floor((record.perfect + record.close) * 100 / (record.total + record.extra + record.offTarget));
 }
 
 export function passesChallenge(record: ChallengeRecord): boolean {
-  return record.total >= CHALLENGE_RULES.minimumTargets && (record.perfect + record.close) * 100 >= CHALLENGE_RULES.successPercent * record.total;
+  return record.total >= CHALLENGE_RULES.minimumTargets && (record.perfect + record.close) * 100 >= CHALLENGE_RULES.successPercent * (record.total + record.extra + record.offTarget);
 }
 
 export function completeChallenge(input: {
@@ -51,7 +53,7 @@ export function completeChallenge(input: {
   const summary = summarizeRound(round, track, moduleId, speed, duration);
   if (summary.total < CHALLENGE_RULES.minimumTargets) return null;
   return { trackId: track.id, moduleId, speed, reference: challengeReference(track), total: summary.total,
-    perfect: summary.perfect, close: summary.close, outside: summary.outside, missed: summary.missed, completedAt };
+    perfect: summary.perfect, close: summary.close, outside: summary.outside, missed: summary.missed, extra: summary.extra, offTarget: summary.offTarget, completedAt };
 }
 
 export function sameChallenge(left: ChallengeRecord, right: ChallengeRecord): boolean {
@@ -61,8 +63,10 @@ export function sameChallenge(left: ChallengeRecord, right: ChallengeRecord): bo
 export function isBetterChallenge(candidate: ChallengeRecord, previous: ChallengeRecord): boolean {
   const candidateHits = candidate.perfect + candidate.close;
   const previousHits = previous.perfect + previous.close;
-  return candidateHits * previous.total > previousHits * candidate.total ||
-    (candidateHits * previous.total === previousHits * candidate.total && candidate.perfect * previous.total > previous.perfect * candidate.total);
+  const candidateTotal = candidate.total + candidate.extra + candidate.offTarget;
+  const previousTotal = previous.total + previous.extra + previous.offTarget;
+  return candidateHits * previousTotal > previousHits * candidateTotal ||
+    (candidateHits * previousTotal === previousHits * candidateTotal && candidate.perfect * previousTotal > previous.perfect * candidateTotal);
 }
 
 export function saveChallengeRecord(records: readonly ChallengeRecord[], candidate: ChallengeRecord): ChallengeRecord[] {
@@ -82,7 +86,7 @@ export function readChallengeRecords(saved: string | null, tracks: readonly Trai
       if (!track || track.referenceStatus === "pending-listening" || value.reference !== challengeReference(track) ||
         !isLearningModuleId(value.moduleId) || !isPlaybackSpeed(value.speed) ||
         typeof value.completedAt !== "string" || !Number.isFinite(Date.parse(value.completedAt))) continue;
-      const counts = [value.total, value.perfect, value.close, value.outside, value.missed];
+      const counts = [value.total, value.perfect, value.close, value.outside, value.missed, value.extra, value.offTarget];
       if (!counts.every(count => Number.isSafeInteger(count) && count >= 0) || value.total < CHALLENGE_RULES.minimumTargets ||
         value.total > (value.moduleId === "pulse" ? track.beats.length : track.downbeats.length) ||
         value.perfect + value.close + value.outside + value.missed !== value.total) continue;

@@ -8,6 +8,14 @@ export type RoundTap = { time: number; result: AttemptResult };
 export type RoundOutcome = { target: number; tapTime: number | null; result: AttemptResult | null };
 export type ExerciseRound = { start: number; end: number; taps: RoundTap[] };
 
+export function isTargetTap(tap: RoundTap): boolean {
+  return tap.result.target !== null && tap.result.errorMs !== null && Math.abs(tap.result.errorMs) <= DEFAULT_THRESHOLDS.retryMs;
+}
+
+export function firstTargetTap(round: ExerciseRound, target: number | null): RoundTap | undefined {
+  return round.taps.find(tap => tap.result.target === target && isTargetTap(tap));
+}
+
 export function summarizeRound(round: ExerciseRound, track: TrainingTrack, moduleId: LearningModuleId, speed: PlaybackSpeed, duration: number) {
   const entry = getPracticeEntry(track.downbeats, duration, speed);
   const margin = DEFAULT_THRESHOLDS.retryMs / 1000 * speed;
@@ -16,14 +24,16 @@ export function summarizeRound(round: ExerciseRound, track: TrainingTrack, modul
     (target + margin <= round.end || (round.end >= duration && target <= round.end))
   );
   const outcomes: RoundOutcome[] = targets.map(target => {
-    const tap = round.taps.find(attempt => attempt.result.target === target);
+    const tap = firstTargetTap(round, target);
     return { target, tapTime: tap?.time ?? null, result: tap?.result ?? null };
   });
   const perfect = outcomes.filter(outcome => outcome.result?.classification === "clavado").length;
   const close = outcomes.filter(outcome => outcome.result?.classification === "cerca").length;
   const missed = outcomes.filter(outcome => !outcome.result).length;
-  const extra = round.taps.filter((tap, index, taps) => taps.findIndex(candidate => candidate.result.target === tap.result.target) !== index).length;
-  return { outcomes, perfect, close, missed, outside: outcomes.length - perfect - close - missed, extra, total: outcomes.length };
+  const targetTaps = round.taps.filter(isTargetTap);
+  const extra = targetTaps.filter((tap, index, taps) => taps.findIndex(candidate => candidate.result.target === tap.result.target) !== index).length;
+  const offTarget = round.taps.length - targetTaps.length;
+  return { outcomes, perfect, close, missed, outside: outcomes.length - perfect - close - missed, extra, offTarget, total: outcomes.length };
 }
 
 export function reviewOutcome(outcome: RoundOutcome): AttemptResult {

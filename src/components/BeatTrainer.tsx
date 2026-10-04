@@ -13,13 +13,13 @@ import { useWaveformPlayer } from "@/lib/useWaveformPlayer";
 import { getPracticeNeighbor, getResumePosition, modeLabels, practiceModes, readPracticeSession, type PracticeLocation, type PracticeSession } from "@/lib/practice";
 import { getBeatPosition } from "@/lib/beatGrid";
 import { getCountIn } from "@/lib/countIn";
-import { recordRoundTap, reviewOutcome, summarizeRound, type ExerciseRound, type RoundOutcome } from "@/lib/exerciseRound";
+import { firstTargetTap, isTargetTap, recordRoundTap, reviewOutcome, summarizeRound, type ExerciseRound, type RoundOutcome } from "@/lib/exerciseRound";
 import { getPracticeEntry } from "@/lib/practiceEntry";
 import { getLearningModule, learningModules, scoreExerciseAttempt, type LearningModuleId } from "@/lib/learningModules";
 import { listeningSeconds, playbackSpeeds, speedLabels, suggestedSpeed, type PlaybackSpeed } from "@/lib/playbackSpeed";
 
 type Progress = PracticeSession["progress"];
-type Feedback = { result: AttemptResult; tapTime: number | null };
+type Feedback = { result: AttemptResult; tapTime: number | null; repeated?: boolean };
 
 const modeDescriptions: Record<TrainingMode, string> = {
   teach: "Mira cómo el 1 abre cada grupo de cuatro. Cuenta en voz alta: el golpe más fuerte no siempre es el 1.",
@@ -337,10 +337,11 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
     const tapTime = player.getTime();
     const result = scoreExerciseAttempt(tapTime, track, player.duration, moduleId, playbackSpeed);
     if (!result) return;
-    if (!isChallenge) setFeedback({ result, tapTime });
+    const previousTap = round && isTargetTap({ time: tapTime, result }) ? firstTargetTap(round, result.target) : undefined;
+    if (!isChallenge) setFeedback({ result: previousTap?.result ?? result, tapTime: previousTap?.time ?? tapTime, repeated: Boolean(previousTap) });
     setRound(current => recordRoundTap(current ?? { start: tapTime, end: tapTime, taps: [] }, tapTime, track, moduleId, playbackSpeed, player.duration));
     replayEndRef.current = null;
-    if (isReferencePending || isChallenge) return;
+    if (isReferencePending || isChallenge || previousTap) return;
     setProgress((current) => ({
       attempts: [...current.attempts, { trackId: track.id, moduleId, playbackSpeed, classification: result.classification, errorMs: result.errorMs }].slice(-100)
     }));
@@ -552,7 +553,8 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
             <div className={`feedback-panel${feedback ? " has-feedback" : ""}`} aria-live="polite">
               {isChallenge && !isReviewing ? <span className="field-label">CHALLENGE · RESULTADO AL TERMINAR</span> : feedback ? (
                 <>
-                  <span className={`result-badge ${feedback.result.classification}`}>{feedbackLabel[feedback.result.classification]}{isReferencePending ? " · PROVISIONAL" : ""}</span>
+                  <span className={`result-badge ${feedback.result.classification}`}>{feedback.repeated ? "REPETIDA · " : ""}{feedbackLabel[feedback.result.classification]}{isReferencePending ? " · PROVISIONAL" : ""}</span>
+                  {feedback.repeated && <small>Este objetivo ya cuenta: se conserva tu primer toque.</small>}
                   <p className="feedback-explanation">{isReferencePending ? "Comparado con la marca del archivo, pendiente de revisión por oído. Es una orientación, no una nota." : feedback.result.message}</p>
                   {feedback.result.errorMs !== null && <small>{Math.abs(feedback.result.errorMs)} ms · {feedback.result.errorMs < 0 ? "temprano" : feedback.result.errorMs > 0 ? "tarde" : "exacto"} respecto {isPulseExercise ? "al pulso" : "al 1"}</small>}
                   <button type="button" className="replay-button" onClick={replay} disabled={!player.isReady || (isReviewing && player.isPlaying)}>{isReviewing && player.isPlaying ? "Reproduciendo fragmento…" : "↺  Escuchar otra vez"}</button>
