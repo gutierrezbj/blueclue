@@ -3,6 +3,8 @@ import path from "node:path";
 
 const sampleRate = 22050;
 const leadInSeconds = 3;
+const practiceBars = 24;
+const beatsPerBar = 4;
 const tracks = [
   { id: "pulse", title: "Pulso claro", bpm: 100, difficulty: "very-easy", description: "Escucha el golpe grave que abre cada grupo de cuatro.", seed: 1 },
   { id: "four-count", title: "Cuenta cuatro", bpm: 112, difficulty: "easy", description: "La caja cae en el 2 y el 4. Vuelve al 1 después de cada cuatro golpes.", seed: 2 },
@@ -73,14 +75,14 @@ await mkdir(path.join(root, "data", "tracks"), { recursive: true });
 
 for (const track of tracks) {
   const beatLength = 60 / track.bpm;
-  const beatTimes = Array.from({ length: 32 }, (_, index) => Number((leadInSeconds + 0.8 + index * beatLength).toFixed(4)));
-  const downbeatTimes = beatTimes.filter((_, index) => index % 4 === 0);
+  const beatTimes = Array.from({ length: practiceBars * beatsPerBar }, (_, index) => Number((leadInSeconds + 0.8 + index * beatLength).toFixed(4)));
+  const downbeatTimes = beatTimes.filter((_, index) => index % beatsPerBar === 0);
   const duration = beatTimes.at(-1) + beatLength + 0.6;
   const samples = new Float32Array(Math.ceil(duration * sampleRate));
 
   beatTimes.forEach((time, index) => {
-    if (track.id === "return" && index === 15) return;
-    const position = index % 4;
+    if (track.id === "return" && index === beatTimes.length / 2 - 1) return;
+    const position = index % beatsPerBar;
     const kickGain = track.id === "subtle-one" && position === 0 ? 0.35 : position === 0 ? 0.9 : 0.65;
     addKick(samples, time, kickGain);
     if (position === 1 || position === 3) addNoise(samples, time, 0.13, 0.24, track.seed, 27);

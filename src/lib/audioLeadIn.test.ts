@@ -4,6 +4,8 @@ import test from "node:test";
 import { getBeatPosition } from "./beatGrid.ts";
 import { getPracticeEntry, scorePracticeAttempt } from "./practiceEntry.ts";
 import { parseLocalPilot } from "./localPilot.ts";
+import { recordRoundTap, summarizeRound, type ExerciseRound } from "./exerciseRound.ts";
+import { playbackSpeeds } from "./playbackSpeed.ts";
 import type { TrainingTrack } from "./tracks.ts";
 
 async function checkSilentLeadIn(track: TrainingTrack) {
@@ -40,6 +42,7 @@ async function checkSilentLeadIn(track: TrainingTrack) {
   for (let index = 1; index < track.beats.length; index += 1) {
     assert.ok(Math.abs(track.beats[index] - track.beats[index - 1] - 60 / track.bpm) < 0.00011, `${track.id}: tempo stays unchanged`);
   }
+  return { duration, samples, format };
 }
 
 test("all bundled demo waveforms have three real silent seconds and aligned references", async () => {
@@ -47,6 +50,38 @@ test("all bundled demo waveforms have three real silent seconds and aligned refe
     const track = JSON.parse(await readFile(new URL(`../../data/tracks/${identifier}.json`, import.meta.url), "utf8"));
     await checkSilentLeadIn(track);
   }
+});
+
+test("public pilots allow 22 complete downbeat attempts at every practice speed", async () => {
+  let totalBytes = 0;
+  for (const identifier of ["pulse", "four-count", "offbeat", "return", "subtle-one"]) {
+    const track: TrainingTrack = JSON.parse(await readFile(new URL(`../../data/tracks/${identifier}.json`, import.meta.url), "utf8"));
+    const { duration, samples, format } = await checkSilentLeadIn(track);
+    totalBytes += samples.length;
+    assert.ok(duration >= 50 && duration <= 65, `${identifier}: about a minute at original speed`);
+    assert.equal(track.beats.length, 96);
+    assert.equal(track.downbeats.length, 24);
+    const bytesPerSecond = format.readUInt32LE(8);
+    for (const target of track.downbeats) {
+      const start = Math.ceil(target * bytesPerSecond / 2) * 2;
+      assert.ok(samples.subarray(start, start + Math.floor(0.02 * bytesPerSecond)).some(sample => sample !== 0), `${identifier}: audible downbeat at ${target}`);
+    }
+    for (const speed of playbackSpeeds) {
+      let round: ExerciseRound = { start: 0, end: 0, taps: [] };
+      for (const target of track.downbeats.slice(2)) round = recordRoundTap(round, target, track, "downbeat", speed, duration);
+      const summary = summarizeRound({ ...round, end: duration }, track, "downbeat", speed, duration);
+      assert.equal(summary.total, 22);
+      assert.equal(summary.perfect, 22);
+      assert.equal(summary.missed, 0);
+      assert.equal(summarizeRound({ start: 0, end: duration, taps: [] }, track, "pulse", speed, duration).total, 88);
+    }
+    if (identifier === "return") {
+      const gap = track.beats[track.beats.length / 2 - 1];
+      const start = Math.ceil(gap * bytesPerSecond / 2) * 2;
+      assert.ok(samples.subarray(start, start + Math.floor(0.1 * bytesPerSecond)).every(sample => sample === 0), "the mid-track gap remains silent before the returning downbeat");
+    }
+  }
+  assert.ok(totalBytes < 15_000_000, "the five public WAV files remain a small offline pack");
 });
 
 test("private pilot audio and scoring share the same three-second lead-in", async (context) => {

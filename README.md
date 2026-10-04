@@ -66,6 +66,12 @@ npm run dev
 
 Abre `http://localhost:3000`. Las cinco pistas piloto y sus referencias de beats están incluidas; son patrones de percusión sintéticos creados para el ejercicio. Se pueden regenerar con `npm run generate:tracks`.
 
+Las cinco pistas públicas tienen **24 compases** y duran **51–62 segundos al tempo
+original**, incluida la entrada. Tras los dos compases de escucha quedan **22 unos**
+para practicar sin reiniciar (88 pulsos en el módulo Pulso). Despacio mantiene los
+mismos objetivos y alarga la escucha. Los cinco WAV ocupan **12,13 MB** en conjunto,
+más los recursos de la app. La pausa de «Vuelve al 1» sigue situada a mitad de pista.
+
 Si existe un piloto privado preparado, la aplicación usa sus cinco fragmentos en lugar de la demostración. Para preparar la selección del pack de curso con Python 3.11 o superior:
 
 ```powershell
@@ -132,7 +138,7 @@ liberar la caché: revisa su estado antes de viajar. Usa altavoz o cable para pr
 con precisión; el retardo Bluetooth no se calibra en esta versión.
 
 Pruebas locales: apertura desde una pestaña nueva y reproducción de las cinco pistas
-con el servidor apagado, vista de 375 px sin desbordamiento, TAP/Enter, 54 tests y
+con el servidor apagado, vista de 375 px sin desbordamiento, TAP/Enter, 55 tests y
 build. **Pendiente:** instalación y prueba de interrupciones/audio en iPhone físico.
 Consulta [validación móvil](docs/MOBILE.md) y [operación](docs/OPERATIONS.md).
 

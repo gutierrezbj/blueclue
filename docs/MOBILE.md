@@ -8,6 +8,10 @@ No es una app de la App Store ni añade cuentas, sincronización o una bibliotec
 Decisión del propietario: despliegue público con los cinco patrones sintéticos.
 Tailscale se usa solo para administrar el VPS, no para acceder como alumno.
 
+Las cinco sintéticas tienen 24 compases cada una (51–62 segundos a velocidad
+original). Sus WAV suman 12,13 MB; el paquete añade los recursos de la aplicación.
+La descarga se actualiza voluntariamente desde Ajustes y conserva el progreso.
+
 ## Instalación
 
 1. Abrir [blueclue.jrgblanco.com](https://blueclue.jrgblanco.com) en Safari del iPhone.
@@ -83,8 +87,9 @@ Rediseño compacto del 4 octubre: práctica y feedback comprobados sin scroll a
 375 × 667; vistas adicionales a 390 × 844 y 320 × 568. El tamaño pequeño mantiene
 TAP y feedback accesibles y permite un desplazamiento breve para el resto.
 Probados Ajustes (pausa y retorno), velocidad, módulos, Train, reinicio, resumen
-automático al terminar y replay. Descarga pública actualizada desde Ajustes: 5,4 MB.
-54 tests incluyen scoring, recorrido, entrada y diez casos del worker (rangos, atomicidad,
+automático al terminar y replay. La descarga pública anterior a ampliar las pistas
+ocupaba 5,4 MB; ya no corresponde al tamaño del paquete musical ampliado.
+55 tests incluyen scoring, recorrido, entrada y diez casos del worker (rangos, atomicidad,
 fallos de descarga, pérdida de caché, navegación offline y separación de versiones).
 
 Antes de declarar móvil terminado, probar en el iPhone real:
