@@ -89,10 +89,19 @@ TAP y feedback accesibles y permite un desplazamiento breve para el resto.
 Probados Ajustes (pausa y retorno), velocidad, módulos, Train, reinicio, resumen
 automático al terminar y replay. La descarga pública anterior a ampliar las pistas
 ocupaba 5,4 MB; ya no corresponde al tamaño del paquete musical ampliado.
-57 tests incluyen contraste de paletas, scoring, recorrido, entrada y diez casos del worker (rangos, atomicidad,
+67 tests incluyen Challenge, récords, selección del primer toque válido, contraste de paletas, scoring, recorrido, entrada y diez casos del worker (rangos, atomicidad,
 fallos de descarga, pérdida de caché, navegación offline y separación de versiones).
 
-Antes de declarar móvil terminado, probar en el iPhone real:
+### Aceptación comunicada por Juan — 4 octubre 2026
+
+Juan comunica que ha probado todo y funciona bien, incluido modo avión, en el
+contexto del uso en su iPhone. Se registra como aceptación de la versión pública
+anterior al Challenge, no como una comprobación instrumentada de cada escenario
+ni de latencia Bluetooth. La corrección de aciertos y el nuevo Challenge requieren
+otra ronda suya después de actualizar la descarga.
+
+Las comprobaciones específicas siguientes quedan como checklist detallado, sin
+atribuir al usuario mediciones que no ha comunicado:
 
 Actualización visual `468ce36`: número y nombre de nivel también en móvil;
 turquesa en Pulso, azul en Cuenta, negro/amarillo en Encuentra el 1. Verificadas

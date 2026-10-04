@@ -9,7 +9,9 @@ replicar el protocolo enterprise completo. No añadir BD, autenticación, Redis,
 workers ni servicios de monitorización propios por obligación de plantilla.
 
 El Beat Trainer y la PWA/offline están implementados. Se comprobaron arranque desde
-una pestaña nueva y cinco pistas con el servidor local apagado; falta iPhone físico.
+una pestaña nueva y cinco pistas con el servidor local apagado. El 4 octubre Juan
+comunica que ha probado todo, incluido modo avión, en el contexto de su iPhone;
+aceptación de la versión previa al Challenge, sin medición de latencia Bluetooth.
 El propietario eligió **web pública con los cinco patrones sintéticos**. Tailscale
 es acceso administrativo al VPS, no un requisito para los alumnos.
 
@@ -142,6 +144,31 @@ copiado y evitó declarar la release saludable. Se corrigió antes de habilitar 
 vhost público; `6860fd1` es la primera release saludable, no las imágenes anteriores.
 
 ## Prueba de salida
+
+### Challenge y corrección de aciertos — 4 octubre 2026
+
+- Release `86d6910`: Challenge completo en Train a la velocidad elegida,
+  récords locales comparables y orientación de avance sin bloquear niveles.
+- Corregido el toque alejado que ocupaba el siguiente 1: solo el primer toque
+  dentro de ±450 ms reales ocupa un objetivo. REPETIDA conserva en pantalla el
+  resultado del resumen; toques alejados se separan de duplicados. Tolerancias
+  sin ampliar. Challenge descuenta el efecto de pulsar de más en su porcentaje.
+- 67 tests locales pasan; Linux 65 pasan y dos privados omitidos. Builds correctos.
+  Regresión de toque lejano seguido de +167 ms: cuenta cerca, no queda bloqueado.
+- Navegador local: REPETIDA con -300 ms coincide con el objetivo del resumen;
+  6 repetidas y 17 alejadas aparecen separadas. Challenge completo sin pulsar:
+  22 oportunidades, 22 sin marcar, 0 %, récord conservado tras recargar. Cierre
+  prematuro sin récord y cambio de pista comprobados. No se inyectan récords
+  artificiales en el origen público.
+- HTTPS `/health`: ok, demo, revisión `86d6910`; Docker healthy, único bind
+  `127.0.0.1:3280`. Imagen sin `.local` ni música privada. Checks existentes
+  BlueClue y BlueClue-HTTP en verde. Sin cambios de proxy ni otros servicios.
+- Descarga pública actualizada desde la interfaz: app y cinco pistas, 12,9 MB.
+  No se ha repetido la apertura sin red de esta release; Juan comunica aceptación
+  de la anterior en modo avión. Falta su primera ronda con el scoring corregido
+  y Challenge; las referencias privadas siguen pendientes de escucha.
+- Rollback conservado a `468ce36`. Cuaderno e infraestructura de Notion
+  actualizados; commits locales, sin push.
 
 ### Paletas por nivel — 4 octubre 2026
 
