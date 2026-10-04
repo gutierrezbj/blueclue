@@ -145,6 +145,20 @@ vhost público; `6860fd1` es la primera release saludable, no las imágenes ante
 
 ## Prueba de salida
 
+### Challenge como último paso — 4 octubre 2026
+
+- Release `44bc713`, solicitada por Juan: panel único al final, tras práctica,
+  repetición y continuación. En móvil queda al final de Ajustes/resumen y oculto
+  en Práctica. Sin cambios de scoring, récords, catálogo ni requisitos de acceso.
+- 76 tests locales pasan; Linux 74 pasan y dos privados omitidos. Build correcto.
+  Navegador: posición inferior a ambas tarjetas en escritorio, tras el botón
+  de volver a practicar en Ajustes y tras la navegación del resumen. Challenge
+  sigue arrancando en Train, 0:00, pausado. Sin overflow a 320 px.
+- HTTPS /health confirma ok, demo, `44bc713`; Docker healthy, único listener
+  127.0.0.1:3280, sin música privada y checks existentes en verde. Rollback
+  `c252759`. Notion actualizado. Sin push ni nueva prueba física de modo avión.
+- Actualizar la descarga del iPhone para conservar el nuevo orden offline.
+
 ### Continuidad y feedback por nivel — 4 octubre 2026
 
 - Release `c252759`: pausar/continuar conserva el feedback. Enter se registra al

@@ -163,7 +163,7 @@ liberar la caché: revisa su estado antes de viajar. Usa altavoz o cable para pr
 con precisión; el retardo Bluetooth no se calibra en esta versión.
 
 Pruebas locales: apertura desde una pestaña nueva y reproducción de las cinco pistas
-con el servidor apagado, vista de 375 px sin desbordamiento, TAP/Enter, 74 tests y
+con el servidor apagado, vista de 375 px sin desbordamiento, TAP/Enter, 76 tests y
 build. **Aceptación del usuario, 4 octubre 2026:** Juan confirma funcionamiento
 correcto, incluido modo avión, en el contexto de su iPhone. El nuevo Challenge
 necesita su primera prueba tras actualizar; no se ha medido latencia Bluetooth.

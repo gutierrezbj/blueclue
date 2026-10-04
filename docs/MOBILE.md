@@ -89,7 +89,7 @@ TAP y feedback accesibles y permite un desplazamiento breve para el resto.
 Probados Ajustes (pausa y retorno), velocidad, módulos, Train, reinicio, resumen
 automático al terminar y replay. La descarga pública anterior a ampliar las pistas
 ocupaba 5,4 MB; ya no corresponde al tamaño del paquete musical ampliado.
-74 tests incluyen Challenge, récords, selección del primer toque válido, Enter sin autorrepetición, contraste de paletas, scoring, recorrido, entrada y diez casos del worker (rangos, atomicidad,
+76 tests incluyen ubicación final del Challenge, récords, selección del primer toque válido, Enter sin autorrepetición, contraste de paletas, scoring, recorrido, entrada y diez casos del worker (rangos, atomicidad,
 fallos de descarga, pérdida de caché, navegación offline y separación de versiones).
 
 ### Aceptación comunicada por Juan — 4 octubre 2026
