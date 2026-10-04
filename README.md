@@ -111,6 +111,11 @@ El resumen de ronda vive en memoria: pausar lo conserva; reiniciar, cambiar pist
 
 ## iPhone y modo bolsillo
 
+La identidad visual acompaña al nivel: **1 · Pulso, turquesa; 2 · Cuenta, azul;
+3 · Encuentra el 1, negro y amarillo**. Velocidad y ayudas no cambian la paleta.
+En móvil, el nivel queda identificado también por texto en Práctica, Ajustes y
+resumen. La selección existente se conserva, sin migrar ni borrar progreso.
+
 Versión pública: **[blueclue.jrgblanco.com](https://blueclue.jrgblanco.com)**,
 con cinco pistas sintéticas; la música privada del curso no está publicada.
 
@@ -138,7 +143,7 @@ liberar la caché: revisa su estado antes de viajar. Usa altavoz o cable para pr
 con precisión; el retardo Bluetooth no se calibra en esta versión.
 
 Pruebas locales: apertura desde una pestaña nueva y reproducción de las cinco pistas
-con el servidor apagado, vista de 375 px sin desbordamiento, TAP/Enter, 55 tests y
+con el servidor apagado, vista de 375 px sin desbordamiento, TAP/Enter, 57 tests y
 build. **Pendiente:** instalación y prueba de interrupciones/audio en iPhone físico.
 Consulta [validación móvil](docs/MOBILE.md) y [operación](docs/OPERATIONS.md).
 

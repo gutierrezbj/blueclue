@@ -105,6 +105,14 @@ No añadir base de datos todavía.
 
 `src/lib/learningModules.ts` separa las consignas y objetivos de la UI. El motor compara contra todos los beats en Pulso y contra downbeats en Cuenta y Encuentra el 1. Los tres módulos comparten preparación, scoring y replay. Teach / Assist / Train son ayudas independientes, no módulos adicionales.
 
+La identidad visual de esos tres niveles depende de `moduleId`, expuesto como
+`data-level` por `BeatTrainer`. Los tokens `--level-*` de `globals.css` gobiernan
+superficies, acentos y foco; no alteran los colores semánticos de feedback.
+`useWaveformPlayer` actualiza únicamente las opciones de color de WaveSurfer al
+cambiar esa identidad, sin recrear el reproductor ni cargar de nuevo el audio.
+Velocidad, ayudas y dificultad de pista no seleccionan paleta. No se añade ningún
+campo de persistencia: restaurar el módulo restaura también su identidad.
+
 `src/lib/playbackSpeed.ts` define las velocidades 65 %, 80 % y 100 %, su valor sugerido por dificultad y la conversión del reloj a tiempo de escucha. Preparación y música usan la misma velocidad, conservando el tono. El scoring calcula `(tapTime - target) * 1000 / playbackRate`: las tolerancias siguen siendo 85, 180 y 450 milisegundos reales. El historial separa módulo y velocidad; los intentos antiguos corresponden a downbeat al 100 %.
 
 `src/lib/localPilot.ts` lee y valida un catálogo JSON privado preparado previamente. Si no está disponible, mantiene las cinco pistas de demostración. `src/lib/beatGrid.ts` vincula el contador y las marcas a `downbeats`, también con un inicio a mitad de compás. Las referencias pendientes de escucha no generan aciertos persistidos. No se analiza audio en tiempo de ejecución.

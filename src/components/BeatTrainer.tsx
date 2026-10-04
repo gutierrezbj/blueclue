@@ -61,7 +61,9 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
   const isPulseExercise = moduleId === "pulse";
   const visualMode = isPulseExercise && mode === "teach" ? "assist" : mode;
   const practiceBpm = (track.bpm * playbackSpeed).toLocaleString("es-ES", { maximumFractionDigits: 1 });
-  const player = useWaveformPlayer(track, hydrated, playbackSpeed);
+  const levelNumber = learningModules.findIndex((item) => item.id === moduleId) + 1;
+  const levelName = ["Inicial", "Intermedio", "Avanzado"][levelNumber - 1];
+  const player = useWaveformPlayer(track, hydrated, playbackSpeed, moduleId);
   const countIn = getCountIn(player.currentTime, track.downbeats[0], track.bpm);
   const isPreparing = countIn !== null && countIn.phase !== "landing";
   const practiceEntry = getPracticeEntry(track.downbeats, player.duration, playbackSpeed);
@@ -323,7 +325,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
   };
 
   return (
-    <main className="app-shell" data-mobile-screen={mobileScreen}>
+    <main className="app-shell" data-mobile-screen={mobileScreen} data-level={moduleId}>
       <a className="skip-link" href="#practice-controls">Ir a los controles de práctica</a>
       <header className="site-header">
         <div className="brand"><span className="brand-mark">B<span>.</span></span><span>BlueClue</span></div>
@@ -332,6 +334,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
       </header>
 
       <section className="mobile-only mobile-context" aria-label="Ejercicio actual">
+        <div className="level-label">Nivel {levelNumber} · {levelName}</div>
         <h1 ref={mobileHeadingRef} tabIndex={-1}>{mobileScreen === "settings" ? "Tu ejercicio" : mobileScreen === "summary" ? "Tu ronda" : lesson.title}</h1>
         <p>Pista {trackIndex + 1}/{tracks.length} · {track.title}</p>
         <span>{mode.toUpperCase()} · {speedLabels[playbackSpeed]} · {practiceBpm} BPM</span>
@@ -352,7 +355,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
 
       <section className="journey-card" aria-labelledby="journey-heading">
         <div className="journey-overview">
-          <span className="field-label">PISTA {trackIndex + 1} DE {tracks.length} · MÓDULO {learningModules.findIndex((item) => item.id === moduleId) + 1} DE 3</span>
+          <span className="field-label">PISTA {trackIndex + 1} DE {tracks.length} · NIVEL {levelNumber} DE 3 · {levelName.toUpperCase()}</span>
           <h2 id="journey-heading" ref={journeyHeadingRef} tabIndex={-1}>{lesson.title}</h2>
           <p>{lesson.instruction}</p>
           {resumed && <p>Retomamos tu ejercicio y su velocidad, sin arrancar la música.</p>}
@@ -365,8 +368,8 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
           </select>
           <p className="save-notice" role="status">{storageUnavailable ? "No podemos guardar en este navegador. Puedes practicar, pero la sesión no se conservará al cerrar." : "Tu punto de práctica se guarda en este navegador."}</p>
         </div>
-        <nav className="module-selector" aria-label="Módulos de aprendizaje">
-          {learningModules.map((item, index) => <button key={item.id} type="button" className={moduleId === item.id ? "module-button active" : "module-button"} aria-current={moduleId === item.id ? "step" : undefined} disabled={!hydrated} onClick={() => navigatePractice({ trackId, moduleId: item.id, mode: item.defaultMode })}><small>MÓDULO {index + 1}</small>{item.title}</button>)}
+        <nav className="module-selector" aria-label="Niveles de aprendizaje">
+          {learningModules.map((item, index) => <button key={item.id} type="button" className={moduleId === item.id ? "module-button active" : "module-button"} aria-current={moduleId === item.id ? "step" : undefined} disabled={!hydrated} onClick={() => navigatePractice({ trackId, moduleId: item.id, mode: item.defaultMode })}><small>NIVEL {index + 1}</small>{item.title}</button>)}
         </nav>
       </section>
 
