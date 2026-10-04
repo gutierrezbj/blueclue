@@ -89,10 +89,19 @@ TAP y feedback accesibles y permite un desplazamiento breve para el resto.
 Probados Ajustes (pausa y retorno), velocidad, módulos, Train, reinicio, resumen
 automático al terminar y replay. La descarga pública anterior a ampliar las pistas
 ocupaba 5,4 MB; ya no corresponde al tamaño del paquete musical ampliado.
-55 tests incluyen scoring, recorrido, entrada y diez casos del worker (rangos, atomicidad,
+57 tests incluyen contraste de paletas, scoring, recorrido, entrada y diez casos del worker (rangos, atomicidad,
 fallos de descarga, pérdida de caché, navegación offline y separación de versiones).
 
 Antes de declarar móvil terminado, probar en el iPhone real:
+
+Actualización visual `468ce36`: número y nombre de nivel también en móvil;
+turquesa en Pulso, azul en Cuenta, negro/amarillo en Encuentra el 1. Verificadas
+27 combinaciones de nivel/velocidad/ayudas: el color no cambia con estas últimas.
+Práctica, Ajustes y resumen mantienen la identidad, sin controles adicionales.
+Restauración pausada y anchos 320/375 comprobados en navegador. En producción,
+ronda completa de 22 oportunidades y actualización del paquete comprobadas:
+cinco pistas disponibles, 12,9 MB descargados. No se repitió la reapertura sin red
+para esta release; las pruebas offline anteriores no sustituyen Safari físico.
 
 - [ ] Instalación desde Safari e icono correcto.
 - [ ] Descargar dentro de la app instalada y arrancar en modo avión.

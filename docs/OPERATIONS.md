@@ -32,8 +32,8 @@ la excepción ligera autorizada; no modifica las plantillas maestras.
 | Internos | 5280 sin uso |
 | Datos | 6280–6289 sin uso; no hay BD |
 | VPS | Servidor 2, comprobado por Tailscale |
-| Directorio | `/opt/apps/blueclue`, release `22efcbf`, enlace `current` |
-| Contenedor | `blueclue-web`, imagen `blueclue:22efcbf`, healthy |
+| Directorio | `/opt/apps/blueclue`, release `468ce36`, enlace `current` |
+| Contenedor | `blueclue-web`, imagen `blueclue:468ce36`, healthy |
 | Bind | `127.0.0.1:3280:3000` verificado; nunca puerto público directo |
 | Dominio | `https://blueclue.jrgblanco.com`, HTTPS verificado |
 
@@ -43,6 +43,10 @@ hostname `srv1369522`. Antes de desplegar: 3911 MiB RAM total, 2320 MiB disponib
 por IP pública no bloquea esta ruta autorizada. Se conserva verificación de host.
 
 ## Peso medido
+
+Desde `f82ed1f`, los cinco WAV públicos ocupan 12.133.690 bytes (12,13 MB),
+con 24 compases por pista y 51–62 segundos al tempo original. Las mediciones
+del 3 de octubre que siguen son históricas, anteriores a ampliar los audios.
 
 Medición local del 3 de octubre, MB decimales, sin compresión HTTP:
 
@@ -138,6 +142,27 @@ copiado y evitó declarar la release saludable. Se corrigió antes de habilitar 
 vhost público; `6860fd1` es la primera release saludable, no las imágenes anteriores.
 
 ## Prueba de salida
+
+### Paletas por nivel — 4 octubre 2026
+
+- Release `468ce36`: Nivel 1 turquesa, Nivel 2 azul y Nivel 3 negro/amarillo.
+  Color asociado al módulo, nunca a velocidad, ayudas ni dificultad de pista.
+  Número y nombre visibles; sin cambios de scoring, audio ni progreso local.
+- 57 tests locales; Linux 55 pasan y dos privados omitidos. Incluye pruebas
+  de tokens y contraste AA para acentos y texto TAP. Builds correctos.
+- Navegador: 27 combinaciones nivel/velocidad/ayudas, Práctica/Ajustes/resumen,
+  restauración pausada, anchos 320 y 375 y escritorio. Sin overflow horizontal.
+  Producción muestra las tres paletas y reproduce con preparación conservada.
+- HTTPS `/health`: `ok`, `demo`, revisión `468ce36`; contenedor healthy,
+  bind exclusivo `127.0.0.1:3280`. Imagen sin catálogo ni música privados.
+  Checks existentes BlueClue y BlueClue-HTTP en verde; sin tocar otros servicios.
+- Rollback conservado a `f82ed1f`. Challenge y récords solo como propuesta.
+  iPhone físico y validación pedagógica siguen pendientes; commits sin push.
+- Ronda pública completa: 22 oportunidades y 22 sin marcar al no pulsar,
+  resumen automático correcto. Sin añadir intentos artificiales al historial.
+- Actualizar descarga desde Ajustes confirma cinco pistas disponibles y **12,9 MB**
+  (app + audio). Reapertura sin red de esta release no repetida; la prueba offline
+  previa pertenece a una release anterior. Safari físico sigue pendiente.
 
 ### Actualización móvil — 4 octubre 2026
 
