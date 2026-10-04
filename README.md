@@ -109,6 +109,22 @@ Al terminar, o pulsar **Ver resumen de esta ronda**, aparecen oportunidades clav
 
 El resumen de ronda vive en memoria: pausar lo conserva; reiniciar, cambiar pista, módulo, ayuda o velocidad, mover la onda o volver a practicar desde un replay empieza otro. Recargar conserva tu punto de práctica, pero no el resumen de la ronda anterior. El historial local de intentos validados permanece. Las referencias pendientes muestran un **resumen provisional**, nunca una nota ni aciertos persistidos.
 
+## Challenge y récords
+
+En **Ajustes** o al terminar una ronda, pulsa **Empezar Challenge**. Conserva
+pista, nivel y velocidad, pasa a Train y queda preparado en 0:00: pulsa Play.
+Tras la entrada, escucha sin onda ni contador y marca hasta el final. La respuesta
+se revela al terminar. Puedes pausar; terminar antes no guarda récord.
+
+Se guarda tu mejor ronda completa por pista, nivel y velocidad, separada del
+historial de práctica. El porcentaje incluye los objetivos sin marcar. La app
+recomienda probar el siguiente nivel con **80 % entre clavados y cerca en dos
+pistas distintas a la misma velocidad**; mínimo 20 oportunidades por ronda.
+Es una orientación inicial, no un aprobado obligatorio. Puedes avanzar libremente.
+Las pistas privadas con referencias pendientes no ofrecen Challenge puntuable.
+No hay sincronización ni ranking público. Una ronda en curso no se recupera como
+Challenge tras recargar; los récords terminados sí.
+
 ## iPhone y modo bolsillo
 
 La identidad visual acompaña al nivel: **1 · Pulso, turquesa; 2 · Cuenta, azul;
@@ -143,8 +159,10 @@ liberar la caché: revisa su estado antes de viajar. Usa altavoz o cable para pr
 con precisión; el retardo Bluetooth no se calibra en esta versión.
 
 Pruebas locales: apertura desde una pestaña nueva y reproducción de las cinco pistas
-con el servidor apagado, vista de 375 px sin desbordamiento, TAP/Enter, 57 tests y
-build. **Pendiente:** instalación y prueba de interrupciones/audio en iPhone físico.
+con el servidor apagado, vista de 375 px sin desbordamiento, TAP/Enter, 64 tests y
+build. **Aceptación del usuario, 4 octubre 2026:** Juan confirma funcionamiento
+correcto, incluido modo avión, en el contexto de su iPhone. El nuevo Challenge
+necesita su primera prueba tras actualizar; no se ha medido latencia Bluetooth.
 Consulta [validación móvil](docs/MOBILE.md) y [operación](docs/OPERATIONS.md).
 
 ## Regla de alcance

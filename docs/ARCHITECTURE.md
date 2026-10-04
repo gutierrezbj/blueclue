@@ -125,6 +125,16 @@ campo de persistencia: restaurar el módulo restaura también su identidad.
 
 ## Audio
 
+`src/lib/challenge.ts` evalúa únicamente rondas completas de Train con referencias
+verificadas. Reutiliza `summarizeRound`; mantiene reglas de 20 oportunidades,
+80 % y dos pistas distintas centralizadas. Su huella de referencias/reglas evita
+comparar récords de rejillas diferentes. `ChallengePanel` presenta el resultado,
+récord y recomendación sin evaluar TAP en la UI. Los récords se validan al leer y
+se guardan aparte de la sesión existente (`*-challenges-v1`), por catálogo.
+La ronda activa es efímera: reiniciar la reemplaza, cambios de ejercicio la
+cancelan y replay no puede guardar otra copia. WaveSurfer desactiva el seek durante
+Challenge; la UI oculta onda y evaluación tras la entrada. No cambia el audio.
+
 Prioridades:
 
 1. estabilidad de reproducción

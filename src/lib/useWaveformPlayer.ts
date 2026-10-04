@@ -6,7 +6,7 @@ import type { TrainingTrack } from "./tracks";
 import { WAVEFORM_SECONDS, type WaveformWindow } from "./waveformWindow";
 import type { PlaybackSpeed } from "./playbackSpeed";
 
-export function useWaveformPlayer(track: TrainingTrack, enabled = true, playbackSpeed: PlaybackSpeed = 1, appearanceKey = "pulse") {
+export function useWaveformPlayer(track: TrainingTrack, enabled = true, playbackSpeed: PlaybackSpeed = 1, appearanceKey = "pulse", seekEnabled = true) {
   const containerRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<WaveSurfer | null>(null);
   const speedRef = useRef(playbackSpeed);
@@ -117,9 +117,10 @@ export function useWaveformPlayer(track: TrainingTrack, enabled = true, playback
     const styles = getComputedStyle(containerRef.current);
     playerRef.current.setOptions({
       progressColor: styles.getPropertyValue("--level-accent").trim(),
-      waveColor: styles.getPropertyValue("--level-wave").trim()
+      waveColor: styles.getPropertyValue("--level-wave").trim(),
+      interact: seekEnabled
     });
-  }, [appearanceKey, track, enabled]);
+  }, [appearanceKey, track, enabled, seekEnabled]);
 
   const play = useCallback(async () => {
     const player = playerRef.current;

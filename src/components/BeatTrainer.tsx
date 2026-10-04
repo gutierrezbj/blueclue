@@ -4,6 +4,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { WaveformDisplay } from "./WaveformDisplay";
 import { RoundSummary } from "./RoundSummary";
 import { PocketMode } from "./PocketMode";
+import { ChallengePanel } from "./ChallengePanel";
+import { completeChallenge, readChallengeRecords, saveChallengeRecord, type ChallengeRecord } from "@/lib/challenge";
 import type { OfflinePack } from "@/lib/offlineTypes";
 import { type AttemptClassification, type AttemptResult } from "@/lib/scoring";
 import { difficultyLabels, type TrainingMode, type TrainingTrack } from "@/lib/tracks";
@@ -48,6 +50,12 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
   const [storageUnavailable, setStorageUnavailable] = useState(false);
   const [resumed, setResumed] = useState(false);
   const [mobileScreen, setMobileScreen] = useState<"practice" | "settings" | "summary">("practice");
+  const [isChallenge, setIsChallenge] = useState(false);
+  const [challengeRecords, setChallengeRecords] = useState<ChallengeRecord[]>([]);
+  const [challengeResult, setChallengeResult] = useState<ChallengeRecord | null>(null);
+  const [challengeInvalidReason, setChallengeInvalidReason] = useState<string | null>(null);
+  const challengeRunRef = useRef<{ invalidated: boolean; finalized: boolean } | null>(null);
+  const challengeStorageKey = `${storageKey}-challenges-v1`;
   const mobileHeadingRef = useRef<HTMLHeadingElement>(null);
   const tapButtonRef = useRef<HTMLButtonElement>(null);
   const focusTapRef = useRef(false);
@@ -63,7 +71,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
   const practiceBpm = (track.bpm * playbackSpeed).toLocaleString("es-ES", { maximumFractionDigits: 1 });
   const levelNumber = learningModules.findIndex((item) => item.id === moduleId) + 1;
   const levelName = ["Inicial", "Intermedio", "Avanzado"][levelNumber - 1];
-  const player = useWaveformPlayer(track, hydrated, playbackSpeed, moduleId);
+  const player = useWaveformPlayer(track, hydrated, playbackSpeed, moduleId, !isChallenge);
   const countIn = getCountIn(player.currentTime, track.downbeats[0], track.bpm);
   const isPreparing = countIn !== null && countIn.phase !== "landing";
   const practiceEntry = getPracticeEntry(track.downbeats, player.duration, playbackSpeed);
@@ -72,6 +80,10 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
 
   useEffect(() => {
     if (!player.interaction) return;
+    if (challengeRunRef.current) {
+      challengeRunRef.current.invalidated = true;
+      setChallengeInvalidReason("Has movido la reproducción: esta ronda no guarda récord. Reinicia el Challenge.");
+    }
     setRound(null);
     setSummaryOpen(false);
     setFeedback(null);
@@ -110,6 +122,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
 
   useEffect(() => {
     try {
+      setChallengeRecords(readChallengeRecords(localStorage.getItem(challengeStorageKey), tracks));
       const saved = localStorage.getItem(storageKey);
       if (saved) {
         const parsed = readPracticeSession(saved, trackIds);
@@ -125,7 +138,16 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
       setStorageUnavailable(true);
     }
     setHydrated(true);
-  }, [trackIds, storageKey, tracks]);
+  }, [trackIds, storageKey, tracks, challengeStorageKey]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    try {
+      localStorage.setItem(challengeStorageKey, JSON.stringify(challengeRecords));
+    } catch {
+      setStorageUnavailable(true);
+    }
+  }, [hydrated, challengeRecords, challengeStorageKey]);
 
   useEffect(() => {
     if (!player.isReady || resumePositionRef.current === null) return;
@@ -177,6 +199,17 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
   const playbackLabel = isReviewing ? "Volver a practicar" : player.isPlaying ? "Pausar práctica" : hasEnded ? "Repetir esta pista" : "Continuar práctica";
 
   useEffect(() => {
+    const run = challengeRunRef.current;
+    if (!isChallenge || !run || run.finalized || isReviewing || !round || !player.isReady || player.isPlaying || player.currentTime < player.duration) return;
+    run.finalized = true;
+    const result = completeChallenge({ round: { ...round, end: player.duration }, track, moduleId, speed: playbackSpeed, mode,
+      duration: player.duration, reachedEnd: true, invalidated: run.invalidated, completedAt: new Date().toISOString() });
+    setChallengeResult(result);
+    if (result) setChallengeRecords(current => saveChallengeRecord(current, result));
+    else setChallengeInvalidReason("Ronda sin récord: completa el Challenge desde el inicio, sin saltos y con referencias verificadas.");
+  }, [isChallenge, isReviewing, round, player.isReady, player.isPlaying, player.currentTime, player.duration, track, moduleId, playbackSpeed, mode]);
+
+  useEffect(() => {
     if (hasEnded && !isReviewing) setMobileScreen("summary");
   }, [hasEnded, isReviewing]);
 
@@ -191,6 +224,46 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
     player.pause();
     focusTapRef.current = false;
     setMobileScreen("settings");
+  }
+
+  function clearChallenge() {
+    challengeRunRef.current = null;
+    setIsChallenge(false);
+    setChallengeResult(null);
+    setChallengeInvalidReason(null);
+  }
+
+  function startChallenge(nextTrackId = trackId) {
+    if (!player.isReady || (tracks.find(item => item.id === nextTrackId) ?? track).referenceStatus === "pending-listening") return;
+    player.pause();
+    player.seek(0);
+    replayEndRef.current = null;
+    resumePositionRef.current = null;
+    focusTapRef.current = false;
+    setTrackId(nextTrackId);
+    setMode("train");
+    setIsChallenge(true);
+    challengeRunRef.current = { invalidated: false, finalized: false };
+    setChallengeResult(null);
+    setChallengeInvalidReason(null);
+    setIsReviewing(false);
+    setFeedback(null);
+    setRound({ start: 0, end: 0, taps: [] });
+    setSummaryOpen(false);
+    setResumed(false);
+    setMobileScreen("practice");
+  }
+
+  function exitChallenge() {
+    player.pause();
+    player.seek(0);
+    clearChallenge();
+    setRound(null);
+    setFeedback(null);
+    setIsReviewing(false);
+    replayEndRef.current = null;
+    setSummaryOpen(false);
+    setMobileScreen("practice");
   }
 
   function startPracticePlayback() {
@@ -209,6 +282,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
 
   function navigatePractice(location: PracticeLocation & { playbackSpeed?: PlaybackSpeed }, fromBeginning = false) {
     if (location.trackId === trackId && location.moduleId === moduleId && location.mode === mode && (location.playbackSpeed === undefined || location.playbackSpeed === playbackSpeed)) return;
+    clearChallenge();
     focusTapRef.current = false;
     setRound(null);
     setSummaryOpen(false);
@@ -229,6 +303,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
 
   function changeSpeed(speed: PlaybackSpeed) {
     if (speed === playbackSpeed) return;
+    clearChallenge();
     player.pause();
     setRound(null);
     setSummaryOpen(false);
@@ -241,6 +316,10 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
   }
 
   function togglePlayback() {
+    if (isChallenge && (isReviewing || hasEnded || summaryOpen)) {
+      restartPractice();
+      return;
+    }
     replayEndRef.current = null;
     if (isReviewing && feedback?.result.replayStart !== null && feedback?.result.replayStart !== undefined) {
       player.seek(feedback.result.replayStart);
@@ -258,10 +337,10 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
     const tapTime = player.getTime();
     const result = scoreExerciseAttempt(tapTime, track, player.duration, moduleId, playbackSpeed);
     if (!result) return;
-    setFeedback({ result, tapTime });
+    if (!isChallenge) setFeedback({ result, tapTime });
     setRound(current => recordRoundTap(current ?? { start: tapTime, end: tapTime, taps: [] }, tapTime, track, moduleId, playbackSpeed, player.duration));
     replayEndRef.current = null;
-    if (isReferencePending) return;
+    if (isReferencePending || isChallenge) return;
     setProgress((current) => ({
       attempts: [...current.attempts, { trackId: track.id, moduleId, playbackSpeed, classification: result.classification, errorMs: result.errorMs }].slice(-100)
     }));
@@ -279,6 +358,11 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
 
   function restartPractice() {
     if (!player.isReady) return;
+    if (isChallenge) {
+      challengeRunRef.current = { invalidated: false, finalized: false };
+      setChallengeResult(null);
+      setChallengeInvalidReason(null);
+    }
     player.pause();
     replayEndRef.current = null;
     setIsReviewing(false);
@@ -292,6 +376,10 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
 
   const listeningInstruction = isPulseExercise ? "Primero escucha el pulso regular. Todavía no pulses: deja que el ritmo se te haga familiar." : "Primero escucha dos veces 1-2-3-4. Estos primeros compases no se puntúan.";
   function finishRound() {
+    if (isChallenge && challengeRunRef.current && !challengeRunRef.current.finalized && player.getTime() < player.duration) {
+      challengeRunRef.current.invalidated = true;
+      setChallengeInvalidReason("Challenge terminado antes de tiempo: puedes revisar esta ronda, pero no guarda récord.");
+    }
     player.pause();
     replayEndRef.current = null;
     focusTapRef.current = false;
@@ -324,8 +412,13 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
     "otra-vez": "OTRA VEZ"
   };
 
+  const challengePanel = <ChallengePanel track={track} tracks={tracks} moduleId={moduleId} speed={playbackSpeed}
+    records={challengeRecords} result={challengeResult} active={isChallenge} unavailable={!player.isReady}
+    invalidReason={challengeInvalidReason} storageUnavailable={storageUnavailable} onStart={startChallenge} onExit={exitChallenge}
+    onAdvance={nextModuleId => { navigatePractice({ trackId, moduleId: nextModuleId, mode: "teach", playbackSpeed }, true); setMobileScreen("practice"); }} />;
+
   return (
-    <main className="app-shell" data-mobile-screen={mobileScreen} data-level={moduleId}>
+    <main className="app-shell" data-mobile-screen={mobileScreen} data-level={moduleId} data-challenge={isChallenge && !isReviewing ? "active" : undefined}>
       <a className="skip-link" href="#practice-controls">Ir a los controles de práctica</a>
       <header className="site-header">
         <div className="brand"><span className="brand-mark">B<span>.</span></span><span>BlueClue</span></div>
@@ -337,7 +430,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
         <div className="level-label">Nivel {levelNumber} · {levelName}</div>
         <h1 ref={mobileHeadingRef} tabIndex={-1}>{mobileScreen === "settings" ? "Tu ejercicio" : mobileScreen === "summary" ? "Tu ronda" : lesson.title}</h1>
         <p>Pista {trackIndex + 1}/{tracks.length} · {track.title}</p>
-        <span>{mode.toUpperCase()} · {speedLabels[playbackSpeed]} · {practiceBpm} BPM</span>
+        <span>{isChallenge ? "CHALLENGE · TRAIN" : mode.toUpperCase()} · {speedLabels[playbackSpeed]} · {practiceBpm} BPM</span>
         {isReferencePending && <small>Referencia provisional · sin nota</small>}
         {storageUnavailable && <small role="status">No se puede guardar el progreso en este navegador.</small>}
       </section>
@@ -399,8 +492,10 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
             ))}
           </div>
           <p className="mode-description">{isPulseExercise ? mode === "train" ? "Sin marcas: acompaña el pulso regular con cada toque." : mode === "assist" ? "Sigue el destello del pulso; la onda ya no muestra las marcas." : "Cada marca es un pulso. Acompaña todos por igual; todavía no necesitas contar." : modeDescriptions[mode]}</p>
+          {(!showSummary || mobileScreen === "settings") && challengePanel}
           </div>
 
+          <div className={isChallenge && !isReviewing && !isPreparing ? "challenge-wave-hidden" : undefined}>
           <WaveformDisplay
             track={track}
             mode={isPulseExercise && mode === "assist" ? "train" : visualMode}
@@ -413,6 +508,8 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
             tapTime={isReviewing ? feedback?.tapTime ?? null : null}
             outcomes={mode !== "train" || showSummary || isReviewing ? roundSummary.outcomes : []}
           />
+          {isChallenge && !isReviewing && !isPreparing && <p className="challenge-listening">Solo oído · mantén el ritmo hasta el final.</p>}
+          </div>
           <div className="transport">
             <button type="button" className="play-button" onClick={togglePlayback} disabled={!player.isReady} aria-label={playbackLabel}>
               {isReviewing ? "↺" : player.isPlaying ? "Ⅱ" : "▶"}
@@ -453,7 +550,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
             </div>
 
             <div className={`feedback-panel${feedback ? " has-feedback" : ""}`} aria-live="polite">
-              {feedback ? (
+              {isChallenge && !isReviewing ? <span className="field-label">CHALLENGE · RESULTADO AL TERMINAR</span> : feedback ? (
                 <>
                   <span className={`result-badge ${feedback.result.classification}`}>{feedbackLabel[feedback.result.classification]}{isReferencePending ? " · PROVISIONAL" : ""}</span>
                   <p className="feedback-explanation">{isReferencePending ? "Comparado con la marca del archivo, pendiente de revisión por oído. Es una orientación, no una nota." : feedback.result.message}</p>
@@ -467,12 +564,13 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
             </div>
             <button type="button" className="replay-button desktop-only" disabled={!round || isReviewing} onClick={finishRound}>Ver resumen de esta ronda</button>
             {showSummary && <RoundSummary summary={roundSummary} provisional={isReferencePending} onReview={replayOutcome} />}
-            <div className="mobile-only mobile-summary-actions"><button type="button" className="continue-button" onClick={restartPractice} disabled={!player.isReady}>↺ Repetir ejercicio</button><button type="button" className="previous-button" onClick={() => setMobileScreen("practice")}>Volver a practicar</button></div>
-            <nav className="journey-actions" aria-label="Navegar entre pasos de práctica">
+            {showSummary && challengePanel}
+            {!isChallenge && <div className="mobile-only mobile-summary-actions"><button type="button" className="continue-button" onClick={restartPractice} disabled={!player.isReady}>↺ Repetir ejercicio</button><button type="button" className="previous-button" onClick={() => setMobileScreen("practice")}>Volver a practicar</button></div>}
+            {!isChallenge && <nav className="journey-actions" aria-label="Navegar entre pasos de práctica">
               <button type="button" className="previous-button" disabled={!hydrated || !previousStep} onClick={() => { if (previousStep) { navigatePractice(previousStep, true); setMobileScreen("practice"); } }}>← Anterior</button>
               {nextStep ? <button type="button" className="next-button" disabled={!hydrated} onClick={() => { navigatePractice(nextStep, true); setMobileScreen("practice"); }}>{nextStep.trackId !== trackId ? "Siguiente pista · Teach / Despacio →" : nextStep.moduleId !== moduleId ? `${getLearningModule(nextStep.moduleId).title} · Despacio →` : `Continuar: ${nextStep.mode.toUpperCase()} · ${speedLabels[nextStep.playbackSpeed]} →`}</button> : <a className="next-button" href="#track-select" onClick={() => setMobileScreen("settings")}>Volver a elegir pista ↑</a>}
-            </nav>
-            <p className="journey-hint">{lesson.readiness} Avanzar es voluntario, no una certificación.</p>
+            </nav>}
+            {!isChallenge && <p className="journey-hint">{lesson.readiness} Avanzar es voluntario, no una certificación.</p>}
           </div>
           <div className="practice-footer">{isReferencePending ? <p className="provisional-summary">PRÁCTICA SIN NOTA<br />Las referencias están por validar. No significa que tengas cero aciertos.</p> : <><span>ESTE MÓDULO · {Math.round(playbackSpeed * 100)} %</span><strong>{accurateCount} / {trackAttempts.length}</strong><span>CLAVADOS O CERCA</span></>}</div>
         </aside>
