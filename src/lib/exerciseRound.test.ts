@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { firstTargetTap, recordRoundTap, summarizeRound, reviewOutcome, type ExerciseRound } from "./exerciseRound.ts";
+import { evaluateRoundTap, firstTargetTap, recordRoundTap, summarizeRound, reviewOutcome, type ExerciseRound } from "./exerciseRound.ts";
 import type { TrainingTrack } from "./tracks.ts";
 
 const track: TrainingTrack = { id: "test", title: "Test", bpm: 120, timeSignature: "4/4", audioFile: "test.wav", difficulty: "very-easy", description: "", beats: Array.from({ length: 40 }, (_, index) => 3.5 + index * 0.5), downbeats: [3.5, 5.5, 7.5, 9.5, 11.5, 13.5, 15.5, 17.5, 19.5, 21.5] };
@@ -68,4 +68,45 @@ test("off-target taps are separate from repeated attempts at all speeds", () => 
     assert.equal(summary.extra, 1);
     assert.equal(summary.outcomes.find(outcome => outcome.target === 9.5)?.result?.errorMs, 167);
   }
+});
+
+test("feedback and summary share the first accepted result in every module and speed", () => {
+  for (const moduleId of ["pulse", "count", "downbeat"] as const) {
+    for (const speed of [0.65, 0.8, 1] as const) {
+      const first = evaluateRoundTap({ start: 0, end: 0, taps: [] }, 9.5 + 0.167 * speed, track, moduleId, speed, 24)!;
+      const repeated = evaluateRoundTap(first.round, 9.5 + 0.17 * speed, track, moduleId, speed, 24)!;
+      const summary = summarizeRound({ ...repeated.round, end: 10 }, track, moduleId, speed, 24);
+      assert.equal(first.repeated, false);
+      assert.equal(repeated.repeated, true);
+      assert.equal(repeated.feedback, first.feedback);
+      assert.equal(summary.outcomes.find(outcome => outcome.target === 9.5)?.result, repeated.feedback.result);
+      assert.equal(first.round.taps.length, 1);
+      assert.equal(summary.close, 1);
+      assert.equal(summary.extra, 1);
+    }
+  }
+});
+
+test("pulse replay keeps pulse wording instead of teaching the downbeat", () => {
+  const evaluation = evaluateRoundTap({ start: 0, end: 0, taps: [] }, 8, track, "pulse", 1, 24)!;
+  const summary = summarizeRound({ ...evaluation.round, end: 9 }, track, "pulse", 1, 24);
+  const outcome = summary.outcomes.find(item => item.target === 8)!;
+  assert.equal(evaluation.feedback.result.message, "Clavado. Ese era el pulso.");
+  assert.equal(reviewOutcome(outcome).message, evaluation.feedback.result.message);
+});
+
+test("far taps do not label a subsequent accurate tap as repeated", () => {
+  const far = evaluateRoundTap({ start: 0, end: 0, taps: [] }, 9, track, "downbeat", 1, 24)!;
+  const accurate = evaluateRoundTap(far.round, 9.667, track, "downbeat", 1, 24)!;
+  assert.equal(accurate.repeated, false);
+  assert.equal(accurate.feedback.result.classification, "cerca");
+  assert.equal(accurate.feedback.result.errorMs, 167);
+});
+
+test("ignored input cannot produce feedback or change the round", () => {
+  const round = { start: 0, end: 0, taps: [] };
+  for (const time of [-1, 0, 5.5, 25, NaN, Infinity]) {
+    assert.equal(evaluateRoundTap(round, time, track, "downbeat", 1, 24), null);
+  }
+  assert.deepEqual(round, { start: 0, end: 0, taps: [] });
 });

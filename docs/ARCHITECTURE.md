@@ -125,6 +125,12 @@ campo de persistencia: restaurar el módulo restaura también su identidad.
 
 ## Audio
 
+`evaluateRoundTap` registra y devuelve en una sola operación la ronda, el feedback
+conservado y el indicador de repetición. La UI no vuelve a calcular el mismo TAP.
+`recordRoundTap` reutiliza el motor de módulos para mantener idénticas las consignas
+de pulso/downbeat durante práctica, resumen y replay. `tapInput.ts` consume Enter
+al bajar la tecla y descarta su autorrepetición; deja Espacio al control de pausa.
+
 `src/lib/challenge.ts` evalúa únicamente rondas completas de Train con referencias
 verificadas. Reutiliza `summarizeRound`; mantiene reglas de 20 oportunidades,
 80 % y dos pistas distintas centralizadas. Su huella de referencias/reglas evita

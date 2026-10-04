@@ -1,6 +1,6 @@
-import { DEFAULT_THRESHOLDS, getReplayStart, scoreAttempt, type AttemptResult } from "./scoring.ts";
+import { DEFAULT_THRESHOLDS, getReplayStart, type AttemptResult } from "./scoring.ts";
 import { getPracticeEntry } from "./practiceEntry.ts";
-import type { LearningModuleId } from "./learningModules.ts";
+import { scoreExerciseAttempt, type LearningModuleId } from "./learningModules.ts";
 import type { TrainingTrack } from "./tracks.ts";
 import type { PlaybackSpeed } from "./playbackSpeed.ts";
 
@@ -43,7 +43,15 @@ export function reviewOutcome(outcome: RoundOutcome): AttemptResult {
 export function recordRoundTap(round: ExerciseRound, time: number, track: TrainingTrack, moduleId: LearningModuleId, speed: PlaybackSpeed, duration: number): ExerciseRound {
   const entry = getPracticeEntry(track.downbeats, duration, speed);
   if (!entry || time < Math.max(round.start, entry.opensAt) || time > duration || !Number.isFinite(time)) return round;
-  const targets = (moduleId === "pulse" ? track.beats : track.downbeats).filter(target => target >= entry.target);
-  const result = scoreAttempt(time, targets, duration, DEFAULT_THRESHOLDS, speed);
+  const result = scoreExerciseAttempt(time, track, duration, moduleId, speed);
+  if (!result) return round;
   return { ...round, end: Math.max(round.end, time), taps: [...round.taps, { time, result }] };
+}
+
+export function evaluateRoundTap(round: ExerciseRound, time: number, track: TrainingTrack, moduleId: LearningModuleId, speed: PlaybackSpeed, duration: number) {
+  const updatedRound = recordRoundTap(round, time, track, moduleId, speed, duration);
+  if (updatedRound === round) return null;
+  const tap = updatedRound.taps[updatedRound.taps.length - 1];
+  const previous = isTargetTap(tap) ? firstTargetTap(round, tap.result.target) : undefined;
+  return { round: updatedRound, feedback: previous ?? tap, repeated: Boolean(previous) };
 }

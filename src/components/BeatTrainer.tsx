@@ -13,9 +13,10 @@ import { useWaveformPlayer } from "@/lib/useWaveformPlayer";
 import { getPracticeNeighbor, getResumePosition, modeLabels, practiceModes, readPracticeSession, type PracticeLocation, type PracticeSession } from "@/lib/practice";
 import { getBeatPosition } from "@/lib/beatGrid";
 import { getCountIn } from "@/lib/countIn";
-import { firstTargetTap, isTargetTap, recordRoundTap, reviewOutcome, summarizeRound, type ExerciseRound, type RoundOutcome } from "@/lib/exerciseRound";
+import { evaluateRoundTap, reviewOutcome, summarizeRound, type ExerciseRound, type RoundOutcome } from "@/lib/exerciseRound";
+import { handleTapKeyDown } from "@/lib/tapInput";
 import { getPracticeEntry } from "@/lib/practiceEntry";
-import { getLearningModule, learningModules, scoreExerciseAttempt, type LearningModuleId } from "@/lib/learningModules";
+import { getLearningModule, learningModules, type LearningModuleId } from "@/lib/learningModules";
 import { listeningSeconds, playbackSpeeds, speedLabels, suggestedSpeed, type PlaybackSpeed } from "@/lib/playbackSpeed";
 
 type Progress = PracticeSession["progress"];
@@ -326,7 +327,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
       setRound(null);
     }
     setIsReviewing(false);
-    setFeedback(null);
+    if (isReviewing || hasEnded) setFeedback(null);
     setResumed(false);
     if (player.isPlaying && !isReviewing) player.pause();
     else startPracticePlayback();
@@ -335,13 +336,13 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
   function tap() {
     if (!canTap) return;
     const tapTime = player.getTime();
-    const result = scoreExerciseAttempt(tapTime, track, player.duration, moduleId, playbackSpeed);
-    if (!result) return;
-    const previousTap = round && isTargetTap({ time: tapTime, result }) ? firstTargetTap(round, result.target) : undefined;
-    if (!isChallenge) setFeedback({ result: previousTap?.result ?? result, tapTime: previousTap?.time ?? tapTime, repeated: Boolean(previousTap) });
-    setRound(current => recordRoundTap(current ?? { start: tapTime, end: tapTime, taps: [] }, tapTime, track, moduleId, playbackSpeed, player.duration));
+    const evaluation = evaluateRoundTap(round ?? { start: tapTime, end: tapTime, taps: [] }, tapTime, track, moduleId, playbackSpeed, player.duration);
+    if (!evaluation) return;
+    const { result, time } = evaluation.feedback;
+    if (!isChallenge) setFeedback({ result, tapTime: time, repeated: evaluation.repeated });
+    setRound(evaluation.round);
     replayEndRef.current = null;
-    if (isReferencePending || isChallenge || previousTap) return;
+    if (isReferencePending || isChallenge || evaluation.repeated) return;
     setProgress((current) => ({
       attempts: [...current.attempts, { trackId: track.id, moduleId, playbackSpeed, classification: result.classification, errorMs: result.errorMs }].slice(-100)
     }));
@@ -545,7 +546,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
               <p className="mobile-only mobile-instruction" role="status">{mobileInstruction}</p>
               <p className="preparation-notice" role="status">{preparationNotice}</p>
               <p className="keyboard-hint"><kbd>Espacio</kbd> inicia o pausa · clic o <kbd>Enter</kbd> sobre el botón grande responde.</p>
-              <button ref={tapButtonRef} type="button" className="tap-button" onPointerDown={event => { if (event.isPrimary && event.button === 0) tap(); }} onClick={event => { if (event.detail === 0) tap(); }} disabled={!canTap}>
+              <button ref={tapButtonRef} type="button" className="tap-button" onPointerDown={event => { if (event.isPrimary && event.button === 0) tap(); }} onKeyDown={event => handleTapKeyDown(event, tap)} onClick={event => { if (event.detail === 0) tap(); }} disabled={!canTap}>
                 <span className="tap-symbol">↘</span><strong>{isPreparing && player.isPlaying && !isReviewing ? countIn?.count ? `${countIn.count}…` : "PREPÁRATE" : player.isPlaying && isListening && !isReviewing ? "SOLO ESCUCHA" : lesson.tapLabel}</strong><small>{isReviewing ? "REVISIÓN GUIADA · SIN PUNTUAR" : isPreparing && player.isPlaying ? "PREPARA TU MANO AQUÍ · LA BARRA YA AVANZA" : player.isPlaying && isListening ? "COGE EL RITMO · TODAVÍA NO PULSES" : player.isPlaying ? "SIGUE MARCANDO: LA MÚSICA NO SE PARA" : "INICIA O REANUDA CON ▶"}</small>
               </button>
             </div>
@@ -565,7 +566,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
               )}
             </div>
             <button type="button" className="replay-button desktop-only" disabled={!round || isReviewing} onClick={finishRound}>Ver resumen de esta ronda</button>
-            {showSummary && <RoundSummary summary={roundSummary} provisional={isReferencePending} onReview={replayOutcome} />}
+            {showSummary && <RoundSummary summary={roundSummary} moduleId={moduleId} provisional={isReferencePending} onReview={replayOutcome} />}
             {showSummary && challengePanel}
             {!isChallenge && <div className="mobile-only mobile-summary-actions"><button type="button" className="continue-button" onClick={restartPractice} disabled={!player.isReady}>↺ Repetir ejercicio</button><button type="button" className="previous-button" onClick={() => setMobileScreen("practice")}>Volver a practicar</button></div>}
             {!isChallenge && <nav className="journey-actions" aria-label="Navegar entre pasos de práctica">

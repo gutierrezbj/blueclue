@@ -93,7 +93,7 @@ El recorrido indica la pista, el módulo, las ayudas y la velocidad actuales. «
 
 La dificultad muy fácil comienza en **Despacio (65 %)** y la fácil en **Intermedio (80 %)**; las demás empiezan al ritmo original. La primera pista privada pasa de 122 a unos **79 BPM**. Puedes elegir cualquiera de las tres velocidades en todos los módulos: cambiarla pausa sin perder la posición y empieza otra ronda. El navegador conserva el tono; preparación y música comparten velocidad, sin un salto de tempo al entrar. El scoring mantiene las mismas tolerancias en milisegundos reales, no en tiempo del archivo. El reloj indica tiempo de escucha a la velocidad elegida y la waveform indica segundos de pista. Los resultados se separan por módulo y velocidad.
 
-El TAP no detiene la música: marca varios compases seguidos. «Escuchar otra vez» abre una revisión guiada que muestra la respuesta y no puntúa; «Volver a practicar» repite ese fragmento con las ayudas del modo elegido. «Reiniciar ejercicio» aparece junto a Play y junto al TAP en escritorio; en móvil hay un único Reiniciar junto a Play. Vuelve a 0:00, limpia el feedback y reproduce de nuevo la entrada de preparación, sin arrastrar la waveform ni borrar los intentos guardados.
+El TAP no detiene la música: marca varios compases seguidos. Pausar y continuar conservan el último feedback para poder leerlo con calma. Enter registra al pulsar la tecla: mantenerla apretada no genera intentos adicionales. «Escuchar otra vez» abre una revisión guiada que muestra la respuesta y no puntúa; «Volver a practicar» repite ese fragmento con las ayudas del modo elegido. El replay y el resumen respetan la consigna del nivel: en Pulso se habla de pulsos, no de buscar el 1. «Reiniciar ejercicio» aparece junto a Play y junto al TAP en escritorio; en móvil hay un único Reiniciar junto a Play. Vuelve a 0:00, limpia el feedback y reproduce de nuevo la entrada de preparación, sin arrastrar la waveform ni borrar los intentos guardados.
 
 Play mueve inmediatamente la bolita por el tramo plano para acomodarte. Después aparece **4 → 3 → 2 → ¡1! al tempo del ejercicio**: el último 1 coincide con el primer downbeat de referencia y continúa 2‑3‑4 sin repetirlo. Los archivos mantienen tres segundos de silencio; su duración real aumenta al practicar despacio. Pausar detiene también la cuenta y reiniciar la repite. Espacio inicia o pausa desde la página o desde TAP; clic o Enter sobre TAP responde al ejercicio actual. Cuando TAP se habilita, recibe el foco. El atajo respeta selectores, campos de texto y el comportamiento nativo de otros botones. La velocidad se adapta en el reproductor, sin modificar los archivos originales ni usar timers de inicio.
 
@@ -161,7 +161,7 @@ liberar la caché: revisa su estado antes de viajar. Usa altavoz o cable para pr
 con precisión; el retardo Bluetooth no se calibra en esta versión.
 
 Pruebas locales: apertura desde una pestaña nueva y reproducción de las cinco pistas
-con el servidor apagado, vista de 375 px sin desbordamiento, TAP/Enter, 67 tests y
+con el servidor apagado, vista de 375 px sin desbordamiento, TAP/Enter, 74 tests y
 build. **Aceptación del usuario, 4 octubre 2026:** Juan confirma funcionamiento
 correcto, incluido modo avión, en el contexto de su iPhone. El nuevo Challenge
 necesita su primera prueba tras actualizar; no se ha medido latencia Bluetooth.
