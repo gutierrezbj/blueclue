@@ -145,6 +145,24 @@ vhost público; `6860fd1` es la primera release saludable, no las imágenes ante
 
 ## Prueba de salida
 
+### Continuidad y feedback por nivel — 4 octubre 2026
+
+- Release `c252759`: pausar/continuar conserva el feedback. Enter se registra al
+  bajar la tecla y mantenerlo no añade intentos; Espacio sigue iniciando/pausando.
+- Registro de ronda y feedback comparten una única evaluación. Replay y resumen
+  de Nivel 1 hablan del pulso, no de marcar solo el 1. Sin cambios de tolerancias,
+  catálogo, niveles, récords guardados ni infraestructura.
+- 74 tests locales pasan; Linux 72 pasan y dos privados omitidos. Build correcto.
+  Navegador: un Enter produce un único cerca de +155 ms, conservado tras pausa
+  y reflejado en resumen/replay; Espacio pausa conservando un clavado de -31 ms.
+  Vista 375 × 667 comprobada; a 320 px no hay desbordamiento horizontal.
+- HTTPS `/health` confirma `c252759`, ok y demo. Contenedor healthy, único bind
+  127.0.0.1:3280, imagen sin audio privado; checks existentes en verde. Rollback
+  conservado a `86d6910`. Sin reiniciar otros proyectos. Compilación y pruebas
+  locales no sustituyen la nueva ronda de Juan en su iPhone.
+- Para llevar la mejora offline: recargar con conexión y Actualizar descarga.
+  No se ha vuelto a probar modo avión de esta release. Commits locales sin push.
+
 ### Challenge y corrección de aciertos — 4 octubre 2026
 
 - Release `86d6910`: Challenge completo en Train a la velocidad elegida,
