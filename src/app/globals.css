@@ -389,6 +389,9 @@ button, a, summary { touch-action: manipulation; }
 .phrase-feedback strong { color: var(--level-accent); }
 .phrase-settings p, .phrase-summary p { color: #c2d6dc; font-size: 14px; line-height: 1.6; }
 .phrase-settings > .next-button { width: 100%; }
+.phrase-steps { display: flex; gap: 8px; }
+.phrase-steps a { flex: 1; min-height: 44px; padding: 12px; text-align: center; color: var(--level-accent); border: 1px solid var(--level-border); border-radius: 8px; }
+.phrase-steps a[aria-current="step"] { border-color: var(--level-accent); background: var(--level-selected); }
 .phrase-summary { display: grid; gap: 8px; }
 .phrase-summary h2 { margin: 16px 0 0; font-size: 20px; }
 .phrase-summary p { margin: 4px 0; }

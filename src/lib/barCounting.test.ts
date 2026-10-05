@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { readFileSync } from "node:fs";
-import { evaluateEightBarTap, getEightBarGuide, getEightBarPlan, summarizeEightBars } from "./eightBars.ts";
+import { evaluateBarCountingTap as evaluateEightBarTap, getBarCountingGuide as getEightBarGuide, getBarCountingPlan as getEightBarPlan, summarizeBarCounting as summarizeEightBars } from "./barCounting.ts";
 import type { ExerciseRound } from "./exerciseRound.ts";
 import type { TrainingTrack } from "./tracks.ts";
 
