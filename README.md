@@ -46,6 +46,13 @@ y revisión del bloque completo. No es todavía detección de frases musicales.
 Los tres niveles y récords de V0.1 se conservan. [Alcance](docs/V0.2.md).
 Para usarlo sin conexión, actualiza la descarga desde Ajustes del Beat Trainer.
 
+El siguiente paso es **Cuenta 16 compases**, disponible en Ajustes de compases o
+al terminar una ronda de ocho. Cuenta 1–8 y después 9–16: el 9 es la mitad, no se
+pulsa. Marca solo el siguiente 1 tras completar dieciséis. Una vuelta larga por
+ronda con las mismas cinco pistas, replay completo y ajustes guardados aparte.
+La guía muestra ocho casillas cada vez para no apretar la pantalla del móvil.
+Repite con menos ayuda y otra pista; un acierto no certifica dominio.
+
 ### Teach
 Muestra waveform, beats, downbeats, 1-2-3-4 y compás.
 

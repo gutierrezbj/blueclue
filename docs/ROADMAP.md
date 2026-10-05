@@ -15,6 +15,9 @@ Objetivo:
 Primer incremento publicado el 5 octubre de 2026: **cuenta ocho compases**.
 Ver [alcance del primer paso](V0.2.md). El resto de esta etapa sigue pendiente.
 
+Siguiente incremento autorizado en construcción: **cuenta dieciséis compases**.
+Una vuelta larga con las mismas pistas; 32 y detección de frases siguen pendientes.
+
 Añadir:
 
 - compases
