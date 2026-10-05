@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { WaveformDisplay } from "./WaveformDisplay";
-import { evaluateBarCountingTap, getBarCountingGuide, getBarCountingPlan, getBarLesson, summarizeBarCounting, type BarCount } from "@/lib/barCounting";
+import { evaluateBarCountingTap, getBarCountingGuide, getBarCountingPlan, getBarLesson, getVisibleBars, summarizeBarCounting, type BarCount } from "@/lib/barCounting";
 import { getCountIn } from "@/lib/countIn";
 import type { ExerciseRound, RoundTap } from "@/lib/exerciseRound";
 import { handleTapKeyDown } from "@/lib/tapInput";
@@ -35,11 +35,11 @@ export function BarCountingTrainer({ tracks, catalogKind, bars }: { tracks: Trai
   const plan = getBarCountingPlan(track, player.duration, speed, bars);
   const countIn = getCountIn(player.currentTime, track.downbeats[0], track.bpm);
   const guide = getBarCountingGuide(player.currentTime, track, reviewTarget !== null ? "teach" : mode, bars);
-  const visibleBars = Array.from({ length: 8 }, (_, index) => index + (guide.bar !== null && guide.bar > 8 ? 9 : 1));
+  const visibleBars = getVisibleBars(guide.bar);
   const preparing = !plan || player.currentTime < plan.start;
   const canTap = player.isReady && player.isPlaying && !preparing && !finished && reviewTarget === null && !!plan && player.currentTime <= plan.end;
   const summary = summarizeBarCounting(round, track, player.duration, speed, bars);
-  const status = preparing ? countIn && countIn.phase !== "landing" ? countIn.count ? `${countIn.count}…` : "Acomódate…" : `Escucha dos compases. Aún no cuentes ${lesson.word}.` : guide.starting ? `Desde aquí: compás 1. Cuenta ${bars} y vuelve al 1.` : bars === 16 ? "Cuenta 8 + 8. Pulsa solo después del compás 16." : "Cuenta ocho compases. Pulsa al volver al primero.";
+  const status = preparing ? countIn && countIn.phase !== "landing" ? countIn.count ? `${countIn.count}…` : "Acomódate…" : `Escucha dos compases. Aún no cuentes ${lesson.word}.` : guide.starting ? `Desde aquí: compás 1. Cuenta ${bars} y vuelve al 1.` : bars === 32 ? "Cuatro grupos de ocho. Pulsa después del 32." : bars === 16 ? "Cuenta 8 + 8. Pulsa solo después del compás 16." : "Cuenta ocho compases. Pulsa al volver al primero.";
 
   useEffect(() => {
     try {
@@ -145,17 +145,18 @@ export function BarCountingTrainer({ tracks, catalogKind, bars }: { tracks: Trai
 
   return <main className="phrase-shell" data-level="downbeat">
     <header className="phrase-header"><a href="#practice-controls">← Beat Trainer</a><button type="button" onClick={() => { player.pause(); setSettings(!settings); }}>{settings ? "← Practicar" : "Ajustes"}</button></header>
-    <div className="level-label">Compás y frase · {bars === 8 ? "Primer" : "Segundo"} paso</div>
+    <div className="level-label">Compás y frase · {bars === 8 ? "Primer" : bars === 16 ? "Segundo" : "Tercer"} paso</div>
     <h1>Cuenta {bars} compases</h1>
     <p className="phrase-context">{track.title} · {mode.toUpperCase()} · {speedLabels[speed]}</p>
     {settings ? <section className="phrase-settings" aria-label={`Preparar ${lesson.word} compases`}>
-      <nav className="phrase-steps" aria-label="Pasos de conteo">{([8, 16] as const).map(count => <a key={count} href={getBarLesson(count).hash} aria-current={count === bars ? "step" : undefined} onClick={() => player.pause()}>{count} compases</a>)}</nav>
-      <p>Cada compás tiene cuatro golpes. Cuenta «1-2-3-4, 2-2-3-4… {bars}-2-3-4» y pulsa en el siguiente 1. {bars === 8 ? "Lo repetimos dos veces." : "Una vuelta larga por ronda. El compás 9 es la mitad: sigue contando, todavía no pulses."}</p>
+      <nav className="phrase-steps" aria-label="Pasos de conteo">{([8, 16, 32] as const).map(count => <a key={count} href={getBarLesson(count).hash} aria-current={count === bars ? "step" : undefined} onClick={() => player.pause()}>{count} compases</a>)}</nav>
+      <p>Cada compás tiene cuatro golpes. Cuenta «1-2-3-4, 2-2-3-4… {bars}-2-3-4» y pulsa en el siguiente 1. {bars === 8 ? "Lo repetimos dos veces." : bars === 16 ? "Una vuelta larga por ronda. El compás 9 es la mitad: sigue contando, todavía no pulses." : "Una vuelta larga por ronda: 1–8, 9–16, 17–24 y 25–32. No pulses al cambiar de grupo; solo al terminar los cuatro."}</p>
+      {bars === 32 && <p>Cinco patrones sintéticos largos, exclusivos de este ejercicio. Las pistas y récords anteriores no cambian.</p>}
       <label htmlFor="phrase-track">Pista</label>
       <select id="phrase-track" className="track-select" value={trackId} disabled={!ready} onChange={event => { reset(); setTrackId(event.target.value); }}>{tracks.map(item => <option key={item.id} value={item.id}>{item.title}</option>)}</select>
       <fieldset className="speed-control"><legend>Velocidad para aprender</legend><div>{playbackSpeeds.map(item => <button type="button" key={item} aria-pressed={speed === item} onClick={() => { if (item !== speed) { reset(); setSpeed(item); } }}>{speedLabels[item]}</button>)}</div></fieldset>
       <div className="mode-selector" role="group" aria-label="Ayudas">{practiceModes.map(item => <button className={mode === item ? "mode-button active" : "mode-button"} type="button" key={item} aria-pressed={mode === item} onClick={() => { if (item !== mode) { reset(); setMode(item); } }}>{modeLabels[item]}</button>)}</div>
-      <p>Teach muestra {bars === 8 ? "los ocho compases" : "1–8 y después 9–16, sin apretar dieciséis casillas en el móvil"}. Assist deja solo el pulso tras la salida. Train retira todas las ayudas tras indicar dónde empezar.</p>
+      <p>Teach muestra {bars === 8 ? "los ocho compases" : bars === 16 ? "1–8 y después 9–16" : "1–8, 9–16, 17–24 y 25–32, ocho casillas cada vez"}. Assist deja solo el pulso tras la salida. Train retira todas las ayudas tras indicar dónde empezar.</p>
       <p>Entrenamos el conteo, no detectamos frases reales: no todas las canciones cambian cada {lesson.word} compases.</p>
       <p>Cambiar pista, velocidad o ayuda prepara una ronda nueva. Al reabrir conservamos tus ajustes, pero empezamos con la entrada para que te sitúes.</p>
       {lastRound && <p>{lastRound} Es práctica, no una certificación.</p>}
@@ -168,7 +169,7 @@ export function BarCountingTrainer({ tracks, catalogKind, bars }: { tracks: Trai
       </div>
       <div className="phrase-transport"><button type="button" className="continue-button" disabled={!player.isReady || !plan} onClick={toggle}>{player.isPlaying ? "Ⅱ Pausar" : finished || reviewTarget !== null ? "▶ Nueva ronda" : player.currentTime === 0 ? "▶ Empezar" : "▶ Continuar"}</button><button type="button" className="restart-button" disabled={!player.isReady || !plan} onClick={restart}>↺ Reiniciar</button></div>
       {player.error && <p className="audio-error" role="alert">{player.error}</p>}
-      {player.isReady && !plan && <p role="alert">Esta pista no tiene diecinueve compases completos de referencia. Elige otra en Ajustes.</p>}
+      {player.isReady && !plan && <p role="alert">Esta pista no tiene suficientes compases de referencia para este ejercicio. Elige otra en Ajustes.</p>}
       {provisional && <p className="phrase-notice">Referencia pendiente de escucha · sin nota guardada</p>}
       {!finished || reviewTarget !== null ? <>
         <div className="phrase-guide" aria-label={guide.bar !== null ? `Compás ${guide.bar} de ${bars}, golpe ${guide.beat}` : "Cuenta por oído"}>
@@ -179,13 +180,13 @@ export function BarCountingTrainer({ tracks, catalogKind, bars }: { tracks: Trai
         <button ref={tapRef} type="button" className="tap-button" disabled={!canTap} onPointerDown={event => { if (event.isPrimary && event.button === 0) tap(); }} onKeyDown={event => handleTapKeyDown(event, tap)} onClick={event => { if (event.detail === 0) tap(); }}><strong>{preparing ? "PRIMERO ESCUCHA" : "VUELTA AL 1"}</strong><small>SOLO DESPUÉS DE {lesson.word.toUpperCase()} COMPASES</small></button>
         <div className="phrase-feedback" role="status">{reviewTarget !== null ? "Escucha el bloque entero. Nueva ronda te devuelve a la entrada." : feedback ? <><strong>{repeated ? "REPETIDA · " : ""}{feedback.result.classification === "otra-vez" ? "FUERA DE LA VUELTA" : feedback.result.classification.toUpperCase()}</strong><span>{feedback.result.message}</span></> : `No marques cada compás: espera a completar ${lesson.word}.`}</div>
       </> : <section className="phrase-summary" aria-labelledby="phrase-result">
-        <h2 id="phrase-result">{bars === 8 ? "Dos vueltas, sin perder el 1" : "16 compases, una vuelta al 1"}</h2>
+        <h2 id="phrase-result">{bars === 8 ? "Dos vueltas, sin perder el 1" : `${bars} compases, una vuelta al 1`}</h2>
         <p>{provisional ? "Orientación provisional" : "Tu ronda"}: {summary.perfect} clavadas · {summary.close} cerca · {summary.outside} fuera de tiempo · {summary.missed} sin marcar.</p>
         <p>{summary.extra} toques adicionales o fuera de la vuelta. Cada objetivo cuenta una sola vez.</p>
         {summary.outcomes.map((outcome, index) => <button type="button" key={outcome.target} className="previous-button" onClick={() => review(outcome.target)}>Escuchar vuelta {index + 1} · {outcome.result?.classification ?? "sin marcar"}</button>)}
         <button type="button" className="next-button" onClick={restart}>Repetir con la misma ayuda</button>
         {mode !== "train" && <button type="button" className="previous-button" onClick={() => { reset(); setMode(mode === "teach" ? "assist" : "train"); }}>Probar {mode === "teach" ? "Assist" : "Train"} →</button>}
-        {bars === 8 ? <a className="phrase-entry" href="#compases-16">Cuando estés cómodo · Cuenta 16 compases →</a> : <a className="phrase-entry" href="#compases">← Volver a 8 compases</a>}
+        {bars === 8 ? <a className="phrase-entry" href="#compases-16">Cuando estés cómodo · Cuenta 16 compases →</a> : bars === 16 ? <><a className="phrase-entry" href="#compases">← Volver a 8 compases</a><a className="phrase-entry" href="#compases-32">Cuando estés cómodo · Cuenta 32 compases →</a></> : <><p>Repite con menos ayuda y otra pista. Contar 32 no demuestra todavía reconocer un cambio musical.</p><a className="phrase-entry" href="#compases-16">← Volver a 16 compases</a></>}
       </section>}
       {reviewTarget !== null && <button type="button" className="previous-button" onClick={() => { player.pause(); setReviewTarget(null); }}>Volver al resumen</button>}
       <p className="keyboard-hint">Espacio inicia o pausa · Enter sobre el botón grande marca la vuelta.</p>

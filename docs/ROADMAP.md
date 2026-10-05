@@ -16,7 +16,10 @@ Primer incremento publicado el 5 octubre de 2026: **cuenta ocho compases**.
 Ver [alcance del primer paso](V0.2.md). El resto de esta etapa sigue pendiente.
 
 Segundo incremento publicado el 5 octubre de 2026: **cuenta dieciséis compases**.
-Una vuelta larga con las mismas pistas; 32 y detección de frases siguen pendientes.
+Una vuelta larga con las mismas pistas.
+
+Tercer incremento autorizado: **cuenta 32 compases**, con cinco versiones largas
+separadas, sin alterar las pistas anteriores. Detección de frases pendiente.
 
 Añadir:
 

@@ -83,6 +83,40 @@ test("descarga interrumpida no deja un paquete listo ni caché parcial", async (
   assert.deepEqual((await worker.caches.keys()).filter(name => name.startsWith("blueclue-pack")), []);
 });
 
+test("long practice downloads all ten audios and serves the long version offline", async () => {
+  const worker = createWorker();
+  worker.specification.audio.push(...Array.from({ length: 5 }, (_, index) => `/tracks/count-32/${index}.wav?v=demo`));
+  worker.specification.audioBytes = 40;
+  await worker.context.downloadPack(worker.specification.id, () => {});
+  assert.equal((await worker.context.verifiedPack()).resources.length, 13);
+  worker.setOffline(true);
+  let response;
+  worker.listeners.get("fetch")({ request: new Request(origin + worker.specification.audio[9], { headers: { Range: "bytes=0-1" } }), respondWith: promise => { response = promise; } });
+  assert.equal((await response).status, 206);
+});
+
+test("a failed long-audio upgrade preserves the old five-track package", async () => {
+  const worker = createWorker();
+  await worker.context.downloadPack(worker.specification.id, () => {});
+  worker.specification.id = "long-build";
+  worker.specification.audio.push(...Array.from({ length: 5 }, (_, index) => `/tracks/count-32/${index}.wav?v=demo`));
+  worker.specification.audioBytes = 40;
+  worker.failures.add("/tracks/count-32/4.wav");
+  await assert.rejects(worker.context.downloadPack(worker.specification.id, () => {}));
+  assert.equal((await worker.context.verifiedPack()).id, "build-demo");
+});
+
+test("offline packs reject foreign URLs, duplicate resources and incomplete audio sets", async () => {
+  for (const invalid of ["foreign", "duplicate", "missing"]) {
+    const worker = createWorker();
+    if (invalid === "foreign") worker.specification.audio[0] = "https://external.test/track.wav";
+    if (invalid === "duplicate") worker.specification.audio[0] = worker.specification.audio[1];
+    if (invalid === "missing") worker.specification.audio.pop();
+    await assert.rejects(worker.context.downloadPack(worker.specification.id, () => {}), /no es válido/);
+    assert.equal(await worker.context.verifiedPack(), null);
+  }
+});
+
 test("una actualización fallida conserva el paquete anterior", async () => {
   const worker = createWorker();
   await worker.context.downloadPack(worker.specification.id, () => {});

@@ -53,6 +53,16 @@ ronda con las mismas cinco pistas, replay completo y ajustes guardados aparte.
 La guía muestra ocho casillas cada vez para no apretar la pantalla del móvil.
 Repite con menos ayuda y otra pista; un acierto no certifica dominio.
 
+**Cuenta 32 compases** continúa desde el resumen de dieciséis o los Ajustes de
+compases (`#compases-32`). Cuenta cuatro grupos de ocho y pulsa solo después del
+32. Una vuelta por ronda, replay completo y ajustes separados. Enseña a sostener
+la cuenta, no a detectar cambios musicales. Cinco versiones sintéticas de 36
+compases exclusivas de este paso dejan intactas las pistas y récords anteriores,
+también cuando usas el piloto privado. Para regenerarlas:
+`node scripts/generate-pilot-tracks.mjs --count-32`.
+Añaden 17,72 MB de audio; el paquete público contiene 29,85 MB de audio más la app.
+Actualiza la descarga para incluir las cinco versiones largas antes de salir.
+
 ### Teach
 Muestra waveform, beats, downbeats, 1-2-3-4 y compás.
 

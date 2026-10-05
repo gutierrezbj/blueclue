@@ -9,5 +9,8 @@ test("switching counting length remounts the exercise without mixing rounds or s
   const trainer = await readFile(new URL("../src/components/BarCountingTrainer.tsx", import.meta.url), "utf8");
   assert.match(trainer, /className="phrase-steps" aria-label="Pasos de conteo"/);
   assert.match(trainer, /Cuando estés cómodo · Cuenta 16 compases/);
-  assert.match(trainer, /Array\.from\(\{ length: 8 \}/);
+  assert.match(trainer, /getVisibleBars\(guide.bar\)/);
+  assert.match(app, /#compases-32/);
+  assert.match(app, /tracks=\{bars === 32 \? props.longTracks : props.tracks\}/);
+  assert.match(trainer, /Cuando estés cómodo · Cuenta 32 compases/);
 });

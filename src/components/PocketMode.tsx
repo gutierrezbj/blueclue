@@ -100,16 +100,16 @@ export function PocketMode({ pack }: { pack: OfflinePack | null }) {
 
   const ready = Boolean(pack && status?.id === pack.id);
   return <details className="pocket-card" id="pocket-mode">
-    <summary><span>BlueClue en tu bolsillo</span><span>{busy ? `Descargando · ${progress} %` : ready ? "5 pistas disponibles sin conexión" : "iPhone · instalar y descargar"}</span></summary>
+    <summary><span>BlueClue en tu bolsillo</span><span>{busy ? `Descargando · ${progress} %` : ready ? "Ejercicios disponibles sin conexión" : "iPhone · instalar y descargar"}</span></summary>
     <div className="pocket-content">
       <p>{installed ? "Estás en la app instalada. Descarga aquí antes de salir." : "En iPhone: abre en Safari → Compartir → Añadir a pantalla de inicio → Abrir como app (si aparece). Después abre BlueClue desde su icono y descarga allí."}</p>
       <p>Primero instala, después descarga. Safari y la app instalada pueden guardar datos por separado. El progreso no se sincroniza con el ordenador.</p>
-      <p>{pack ? `Las cinco pistas de este catálogo ocupan ${(pack.audioBytes / 1_000_000).toLocaleString("es-ES", { maximumFractionDigits: 1 })} MB, más la app. Usa Wi-Fi y mantén la app abierta durante la descarga.` : "Puedes seguir practicando online."}</p>
-      <p role="status">{busy ? `Preparando app y cinco pistas: ${progress} %.` : message || (ready ? `Descarga completa · ${((status?.bytes ?? 0) / 1_000_000).toLocaleString("es-ES", { maximumFractionDigits: 1 })} MB. Compruébala en modo avión antes de salir.` : status ? "Tienes una descarga anterior. Actualízala con conexión para guardar esta versión." : "Aún no hay un paquete completo sin conexión.")}</p>
-      {!online && <p>Sin conexión detectada. {ready ? "Puedes practicar las cinco pistas descargadas." : "Necesitas conexión para completar la descarga."}</p>}
+      <p>{pack ? `Las cinco pistas y las cinco versiones largas de 32 compases ocupan ${(pack.audioBytes / 1_000_000).toLocaleString("es-ES", { maximumFractionDigits: 1 })} MB, más la app. Usa Wi-Fi y mantén la app abierta durante la descarga.` : "Puedes seguir practicando online."}</p>
+      <p role="status">{busy ? `Preparando app y audios de práctica: ${progress} %.` : message || (ready ? `Descarga completa · ${((status?.bytes ?? 0) / 1_000_000).toLocaleString("es-ES", { maximumFractionDigits: 1 })} MB. Compruébala en modo avión antes de salir.` : status ? "Tienes una descarga anterior. Actualízala con conexión para guardar esta versión." : "Aún no hay un paquete completo sin conexión.")}</p>
+      {!online && <p>Sin conexión detectada. {ready ? "Puedes practicar con los audios descargados." : "Necesitas conexión para completar la descarga."}</p>}
       {busy && <progress aria-label="Descarga del paquete" value={progress} max={100} />}
       <div className="pocket-actions">
-        <button type="button" className="continue-button" disabled={!available || busy || !online} onClick={download}>{ready ? "Volver a descargar las 5 pistas" : status ? "Actualizar descarga" : "Descargar las 5 pistas"}</button>
+        <button type="button" className="continue-button" disabled={!available || busy || !online} onClick={download}>{ready ? "Volver a descargar los ejercicios" : status ? "Actualizar descarga" : "Descargar los ejercicios"}</button>
         {status && <button type="button" className="previous-button" disabled={busy || !online} onClick={remove}>Eliminar descarga, conservar progreso</button>}
       </div>
       <p className="save-notice">iOS puede liberar almacenamiento. Revisa este estado antes de viajar. Al cambiar de app o bloquear la pantalla, la práctica se pausa; vuelve con Continuar. Para precisión, usa el altavoz o auriculares con cable: Bluetooth puede añadir retardo.</p>

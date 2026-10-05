@@ -158,6 +158,14 @@ Solo cargar la pista activa y los metadatos necesarios.
 
 ## Futuro
 
+`barCounting.ts` separa planificación, guía y scoring de 8/16/32. Ocho tiene dos
+objetivos; dieciséis y treinta y dos, uno. `getVisibleBars` muestra solo ocho
+posiciones cada vez. `TrainingApp` remonta el entrenador al cambiar de paso y
+reserva `longTracks` para 32, siempre sintético. `trainingCatalog` versiona y
+empaqueta los cinco audios del catálogo activo más los cinco largos; no cambia
+los JSON ni WAV previos. El worker acepta paquetes anteriores de cinco y nuevos
+de diez, verifica todos sus recursos y conserva el paquete anterior ante fallos.
+
 Essentia y análisis automático quedan fuera de V0.1.
 
 Cuando lleguen, deben alimentar el mismo modelo de datos, no obligar a reescribir la UI ni el motor de ejercicios.
