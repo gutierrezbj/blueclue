@@ -138,6 +138,14 @@ la aceptación pedagógica y Safari en iPhone físico siguen pendientes.
 
 ## Referencias técnicas
 
+Segundo paso V0.2 (5 octubre): release `3c180d2`, acceso `/#compases-16` o
+desde el resumen/Ajustes de ocho. Guía 1–8 y 9–16, una vuelta larga, sin nuevos
+audios. Práctica a 320 × 568 sin scroll; producción revisada a 375 × 667 con
+ronda completa, replay y pausa. 92 tests locales; Linux 90 pasan y dos omitidos.
+Descarga local 12,9 MB y reapertura en pestaña nueva sin servidor comprobadas
+con Pulso claro. No se repiten las otras cuatro pistas offline en esta entrega.
+Actualizar la descarga de la PWA; Safari físico y prueba pedagógica pendientes.
+
 - [Guía PWA de Next.js](https://nextjs.org/docs/app/guides/progressive-web-apps)
 - [Instalar una web en iPhone](https://support.apple.com/en-lamr/guide/iphone/iphea86e5236/ios)
 - [Almacenamiento de WebKit](https://webkit.org/blog/14403/updates-to-storage-policy/)

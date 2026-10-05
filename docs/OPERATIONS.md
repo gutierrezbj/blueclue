@@ -2,6 +2,26 @@
 
 Estado actualizado el 5 de octubre de 2026.
 
+## V0.2 — dieciséis compases, publicada el 5 de octubre de 2026
+
+- Release `3c180d2`, implementación `ddb9ae0`. 92 pruebas locales pasan;
+  Linux 90 pasan y dos privadas omitidas, cero fallos. Builds correctos, sin push.
+- Una vuelta de dieciséis, no dos de ocho; la mitad no es un objetivo. Mismos
+  cinco audios, entrada y velocidades. Guía móvil 1–8/9–16, replay completo,
+  almacenamiento independiente; volver a ocho conserva sus ajustes y resultado.
+- Ronda, pausa, toque lejano, replay y navegación comprobados en navegador.
+  Pantalla 320 × 568 sin scroll, también revisada a 375 × 667. Descarga local
+  de 12,9 MB: pestaña nueva con servidor 3001 apagado reproduce Pulso claro en
+  `/#compases-16`. Otras cuatro pistas offline no repetidas en esta entrega.
+- Docker healthy, HTTPS `/health` ok/demo/3c180d2, único bind 127.0.0.1:3280;
+  imagen sin `.local` ni audio privado. Checks BlueClue y BlueClue-HTTP up.
+  Sin nuevos servicios, puertos, cambios de proxy ni reinicios de otros proyectos.
+- `current` apunta a `3c180d2`; rollback conservado a `27e0ce1`. Actualizar la
+  descarga antes de salir. Safari físico y aceptación pedagógica pendientes.
+- Web pública a 375 × 667: reproducción, cierre con una oportunidad sin marcar
+  al no pulsar, replay y pausa verificados. Notion principal, Desarrollo e
+  infraestructura actualizados, sin alterar la reserva ni páginas hijas.
+
 ## V0.2 inicial — publicada el 5 de octubre de 2026
 
 - Commits `1777dfe` (motor de ocho compases) y `abb5124` (interfaz).
@@ -59,8 +79,8 @@ la excepción ligera autorizada; no modifica las plantillas maestras.
 | Internos | 5280 sin uso |
 | Datos | 6280–6289 sin uso; no hay BD |
 | VPS | Servidor 2, comprobado por Tailscale |
-| Directorio | `/opt/apps/blueclue`, release `27e0ce1`, enlace `current` |
-| Contenedor | `blueclue-web`, imagen `blueclue:27e0ce1`, healthy |
+| Directorio | `/opt/apps/blueclue`, release `3c180d2`, enlace `current` |
+| Contenedor | `blueclue-web`, imagen `blueclue:3c180d2`, healthy |
 | Bind | `127.0.0.1:3280:3000` verificado; nunca puerto público directo |
 | Dominio | `https://blueclue.jrgblanco.com`, HTTPS verificado |
 
