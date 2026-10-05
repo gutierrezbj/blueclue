@@ -3,7 +3,8 @@ import path from "node:path";
 
 const sampleRate = 22050;
 const leadInSeconds = 3;
-const practiceBars = 24;
+const longPractice = process.argv.includes("--count-32");
+const practiceBars = longPractice ? 36 : 24;
 const beatsPerBar = 4;
 const tracks = [
   { id: "pulse", title: "Pulso claro", bpm: 100, difficulty: "very-easy", description: "Escucha el golpe grave que abre cada grupo de cuatro.", seed: 1 },
@@ -70,8 +71,9 @@ function encodeWav(samples) {
 }
 
 const root = process.cwd();
-await mkdir(path.join(root, "public", "tracks"), { recursive: true });
-await mkdir(path.join(root, "data", "tracks"), { recursive: true });
+const trackDirectory = longPractice ? "tracks/count-32" : "tracks";
+await mkdir(path.join(root, "public", trackDirectory), { recursive: true });
+await mkdir(path.join(root, "data", trackDirectory), { recursive: true });
 
 for (const track of tracks) {
   const beatLength = 60 / track.bpm;
@@ -99,17 +101,17 @@ for (const track of tracks) {
   });
 
   const metadata = {
-    id: track.id,
+    id: longPractice ? `${track.id}-32` : track.id,
     title: track.title,
     bpm: track.bpm,
     timeSignature: "4/4",
-    audioFile: `/tracks/${track.id}.wav`,
+    audioFile: `/${trackDirectory}/${track.id}.wav`,
     leadInSeconds,
     beats: beatTimes,
     downbeats: downbeatTimes,
     difficulty: track.difficulty,
     description: track.description
   };
-  await writeFile(path.join(root, "data", "tracks", `${track.id}.json`), `${JSON.stringify(metadata, null, 2)}\n`);
-  await writeFile(path.join(root, "public", "tracks", `${track.id}.wav`), encodeWav(samples));
+  await writeFile(path.join(root, "data", trackDirectory, `${track.id}.json`), `${JSON.stringify(metadata, null, 2)}\n`);
+  await writeFile(path.join(root, "public", trackDirectory, `${track.id}.wav`), encodeWav(samples));
 }
