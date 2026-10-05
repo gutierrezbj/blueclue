@@ -2,6 +2,26 @@
 
 Estado actualizado el 5 de octubre de 2026.
 
+## V0.2 — treinta y dos compases, publicada el 5 de octubre de 2026
+
+- Release `86f6473`; motor y audios `8ed68ed`. 100 tests locales pasan; Linux
+  98 pasan y dos privados omitidos. Builds correctos; commits locales, sin push.
+- Cinco WAV/JSON originales intactos. Cinco versiones sintéticas de 36 compases
+  exclusivas de 32, 17.715.324 bytes adicionales. Audio público total 29.849.014
+  bytes; diez archivos. Paquete completo medido en navegador local: 30,6 MB.
+- Entrada, cuatro grupos de ocho, una oportunidad final, replay y navegación
+  16/32 comprobados. Práctica 320 × 568 sin scroll. Web pública 375 × 667:
+  guía, reproducción y pausa verificadas. Ajustes/resultado de 32 separados.
+- Descarga actualizada desde el paquete anterior. Servidor temporal apagado:
+  pestaña nueva abre 32 y carga/inicia los cinco audios largos. No se escucharon
+  completos offline; no equivale a una prueba física de Safari/iPhone.
+- HTTPS `/health`: ok/demo/86f6473. Docker healthy, solo 127.0.0.1:3280:3000;
+  imagen sin `.local` ni `public/tracks/local-pilot`. Checks BlueClue y
+  BlueClue-HTTP up. Sin tocar proxy, otros proyectos ni límites de recursos.
+- `current` → `86f6473`, rollback `3c180d2`. Notion principal, Desarrollo e
+  infraestructura actualizados. Actualizar descarga con conexión antes de salir.
+  Aceptación pedagógica pendiente; no se implementa detección de frases reales.
+
 ## V0.2 — dieciséis compases, publicada el 5 de octubre de 2026
 
 - Release `3c180d2`, implementación `ddb9ae0`. 92 pruebas locales pasan;
@@ -79,8 +99,8 @@ la excepción ligera autorizada; no modifica las plantillas maestras.
 | Internos | 5280 sin uso |
 | Datos | 6280–6289 sin uso; no hay BD |
 | VPS | Servidor 2, comprobado por Tailscale |
-| Directorio | `/opt/apps/blueclue`, release `3c180d2`, enlace `current` |
-| Contenedor | `blueclue-web`, imagen `blueclue:3c180d2`, healthy |
+| Directorio | `/opt/apps/blueclue`, release `86f6473`, enlace `current` |
+| Contenedor | `blueclue-web`, imagen `blueclue:86f6473`, healthy |
 | Bind | `127.0.0.1:3280:3000` verificado; nunca puerto público directo |
 | Dominio | `https://blueclue.jrgblanco.com`, HTTPS verificado |
 

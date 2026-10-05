@@ -138,6 +138,14 @@ la aceptación pedagógica y Safari en iPhone físico siguen pendientes.
 
 ## Referencias técnicas
 
+Tercer paso V0.2 (5 octubre): release `86f6473`, `/#compases-32`. Grupos de ocho
+hasta 32, una vuelta larga, misma entrada. Cinco versiones largas independientes
+de los audios anteriores. 100 tests locales; Linux 98 pasan y dos omitidos.
+320 × 568 sin scroll y producción 375 × 667 comprobadas. Descarga local 30,6 MB;
+pestaña nueva sin servidor carga e inicia las cinco versiones largas. No se
+escuchan completas en esta prueba. Actualizar descarga antes de salir; quedan
+validación física en iPhone y prueba pedagógica del nuevo conteo.
+
 Segundo paso V0.2 (5 octubre): release `3c180d2`, acceso `/#compases-16` o
 desde el resumen/Ajustes de ocho. Guía 1–8 y 9–16, una vuelta larga, sin nuevos
 audios. Práctica a 320 × 568 sin scroll; producción revisada a 375 × 667 con
