@@ -2,6 +2,23 @@
 
 Estado actualizado el 5 de octubre de 2026.
 
+## Revisión pedagógica publicada — fc1f24b
+
+- Tras rechazo de Juan, 8/16/32 salen del recorrido recomendado: sin enlace de
+  siguiente etapa ni continuación encadenada. URLs antiguas opcionales, datos,
+  tres niveles y Challenge conservados. Verificado en móvil local y público.
+- 101 pruebas locales; Linux 99 pasan y dos privadas omitidas. Builds correctos.
+  HTTPS ok/demo/fc1f24b, Docker healthy; solo 127.0.0.1:3280:3000. Imagen sin
+  `.local` ni música privada. `current` → fc1f24b; rollback 86f6473. Sin push.
+- El cron coincidió con el reinicio y registró caída; ejecución real posterior
+  de `/opt/scripts/healthcheck.sh` confirma BlueClue=up y BlueClue-HTTP=up.
+  No se editaron estados a mano ni configuraciones de otros proyectos.
+- Audios/descarga sin cambios; no se repite modo avión. Actualizar descarga
+  para llevar el nuevo menú offline. Notion actualizado con el rechazo pedagógico.
+- Muestra sintética local de 23 s (`.local/escucha-el-bajo.wav`), sin integrarla
+  ni publicarla: bajo entra a 7 s, sale a 12 s y vuelve a 17 s. Pico medido 0,433,
+  sin clipping, 1.014.344 bytes. Pendiente escucha del usuario antes de otro módulo.
+
 ## V0.2 — treinta y dos compases, publicada el 5 de octubre de 2026
 
 - Release `86f6473`; motor y audios `8ed68ed`. 100 tests locales pasan; Linux
@@ -99,8 +116,8 @@ la excepción ligera autorizada; no modifica las plantillas maestras.
 | Internos | 5280 sin uso |
 | Datos | 6280–6289 sin uso; no hay BD |
 | VPS | Servidor 2, comprobado por Tailscale |
-| Directorio | `/opt/apps/blueclue`, release `86f6473`, enlace `current` |
-| Contenedor | `blueclue-web`, imagen `blueclue:86f6473`, healthy |
+| Directorio | `/opt/apps/blueclue`, release `fc1f24b`, enlace `current` |
+| Contenedor | `blueclue-web`, imagen `blueclue:fc1f24b`, healthy |
 | Bind | `127.0.0.1:3280:3000` verificado; nunca puerto público directo |
 | Dominio | `https://blueclue.jrgblanco.com`, HTTPS verificado |
 
