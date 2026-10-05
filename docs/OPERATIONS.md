@@ -1,6 +1,27 @@
 # Operación ligera — BlueClue
 
-Estado actualizado el 4 de octubre de 2026.
+Estado actualizado el 5 de octubre de 2026.
+
+## V0.2 inicial — preparada, aún no publicada
+
+- Commits `1777dfe` (motor de ocho compases) y `abb5124` (interfaz).
+  84 pruebas locales pasan y build correcto. No se ha hecho push.
+- Preparación, pausa, dos vueltas completas, Teach/Train y revisión guiada
+  comprobados en navegador; la revisión mantiene el resumen sin nuevos intentos.
+  Práctica sin scroll a 320 × 568 y 375 × 667, conservando Ajustes separados.
+- Descarga local completa: 12,9 MB. Tras apagar el servidor temporal 3001,
+  una pestaña nueva abre `/#compases` y reproduce las cinco pistas sintéticas.
+  No equivale a prueba física de Safari/iPhone ni a aceptación pedagógica.
+- Acceso desde Ajustes sin mover el Challenge del final. Los tres niveles,
+  historial y récords de V0.1 no cambian. Última ronda de compases por separado.
+- Publicación pendiente: SSH por Tailscale pidió verificación humana adicional;
+  la conexión terminó antes de ejecutar comandos remotos. No se ha cambiado
+  ningún servicio, puerto, proxy ni imagen del VPS en esta entrega.
+- HTTPS `/health` público confirma `ok`, catálogo `demo`, revisión `44bc713`.
+  **La nueva práctica todavía no está disponible en la web pública.**
+- Notion principal y Desarrollo reflejan el alcance autorizado y el bloqueo.
+  Pendiente: renovar verificación, compilar en VPS con límites existentes,
+  publicar solo sintéticas, comprobar health/monitorización y probar en iPhone.
 
 ## Decisión del propietario
 
