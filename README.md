@@ -37,6 +37,15 @@ Incluye:
 
 ## Modos
 
+### Primer paso V0.2: cuenta ocho compases
+
+Desde la elección de ejercicios, abre **Siguiente etapa · Cuenta 8 compases**.
+Escucha la entrada, cuenta ocho grupos de cuatro y marca la vuelta al primer
+compás. Dos vueltas por ronda, ayudas Teach / Assist / Train, tres velocidades
+y revisión del bloque completo. No es todavía detección de frases musicales.
+Los tres niveles y récords de V0.1 se conservan. [Alcance](docs/V0.2.md).
+Para usarlo sin conexión, actualiza la descarga desde Ajustes del Beat Trainer.
+
 ### Teach
 Muestra waveform, beats, downbeats, 1-2-3-4 y compás.
 
