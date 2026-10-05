@@ -2,7 +2,7 @@
 
 Estado actualizado el 5 de octubre de 2026.
 
-## V0.2 inicial — preparada, aún no publicada
+## V0.2 inicial — publicada el 5 de octubre de 2026
 
 - Commits `1777dfe` (motor de ocho compases) y `abb5124` (interfaz).
   84 pruebas locales pasan y build correcto. No se ha hecho push.
@@ -14,14 +14,18 @@ Estado actualizado el 5 de octubre de 2026.
   No equivale a prueba física de Safari/iPhone ni a aceptación pedagógica.
 - Acceso desde Ajustes sin mover el Challenge del final. Los tres niveles,
   historial y récords de V0.1 no cambian. Última ronda de compases por separado.
-- Publicación pendiente: SSH por Tailscale pidió verificación humana adicional;
-  la conexión terminó antes de ejecutar comandos remotos. No se ha cambiado
-  ningún servicio, puerto, proxy ni imagen del VPS en esta entrega.
-- HTTPS `/health` público confirma `ok`, catálogo `demo`, revisión `44bc713`.
-  **La nueva práctica todavía no está disponible en la web pública.**
-- Notion principal y Desarrollo reflejan el alcance autorizado y el bloqueo.
-  Pendiente: renovar verificación, compilar en VPS con límites existentes,
-  publicar solo sintéticas, comprobar health/monitorización y probar en iPhone.
+- Acceso Tailscale recuperado. Release `27e0ce1` construida y activada en VPS2;
+  Linux: 82 pruebas pasan y dos privadas omitidas, cero fallos. Build correcto.
+- HTTPS `/health`: `ok`, catálogo `demo`, revisión `27e0ce1`. Docker healthy,
+  único bind `127.0.0.1:3280:3000`; checks existentes BlueClue y BlueClue-HTTP up.
+  Imagen comprobada sin `.local` ni `public/tracks/local-pilot`.
+- Sin nuevos puertos, cambios de proxy ni reinicios de otros proyectos. Mismos
+  límites de recursos. `current` apunta a la nueva release; rollback a `44bc713`.
+- Acceso público: `https://blueclue.jrgblanco.com/#compases`. Actualizar la
+  descarga desde Ajustes del Beat Trainer antes de practicar sin conexión.
+  Guía, reproducción y pausa verificadas en producción a 375 × 667.
+  Notion principal, Desarrollo y catálogo de infraestructura actualizados.
+  Pendiente: prueba pedagógica de Juan y validación física de esta entrega en iPhone.
 
 ## Decisión del propietario
 
@@ -55,8 +59,8 @@ la excepción ligera autorizada; no modifica las plantillas maestras.
 | Internos | 5280 sin uso |
 | Datos | 6280–6289 sin uso; no hay BD |
 | VPS | Servidor 2, comprobado por Tailscale |
-| Directorio | `/opt/apps/blueclue`, release `468ce36`, enlace `current` |
-| Contenedor | `blueclue-web`, imagen `blueclue:468ce36`, healthy |
+| Directorio | `/opt/apps/blueclue`, release `27e0ce1`, enlace `current` |
+| Contenedor | `blueclue-web`, imagen `blueclue:27e0ce1`, healthy |
 | Bind | `127.0.0.1:3280:3000` verificado; nunca puerto público directo |
 | Dominio | `https://blueclue.jrgblanco.com`, HTTPS verificado |
 

@@ -12,7 +12,7 @@ Objetivo:
 
 ## V0.2 — Phrase Trainer
 
-Primer incremento en construcción, autorizado: **cuenta ocho compases**.
+Primer incremento publicado el 5 octubre de 2026: **cuenta ocho compases**.
 Ver [alcance del primer paso](V0.2.md). El resto de esta etapa sigue pendiente.
 
 Añadir:

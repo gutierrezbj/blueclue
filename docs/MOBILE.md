@@ -125,7 +125,18 @@ para esta release; las pruebas offline anteriores no sustituyen Safari físico.
 
 Las pruebas de tamaño de ventana no emulan Safari ni certifican un iPhone.
 
-## Referencias
+## Primer paso V0.2 — 5 octubre 2026
+
+Release `27e0ce1`: Ajustes → Siguiente etapa → Cuenta 8 compases, o acceso directo
+a `/#compases`. Pantalla separada, sin añadir scroll al entrenamiento anterior.
+84 pruebas locales; Linux 82 pasan y dos privadas omitidas. Preparación, pausa,
+Teach/Train, ronda completa y replay sin alterar el resultado comprobados en
+navegador. Práctica a 320 × 568 y 375 × 667 sin scroll. Paquete local de 12,9 MB,
+reapertura desde pestaña nueva con el servidor apagado y cinco pistas reproduciendo.
+Actualiza la descarga dentro de la PWA antes de salir. HTTPS y Docker saludables;
+la aceptación pedagógica y Safari en iPhone físico siguen pendientes.
+
+## Referencias técnicas
 
 - [Guía PWA de Next.js](https://nextjs.org/docs/app/guides/progressive-web-apps)
 - [Instalar una web en iPhone](https://support.apple.com/en-lamr/guide/iphone/iphea86e5236/ios)
