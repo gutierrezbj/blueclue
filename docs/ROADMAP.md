@@ -12,6 +12,12 @@ Objetivo:
 
 ## V0.2 — Phrase Trainer
 
+**Revisión tras probarlo:** los conteos de 8/16/32 salen del recorrido principal
+por falta de utilidad percibida con audio monótono. No se consideran aprendizaje
+validado. Enlaces antiguos opcionales; siguiente propuesta pendiente de escuchar:
+fragmento corto con cambios audibles, sin construir otro módulo hasta validarlo.
+Las entregas que siguen documentan el historial técnico, no el recorrido vigente.
+
 Primer incremento publicado el 5 octubre de 2026: **cuenta ocho compases**.
 Ver [alcance del primer paso](V0.2.md). El resto de esta etapa sigue pendiente.
 

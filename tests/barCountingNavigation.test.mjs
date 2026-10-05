@@ -8,9 +8,16 @@ test("switching counting length remounts the exercise without mixing rounds or s
   assert.match(app, /#compases-16/);
   const trainer = await readFile(new URL("../src/components/BarCountingTrainer.tsx", import.meta.url), "utf8");
   assert.match(trainer, /className="phrase-steps" aria-label="Pasos de conteo"/);
-  assert.match(trainer, /Cuando estés cómodo · Cuenta 16 compases/);
   assert.match(trainer, /getVisibleBars\(guide.bar\)/);
   assert.match(app, /#compases-32/);
   assert.match(app, /tracks=\{bars === 32 \? props.longTracks : props.tracks\}/);
-  assert.match(trainer, /Cuando estés cómodo · Cuenta 32 compases/);
+});
+
+test("long counts are not recommended steps and existing links remain optional", async () => {
+  const trainer = await readFile(new URL("../src/components/BeatTrainer.tsx", import.meta.url), "utf8");
+  const counting = await readFile(new URL("../src/components/BarCountingTrainer.tsx", import.meta.url), "utf8");
+  assert.doesNotMatch(trainer, /href="#compases/);
+  assert.doesNotMatch(counting, /Cuando estés cómodo|Siguiente etapa/);
+  assert.match(counting, /Conteo opcional · Fuera del recorrido/);
+  assert.match(counting, /Volver al Beat Trainer/);
 });

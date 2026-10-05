@@ -37,23 +37,32 @@ Incluye:
 
 ## Modos
 
-### Primer paso V0.2: cuenta ocho compases
+### Conteos V0.2 fuera del recorrido recomendado
 
-Desde la elección de ejercicios, abre **Siguiente etapa · Cuenta 8 compases**.
+Tras la prueba de Juan, se retiran del recorrido principal los conteos monótonos
+de 8/16/32: alargar la espera no aportaba el aprendizaje buscado. No necesitas
+completarlos. Los tres niveles iniciales y Challenge se conservan; los enlaces
+antiguos siguen disponibles como práctica opcional, sin borrar datos.
+Antes de otro módulo se valida una muestra corta con entradas/salidas de bajo.
+No hay todavía un nuevo ejercicio ni scoring de cambios.
+
+La descripción siguiente conserva el funcionamiento de los enlaces antiguos.
+
+El enlace directo `#compases` conserva el conteo opcional de ocho.
 Escucha la entrada, cuenta ocho grupos de cuatro y marca la vuelta al primer
 compás. Dos vueltas por ronda, ayudas Teach / Assist / Train, tres velocidades
 y revisión del bloque completo. No es todavía detección de frases musicales.
 Los tres niveles y récords de V0.1 se conservan. [Alcance](docs/V0.2.md).
 Para usarlo sin conexión, actualiza la descarga desde Ajustes del Beat Trainer.
 
-El siguiente paso es **Cuenta 16 compases**, disponible en Ajustes de compases o
-al terminar una ronda de ocho. Cuenta 1–8 y después 9–16: el 9 es la mitad, no se
+**Cuenta 16 compases** sigue disponible en Ajustes de compases como conteo
+opcional. Cuenta 1–8 y después 9–16: el 9 es la mitad, no se
 pulsa. Marca solo el siguiente 1 tras completar dieciséis. Una vuelta larga por
 ronda con las mismas cinco pistas, replay completo y ajustes guardados aparte.
 La guía muestra ocho casillas cada vez para no apretar la pantalla del móvil.
 Repite con menos ayuda y otra pista; un acierto no certifica dominio.
 
-**Cuenta 32 compases** continúa desde el resumen de dieciséis o los Ajustes de
+**Cuenta 32 compases** sigue disponible como conteo opcional en los Ajustes de
 compases (`#compases-32`). Cuenta cuatro grupos de ocho y pulsa solo después del
 32. Una vuelta por ronda, replay completo y ajustes separados. Enseña a sostener
 la cuenta, no a detectar cambios musicales. Cinco versiones sintéticas de 36

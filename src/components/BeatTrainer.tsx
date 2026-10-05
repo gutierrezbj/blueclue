@@ -466,7 +466,6 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
         <nav className="module-selector" aria-label="Niveles de aprendizaje">
           {learningModules.map((item, index) => <button key={item.id} type="button" className={moduleId === item.id ? "module-button active" : "module-button"} aria-current={moduleId === item.id ? "step" : undefined} disabled={!hydrated} onClick={() => navigatePractice({ trackId, moduleId: item.id, mode: item.defaultMode })}><small>NIVEL {index + 1}</small>{item.title}</button>)}
         </nav>
-        <a className="phrase-entry" href="#compases" onClick={() => player.pause()}>Siguiente etapa · Cuenta 8 compases →</a>
       </section>
 
       <div className="trainer-grid">

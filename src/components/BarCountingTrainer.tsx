@@ -145,7 +145,7 @@ export function BarCountingTrainer({ tracks, catalogKind, bars }: { tracks: Trai
 
   return <main className="phrase-shell" data-level="downbeat">
     <header className="phrase-header"><a href="#practice-controls">← Beat Trainer</a><button type="button" onClick={() => { player.pause(); setSettings(!settings); }}>{settings ? "← Practicar" : "Ajustes"}</button></header>
-    <div className="level-label">Compás y frase · {bars === 8 ? "Primer" : bars === 16 ? "Segundo" : "Tercer"} paso</div>
+    <div className="level-label">Conteo opcional · Fuera del recorrido</div>
     <h1>Cuenta {bars} compases</h1>
     <p className="phrase-context">{track.title} · {mode.toUpperCase()} · {speedLabels[speed]}</p>
     {settings ? <section className="phrase-settings" aria-label={`Preparar ${lesson.word} compases`}>
@@ -186,7 +186,8 @@ export function BarCountingTrainer({ tracks, catalogKind, bars }: { tracks: Trai
         {summary.outcomes.map((outcome, index) => <button type="button" key={outcome.target} className="previous-button" onClick={() => review(outcome.target)}>Escuchar vuelta {index + 1} · {outcome.result?.classification ?? "sin marcar"}</button>)}
         <button type="button" className="next-button" onClick={restart}>Repetir con la misma ayuda</button>
         {mode !== "train" && <button type="button" className="previous-button" onClick={() => { reset(); setMode(mode === "teach" ? "assist" : "train"); }}>Probar {mode === "teach" ? "Assist" : "Train"} →</button>}
-        {bars === 8 ? <a className="phrase-entry" href="#compases-16">Cuando estés cómodo · Cuenta 16 compases →</a> : bars === 16 ? <><a className="phrase-entry" href="#compases">← Volver a 8 compases</a><a className="phrase-entry" href="#compases-32">Cuando estés cómodo · Cuenta 32 compases →</a></> : <><p>Repite con menos ayuda y otra pista. Contar 32 no demuestra todavía reconocer un cambio musical.</p><a className="phrase-entry" href="#compases-16">← Volver a 16 compases</a></>}
+        <p>Este conteo no forma parte del recorrido recomendado. No necesitas completarlo para avanzar.</p>
+        <a className="phrase-entry" href="#practice-controls">Volver al Beat Trainer →</a>
       </section>}
       {reviewTarget !== null && <button type="button" className="previous-button" onClick={() => { player.pause(); setReviewTarget(null); }}>Volver al resumen</button>}
       <p className="keyboard-hint">Espacio inicia o pausa · Enter sobre el botón grande marca la vuelta.</p>
