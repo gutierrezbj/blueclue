@@ -67,3 +67,17 @@ await mkdir(".local", { recursive: true });
 await writeFile(".local/escucha-el-bajo.wav", wav);
 await writeFile(".local/escucha-el-bajo.json", JSON.stringify({ bpm, duration, preparation: [0, 2], changes: [{ time: 7, action: "bass-in" }, { time: 12, action: "bass-out" }, { time: 17, action: "bass-in" }], peak }, null, 2));
 console.log(`Muestra local: ${duration} segundos, ${wav.length} bytes, pico ${peak.toFixed(3)}. No publicada ni integrada en el catálogo.`);
+if (process.argv.includes("--publish")) {
+  await mkdir("public/tracks/listening", { recursive: true });
+  await mkdir("data/listening", { recursive: true });
+  await writeFile("public/tracks/listening/bass.wav", wav);
+  await writeFile("data/listening/bass.json", `${JSON.stringify({
+    id: "bass-listening-v1", title: "Escucha el bajo", bpm, timeSignature: "4/4", difficulty: "easy",
+    description: "Reconoce cuándo entra y vuelve el bajo. No necesitas contar.",
+    audioFile: "/tracks/listening/bass.wav", duration, leadInSeconds: startSeconds,
+    beats: Array.from({ length: 32 }, (_, index) => startSeconds + index * beatSeconds),
+    downbeats: Array.from({ length: 8 }, (_, index) => startSeconds + index * beatSeconds * 4),
+    changes: [{ time: 7, action: "bass-in" }, { time: 12, action: "bass-out" }, { time: 17, action: "bass-in" }]
+  }, null, 2)}\n`);
+  console.log("Copiada la misma muestra aprobada al catálogo público de escucha.");
+}

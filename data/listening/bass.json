@@ -1,0 +1,69 @@
+{
+  "id": "bass-listening-v1",
+  "title": "Escucha el bajo",
+  "bpm": 96,
+  "timeSignature": "4/4",
+  "difficulty": "easy",
+  "description": "Reconoce cuándo entra y vuelve el bajo. No necesitas contar.",
+  "audioFile": "/tracks/listening/bass.wav",
+  "duration": 23,
+  "leadInSeconds": 2,
+  "beats": [
+    2,
+    2.625,
+    3.25,
+    3.875,
+    4.5,
+    5.125,
+    5.75,
+    6.375,
+    7,
+    7.625,
+    8.25,
+    8.875,
+    9.5,
+    10.125,
+    10.75,
+    11.375,
+    12,
+    12.625,
+    13.25,
+    13.875,
+    14.5,
+    15.125,
+    15.75,
+    16.375,
+    17,
+    17.625,
+    18.25,
+    18.875,
+    19.5,
+    20.125,
+    20.75,
+    21.375
+  ],
+  "downbeats": [
+    2,
+    4.5,
+    7,
+    9.5,
+    12,
+    14.5,
+    17,
+    19.5
+  ],
+  "changes": [
+    {
+      "time": 7,
+      "action": "bass-in"
+    },
+    {
+      "time": 12,
+      "action": "bass-out"
+    },
+    {
+      "time": 17,
+      "action": "bass-in"
+    }
+  ]
+}
