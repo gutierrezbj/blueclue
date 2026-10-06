@@ -37,6 +37,16 @@ Incluye:
 
 ## Modos
 
+### Escucha el bajo — práctica corta autorizada
+
+En la elección de ejercicios, abre **Escucha el cambio · El bajo**
+(`#escucha-el-bajo`). Primero escucha con guía; después reconoce sus entradas
+sin ayudas. Dos oportunidades en 23 segundos, margen para reaccionar al sonido,
+resumen y revisión de cada cambio. No necesitas contar compases ni clavar un beat.
+Actualizar la descarga guarda también este audio sintético para usarlo sin red.
+La muestra fue aceptada; la utilidad del ejercicio completo aún requiere práctica
+del usuario. No sustituye ni cambia los tres niveles de V0.1.
+
 ### Conteos V0.2 fuera del recorrido recomendado
 
 Tras la prueba de Juan, se retiran del recorrido principal los conteos monótonos

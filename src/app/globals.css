@@ -368,6 +368,12 @@ button, a, summary { touch-action: manipulation; }
 .level-label { margin-bottom: 5px; color: var(--level-accent); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
 
 .phrase-entry { grid-column: 1 / -1; color: var(--level-accent); padding: 12px 0; font-size: 14px; }
+.bass-audio { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; pointer-events: none; }
+.bass-shell .mode-selector { display: flex; gap: 8px; margin: 16px 0; }
+.bass-shell .mode-button { flex: 1; min-height: 44px; }
+.bass-shell .phrase-guide { padding: 18px 12px; line-height: 1.5; }
+.bass-shell .tap-button { min-height: 140px; }
+.bass-shell .phrase-header span { font-size: 12px; }
 .phrase-shell { max-width: 640px; margin: auto; padding: env(safe-area-inset-top) max(14px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left)); }
 .phrase-header { display: flex; align-items: center; justify-content: space-between; min-height: 52px; margin-bottom: 8px; border-bottom: 1px solid var(--level-border); }
 .phrase-header a, .phrase-header button { color: var(--level-accent); font-size: 14px; min-height: 44px; padding: 12px 0; }

@@ -166,6 +166,15 @@ empaqueta los cinco audios del catálogo activo más los cinco largos; no cambia
 los JSON ni WAV previos. El worker acepta paquetes anteriores de cinco y nuevos
 de diez, verifica todos sus recursos y conserva el paquete anterior ante fallos.
 
+La práctica autorizada `#escucha-el-bajo` añade `BassListeningTrainer`, sin
+mezclar su evaluación con el scoring de beats. `bassListening.ts` evalúa entradas
+anotadas, rechaza anticipaciones y acepta reconocimiento hasta 2,5 segundos
+después; calcula resumen y límites de replay. No analiza el audio. Datos y WAV
+en `data/listening` y `public/tracks/listening`; el reproductor existente se
+reutiliza sin onda visible ni seek manual. `trainingCatalog` mantiene cinco
+pistas principales y cinco largas, y expone `listeningTrack` por separado.
+La descarga actual contiene once audios; sigue aceptando paquetes de cinco/diez.
+
 Essentia y análisis automático quedan fuera de V0.1.
 
 Cuando lleguen, deben alimentar el mismo modelo de datos, no obligar a reescribir la UI ni el motor de ejercicios.

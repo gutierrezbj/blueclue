@@ -466,6 +466,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
         <nav className="module-selector" aria-label="Niveles de aprendizaje">
           {learningModules.map((item, index) => <button key={item.id} type="button" className={moduleId === item.id ? "module-button active" : "module-button"} aria-current={moduleId === item.id ? "step" : undefined} disabled={!hydrated} onClick={() => navigatePractice({ trackId, moduleId: item.id, mode: item.defaultMode })}><small>NIVEL {index + 1}</small>{item.title}</button>)}
         </nav>
+        <a className="phrase-entry" href="#escucha-el-bajo" onClick={() => player.pause()}>Escucha el cambio · El bajo →</a>
       </section>
 
       <div className="trainer-grid">
