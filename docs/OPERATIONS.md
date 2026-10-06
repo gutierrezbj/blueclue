@@ -1,6 +1,33 @@
 # Operación ligera — BlueClue
 
-Estado actualizado el 5 de octubre de 2026.
+Estado actualizado el 6 de octubre de 2026.
+
+## Escucha el bajo — publicada como 1386868
+
+- Juan acepta la muestra y autoriza una práctica breve. Mismo audio sintético
+  de 23 segundos: Escuchar con guía → Reconocer sin onda ni cuenta → revisar.
+  Ventana posterior de 2,5 segundos, dos entradas, duplicados separados; no
+  puntuación de precisión ni nuevos récords. V0.1/Challenge sin cambios.
+- Commits `9dde86c` (motor/audio) y `1386868` (interfaz/descarga). 108 pruebas
+  locales pasan; Linux 106 pasan y dos privadas omitidas. Builds correctos.
+- Navegador local: entrada reconocida mediante Enter, duplicado mediante click,
+  pausa mediante Espacio, resumen de 1/2 con un toque adicional y una entrada
+  sin reconocer. Replay se detiene alrededor del segundo 20 y conserva resultado.
+  Reabrir conserva la última práctica, comienza en Escuchar pausado desde cero.
+  Práctica móvil a 320 × 568 sin scroll; también comprobada a 375 × 667.
+- Actualización desde paquete anterior completada: 31,6 MB, app + once audios.
+  Servidor temporal apagado, pestaña nueva: audio de bajo completo de 23 segundos
+  hasta el resumen de Escuchar. Es prueba offline local, no Safari/iPhone físico.
+- VPS2: imagen sin `.local` ni música privada; HTTPS ok/demo/1386868, Docker
+  healthy y único bind 127.0.0.1:3280:3000. `current` → 1386868; rollback fc1f24b.
+  Checks BlueClue y BlueClue-HTTP up; no cambios de proxy, puertos ni otros servicios.
+  La conexión SSH de compilación se cerró; reconexión confirmó build finalizado,
+  imagen etiquetada y pruebas correctas antes de activar el servicio.
+- Falta prueba pedagógica del ejercicio completo por Juan y nueva comprobación
+  en su iPhone. Actualizar la descarga con conexión. Commits locales sin push.
+- Web pública a 375 × 667: reproducción y pausa correctas, controles y feedback
+  sin scroll. Notion principal, Desarrollo e infraestructura actualizados;
+  conservadas las cuatro páginas hijas y la reserva +280.
 
 ## Revisión pedagógica publicada — fc1f24b
 
