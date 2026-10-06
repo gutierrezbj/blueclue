@@ -5,6 +5,7 @@ import { WaveformDisplay } from "./WaveformDisplay";
 import { RoundSummary } from "./RoundSummary";
 import { PocketMode } from "./PocketMode";
 import { ChallengePanel } from "./ChallengePanel";
+import { enterPractice } from "@/lib/navigation";
 import { completeChallenge, readChallengeRecords, saveChallengeRecord, type ChallengeRecord } from "@/lib/challenge";
 import type { OfflinePack } from "@/lib/offlineTypes";
 import { type AttemptClassification, type AttemptResult } from "@/lib/scoring";
@@ -33,14 +34,14 @@ function formatTime(seconds: number): string {
   return `${Math.floor(totalSeconds / 60)}:${String(totalSeconds % 60).padStart(2, "0")}`;
 }
 
-type Props = { tracks: TrainingTrack[]; catalogKind: "local" | "demo"; catalogNotice: string | null; offlinePack: OfflinePack | null };
+type Props = { tracks: TrainingTrack[]; catalogKind: "local" | "demo"; catalogNotice: string | null; offlinePack: OfflinePack | null; initialModule?: LearningModuleId };
 
-export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }: Props) {
+export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack, initialModule }: Props) {
   const trackIds = useMemo(() => tracks.map((track) => track.id), [tracks]);
   const storageKey = catalogKind === "local" ? "blueclue-v0.1-local-pilot" : "blueclue-v0.1";
   const [trackId, setTrackId] = useState(tracks[0].id);
   const [mode, setMode] = useState<TrainingMode>("teach");
-  const [moduleId, setModuleId] = useState<LearningModuleId>("pulse");
+  const [moduleId, setModuleId] = useState<LearningModuleId>(initialModule ?? "pulse");
   const [playbackSpeed, setPlaybackSpeed] = useState<PlaybackSpeed>(suggestedSpeed(tracks[0].difficulty));
   const [progress, setProgress] = useState<Progress>({ attempts: [] });
   const [hydrated, setHydrated] = useState(false);
@@ -125,21 +126,24 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
     try {
       setChallengeRecords(readChallengeRecords(localStorage.getItem(challengeStorageKey), tracks));
       const saved = localStorage.getItem(storageKey);
-      if (saved) {
-        const parsed = readPracticeSession(saved, trackIds);
+      {
+        const previous = readPracticeSession(saved, trackIds);
+        const parsed = enterPractice(previous, initialModule);
         setTrackId(parsed.trackId);
         setMode(parsed.mode);
         setModuleId(parsed.moduleId);
         setPlaybackSpeed(parsed.playbackSpeed ?? suggestedSpeed((tracks.find((item) => item.id === parsed.trackId) ?? tracks[0]).difficulty));
         setProgress(parsed.progress);
         resumePositionRef.current = parsed.position;
-        setResumed(true);
+        setResumed(Boolean(saved) && parsed === previous);
       }
     } catch {
       setStorageUnavailable(true);
+      if (initialModule) { setModuleId(initialModule); setMode("teach"); setPlaybackSpeed(0.65); }
     }
+    if (initialModule) window.history.replaceState(window.history.state, "", "#practice-controls");
     setHydrated(true);
-  }, [trackIds, storageKey, tracks, challengeStorageKey]);
+  }, [trackIds, storageKey, tracks, challengeStorageKey, initialModule]);
 
   useEffect(() => {
     if (!hydrated) return;
@@ -168,9 +172,11 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
     }
     saveSession();
     window.addEventListener("pagehide", saveSession);
+    window.addEventListener("hashchange", saveSession);
     document.addEventListener("visibilitychange", saveSession);
     return () => {
       window.removeEventListener("pagehide", saveSession);
+      window.removeEventListener("hashchange", saveSession);
       document.removeEventListener("visibilitychange", saveSession);
     };
   }, [hydrated, trackId, moduleId, mode, playbackSpeed, progress, positionBucket, player.isReady, player.isPlaying, player.getTime, storageKey]);
@@ -225,6 +231,13 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
     player.pause();
     focusTapRef.current = false;
     setMobileScreen("settings");
+  }
+
+  function leavePractice() {
+    player.pause();
+    if (!hydrated || !player.isReady) return;
+    try { localStorage.setItem(storageKey, JSON.stringify({ trackId, moduleId, mode, playbackSpeed, progress, position: player.getTime() })); }
+    catch { setStorageUnavailable(true); }
   }
 
   function clearChallenge() {
@@ -423,7 +436,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
     <main className="app-shell" data-mobile-screen={mobileScreen} data-level={moduleId} data-challenge={isChallenge && !isReviewing ? "active" : undefined}>
       <a className="skip-link" href="#practice-controls">Ir a los controles de práctica</a>
       <header className="site-header">
-        <div className="brand"><span className="brand-mark">B<span>.</span></span><span>BlueClue</span></div>
+        <a className="practice-menu-back" href="#marca-el-1" onClick={leavePractice}>← Niveles</a>
         <div className="header-tag">ENTRENA TU OÍDO <span>·</span> V0.1</div>
         <button type="button" className="mobile-only mobile-settings-button" onClick={() => mobileScreen === "practice" ? openMobileSettings() : setMobileScreen("practice")}>{mobileScreen === "practice" ? "Ajustes" : "← Practicar"}</button>
       </header>
@@ -466,7 +479,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack }:
         <nav className="module-selector" aria-label="Niveles de aprendizaje">
           {learningModules.map((item, index) => <button key={item.id} type="button" className={moduleId === item.id ? "module-button active" : "module-button"} aria-current={moduleId === item.id ? "step" : undefined} disabled={!hydrated} onClick={() => navigatePractice({ trackId, moduleId: item.id, mode: item.defaultMode })}><small>NIVEL {index + 1}</small>{item.title}</button>)}
         </nav>
-        <a className="phrase-entry" href="#escucha-el-bajo" onClick={() => player.pause()}>Escucha el cambio · El bajo →</a>
+        <a className="phrase-entry" href="#inicio" onClick={leavePractice}>Volver a los bloques de aprendizaje →</a>
       </section>
 
       <div className="trainer-grid">

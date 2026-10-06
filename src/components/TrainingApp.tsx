@@ -5,22 +5,27 @@ import { BeatTrainer } from "./BeatTrainer";
 import { BarCountingTrainer } from "./BarCountingTrainer";
 import { BassListeningTrainer } from "./BassListeningTrainer";
 import type { ListeningTrack } from "@/lib/bassListening";
-import type { BarCount } from "@/lib/barCounting";
+import { LearningMenu } from "./LearningMenu";
+import { readAppRoute, type AppRoute } from "@/lib/navigation";
 import type { TrainingTrack } from "@/lib/tracks";
 
 export function TrainingApp(props: ComponentProps<typeof BeatTrainer> & { longTracks: TrainingTrack[]; listeningTrack: ListeningTrack }) {
-  const [bars, setBars] = useState<BarCount | null>(null);
-  const [listening, setListening] = useState(false);
+  const [route, setRoute] = useState<AppRoute>({ screen: "home" });
   useEffect(() => {
     function navigate() {
-      setListening(window.location.hash === "#escucha-el-bajo");
-      setBars(window.location.hash === "#compases" ? 8 : window.location.hash === "#compases-16" ? 16 : window.location.hash === "#compases-32" ? 32 : null);
+      const next = readAppRoute(window.location.hash);
+      setRoute(current => next.screen === "practice" && !next.moduleId && current.screen === "practice" ? current : next);
     }
     navigate();
     window.addEventListener("hashchange", navigate);
     return () => window.removeEventListener("hashchange", navigate);
   }, []);
-  useEffect(() => { window.scrollTo({ top: 0, behavior: "instant" }); }, [bars, listening]);
-  if (listening) return <BassListeningTrainer track={props.listeningTrack} />;
-  return bars ? <BarCountingTrainer key={bars} bars={bars} tracks={bars === 32 ? props.longTracks : props.tracks} catalogKind={bars === 32 ? "demo" : props.catalogKind} /> : <BeatTrainer {...props} />;
+  useEffect(() => { window.scrollTo({ top: 0, behavior: "instant" }); }, [route.screen]);
+  if (route.screen === "bass") return <BassListeningTrainer track={props.listeningTrack} />;
+  if (route.screen === "bars") {
+    const bars = route.bars;
+    return <BarCountingTrainer key={bars} bars={bars} tracks={bars === 32 ? props.longTracks : props.tracks} catalogKind={bars === 32 ? "demo" : props.catalogKind} />;
+  }
+  if (route.screen === "practice") return <BeatTrainer {...props} key={route.moduleId ?? "resume"} initialModule={route.moduleId} />;
+  return <LearningMenu screen={route.screen} />;
 }

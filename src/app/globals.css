@@ -374,6 +374,47 @@ button, a, summary { touch-action: manipulation; }
 .bass-shell .phrase-guide { padding: 18px 12px; line-height: 1.5; }
 .bass-shell .tap-button { min-height: 140px; }
 .bass-shell .phrase-header span { font-size: 12px; }
+
+:root:has(.learning-menu) { --level-background: #090e12; --level-halo: #090e12; }
+.learning-menu { width: 100%; max-width: 440px; margin: 0 auto; padding: max(22px, env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left)); color: #f2f7fa; }
+.menu-header, .menu-brand { display: flex; align-items: center; gap: 8px; }
+.menu-header { justify-content: space-between; min-height: 30px; }
+.menu-brand { font-size: 18px; font-weight: 750; letter-spacing: -.4px; }
+.menu-logo { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; background: #68e0c4; color: #082028; }
+.menu-kicker { font-size: 11px; letter-spacing: 1.1px; text-transform: uppercase; color: #a9bac6; }
+.learning-menu h1 { margin: 28px 0 6px; font-size: 29px; line-height: 1.15; letter-spacing: -.8px; }
+.learning-menu h1:focus-visible { outline: none; }
+.menu-intro { margin: 0 0 20px; color: #a9bac6; font-size: 14px; line-height: 1.45; }
+.menu-options { display: grid; gap: 12px; }
+.menu-block { display: flex; flex-direction: column; align-items: stretch; min-height: 162px; padding: 18px; border: 1px solid #34454f; border-radius: 17px; background: #131d24; color: #f2f7fa; text-decoration: none; }
+.menu-block-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 13px; color: #a9bac6; font-size: 23px; font-weight: 650; line-height: 1; }
+.menu-block strong { font-size: 24px; line-height: 1.2; letter-spacing: -.5px; }
+.menu-block > span:not(.menu-block-top) { margin-top: 6px; color: #a9bac6; font-size: 13px; line-height: 1.4; }
+.menu-block small { margin-top: 16px; color: #d8e4eb; font-size: 12px; }
+.menu-block:hover, .menu-level:hover { filter: brightness(1.15); }
+.menu-footer { margin: 20px 0 0; color: #a9bac6; text-align: center; font-size: 12px; line-height: 1.6; }
+.menu-back, .practice-menu-back { display: inline-flex; align-items: center; min-height: 44px; color: #f2f7fa; font-size: 14px; text-decoration: none; }
+.menu-back { margin-top: 10px; }
+.menu-eyebrow { margin: 12px 0 0; color: #a9bac6; text-transform: uppercase; letter-spacing: 1.2px; font-size: 11px; }
+.menu-eyebrow + h1 { margin-top: 7px; }
+.menu-level { --menu-accent: #68e0c4; --menu-fill: #10272a; display: grid; grid-template-columns: 38px 1fr 18px; align-items: center; gap: 11px; min-height: 90px; padding: 14px; border: 1px solid #34454f; border-left: 4px solid var(--menu-accent); border-radius: 14px; background: var(--menu-fill); color: #f2f7fa; text-decoration: none; }
+.menu-level[data-menu-level="count"] { --menu-accent: #75baff; --menu-fill: #101f32; }
+.menu-level[data-menu-level="downbeat"] { --menu-accent: #ffdb00; --menu-fill: #15150e; }
+.menu-level small { display: block; color: var(--menu-accent); text-transform: uppercase; letter-spacing: 1px; font-size: 11px; }
+.menu-level strong { display: block; margin-top: 4px; font-size: 18px; line-height: 1.25; }
+.menu-digit { color: var(--menu-accent); font-size: 30px; font-weight: 750; }
+@media (max-width: 360px) {
+  .learning-menu { padding-inline: max(14px, env(safe-area-inset-left)) max(14px, env(safe-area-inset-right)); }
+  .learning-menu h1 { font-size: 26px; }
+  .menu-block { padding: 16px 14px; min-height: 154px; }
+  .menu-block strong { font-size: 22px; }
+  .menu-level { grid-template-columns: 29px 1fr 16px; gap: 8px; padding: 12px; }
+  .menu-level strong { font-size: 17px; }
+  .menu-back { margin-top: 4px; }
+  .menu-intro { margin-bottom: 16px; }
+  .menu-level { min-height: 84px; }
+  .menu-footer { margin-top: 16px; }
+}
 .phrase-shell { max-width: 640px; margin: auto; padding: env(safe-area-inset-top) max(14px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left)); }
 .phrase-header { display: flex; align-items: center; justify-content: space-between; min-height: 52px; margin-bottom: 8px; border-bottom: 1px solid var(--level-border); }
 .phrase-header a, .phrase-header button { color: var(--level-accent); font-size: 14px; min-height: 44px; padding: 12px 0; }

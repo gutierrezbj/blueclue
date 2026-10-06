@@ -114,7 +114,7 @@ export function BassListeningTrainer({ track }: { track: ListeningTrack }) {
   }
 
   return <main className="phrase-shell bass-shell" data-level="downbeat">
-    <header className="phrase-header"><a href="#practice-controls" onClick={() => player.pause()}>← Beat Trainer</a><span>Escucha musical</span></header>
+    <header className="phrase-header"><a href="#escucha-el-cambio" onClick={() => player.pause()}>← Escucha el cambio</a><span>Práctica</span></header>
     <div className="level-label">Práctica corta · 23 segundos</div>
     <h1>Escucha el bajo</h1>
     <p className="phrase-context">Notas graves que entran, salen y vuelven. No cuentes.</p>

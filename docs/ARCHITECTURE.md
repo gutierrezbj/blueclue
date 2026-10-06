@@ -90,6 +90,15 @@ Los valores iniciales se pueden ajustar durante pruebas reales.
 
 ## Persistencia
 
+`navigation.ts` resuelve los hashes de Inicio, bloques, niveles y rutas previas.
+`TrainingApp` monta un único menú o entrenador; los menús no cargan audio.
+`LearningMenu` ofrece enlaces nativos grandes sin almacenar otro progreso.
+`enterPractice` conserva una sesión del mismo módulo; para otro reinicia posición
+y ayudas en Teach/65 %, manteniendo pista e historial. Al hidratar la elección,
+el hash pasa a la práctica genérica para que recargar respete el avance interno.
+Beat Trainer guarda posición al salir por enlace o historial del navegador;
+los récords y claves de almacenamiento existentes no cambian.
+
 V0.1 puede usar almacenamiento local para:
 
 - pista actual

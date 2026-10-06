@@ -37,9 +37,19 @@ Incluye:
 
 ## Modos
 
+### Inicio por bloques
+
+La portada ofrece dos botones grandes: **Marca el 1** → elegir uno de los tres
+niveles, y **Escucha el cambio** → Escucha el bajo. No hay ejercicios ficticios,
+bloqueos ni audio al navegar. «Inicio» vuelve a los bloques; «Niveles» sale de
+la práctica de ritmo. Los enlaces anteriores siguen funcionando.
+Entrar en el mismo nivel recupera pista, ayudas, velocidad y posición en pausa;
+elegir otro empieza en Teach/Despacio desde cero, conservando pista e historial.
+Dentro del ejercicio siguen disponibles Ajustes, recorrido guiado y Challenge.
+
 ### Escucha el bajo — práctica corta autorizada
 
-En la elección de ejercicios, abre **Escucha el cambio · El bajo**
+Desde Inicio, abre **Escucha el cambio → Escucha el bajo**
 (`#escucha-el-bajo`). Primero escucha con guía; después reconoce sus entradas
 sin ayudas. Dos oportunidades en 23 segundos, margen para reaccionar al sonido,
 resumen y revisión de cada cambio. No necesitas contar compases ni clavar un beat.
@@ -53,8 +63,8 @@ Tras la prueba de Juan, se retiran del recorrido principal los conteos monótono
 de 8/16/32: alargar la espera no aportaba el aprendizaje buscado. No necesitas
 completarlos. Los tres niveles iniciales y Challenge se conservan; los enlaces
 antiguos siguen disponibles como práctica opcional, sin borrar datos.
-Antes de otro módulo se valida una muestra corta con entradas/salidas de bajo.
-No hay todavía un nuevo ejercicio ni scoring de cambios.
+Tras aceptar la muestra, se añadió la práctica corta Escucha el bajo descrita
+arriba. Su utilidad pedagógica aún requiere práctica del usuario.
 
 La descripción siguiente conserva el funcionamiento de los enlaces antiguos.
 
@@ -196,7 +206,8 @@ La descarga no está habilitada en `npm run dev`. Fuera de localhost requiere HT
 No sirve abrir la IP del ordenador por HTTP para validar instalación en iPhone.
 
 El móvil separa Práctica, Ajustes y resumen: onda, guía, controles, TAP y feedback
-permanecen juntos, sin portada ni controles duplicados. «Continuar» en el resumen
+permanecen juntos, sin controles duplicados. La portada separada sirve únicamente
+para elegir bloque y nivel; no se intercala al repetir o continuar. «Continuar» en el resumen
 indica las ayudas y velocidad del siguiente paso; no arranca música por sorpresa. TAP
 registra al apoyar el dedo (o pulsar el ratón), no al soltarlo; Enter sigue disponible.
 Cambiar de app o bloquear la pantalla pausa la práctica, sin reanudar automáticamente.

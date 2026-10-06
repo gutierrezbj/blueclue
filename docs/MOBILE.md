@@ -28,10 +28,23 @@ Eliminar la descarga libera solo cachés BlueClue, nunca el progreso de ejercici
 
 ## Diseño técnico
 
+### Inicio por bloques — 6 octubre 2026
+
+- Portada aprobada: dos botones grandes, Marca el 1 y Escucha el cambio. Sin
+  casillas futuras, porcentajes inventados ni requisitos de desbloqueo.
+- Marca el 1 abre tres niveles grandes con sus colores; Escucha el cambio abre
+  la práctica del bajo. «Inicio» vuelve a la portada; «Niveles» vuelve al selector.
+- Los menús no montan reproductores. Elegir un ejercicio nunca inicia audio.
+- Reentrar al mismo nivel conserva sesión pausada. Elegir otro reinicia en
+  Teach/Despacio, sin borrar historial ni cambiar la pista elegida.
+- Ajustes y descarga siguen dentro del Beat Trainer; Challenge permanece al final.
+- Hashes de menú y niveles funcionan con Atrás/Adelante; se conservan los enlaces
+  antiguos a práctica, bajo y conteos opcionales. No se modifica el scoring.
+
 ### Navegación móvil compacta
 
-- La pantalla inicial es la práctica: ejercicio actual, onda, Play/Pausa, Reiniciar,
-  guía, botón grande y feedback breve. Sin portada ni controles duplicados.
+- Tras elegir nivel aparece la práctica: ejercicio actual, onda, Play/Pausa,
+  Reiniciar, guía, botón grande y feedback breve. La portada no invade el ejercicio.
 - Ajustes pausa el audio y reúne pista, módulo, velocidad, Teach/Assist/Train e
   instalación/descarga. Volver a practicar no arranca música por sorpresa.
 - «Ver mi ronda» abre un resumen separado; también aparece al terminar. Desde él
