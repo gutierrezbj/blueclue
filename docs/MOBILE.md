@@ -17,8 +17,9 @@ La descarga se actualiza voluntariamente desde Ajustes y conserva el progreso.
 1. Abrir [blueclue.jrgblanco.com](https://blueclue.jrgblanco.com) en Safari del iPhone.
 2. Compartir → Añadir a pantalla de inicio; activar Abrir como app si se muestra.
 3. Abrir BlueClue desde el icono, no continuar en la pestaña de Safari.
-4. Abrir Ajustes → «BlueClue en tu bolsillo» y descargar las cinco pistas con Wi-Fi.
-5. Esperar «5 pistas disponibles sin conexión» antes de cambiar de app.
+4. Inicio → Marca el 1 → elegir nivel → Ajustes → «BlueClue en tu bolsillo»;
+   descargar los ejercicios con Wi-Fi. El paquete actual incluye once audios.
+5. Esperar «Ejercicios disponibles sin conexión» antes de cambiar de app.
 6. Activar modo avión, cerrar y abrir BlueClue y comprobar cada pista.
 
 El almacenamiento de Safari puede ser distinto del de la app instalada. El progreso

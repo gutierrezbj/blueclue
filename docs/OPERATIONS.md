@@ -2,6 +2,32 @@
 
 Estado actualizado el 6 de octubre de 2026.
 
+## Portada por bloques — publicada como 615ba57
+
+- Maqueta aprobada por Juan: dos accesos grandes, Marca el 1 y Escucha el cambio.
+  Primero elegir bloque; después nivel o práctica. Sin módulos inventados ni
+  bloqueos. Los colores siguen identificando los tres niveles, no los bloques.
+- Menús sin reproductor; entrar siempre pausado. Reentrar al mismo nivel conserva
+  sesión; elegir otro prepara Teach/Despacio desde cero con pista e historial
+  conservados. Atrás/Adelante y enlaces antiguos comprobados o cubiertos por tests.
+- Commits `0d2bbbe` (rutas y sesión) y `615ba57` (portada e integración). 112 tests
+  locales pasan; Linux 110 pasan y dos privados omitidos. Builds correctos.
+- Portada y selector de niveles caben sin scroll a 320 × 568 y 375 × 667. En
+  local se comprueba selección de niveles, salida del audio, restauración pausada
+  en 15,21 s, navegación Atrás/Adelante y acceso al bajo. Producción: portada,
+  selector, reproducción, pausa y regreso verificados a 375 × 667.
+- Paquete actualizado: 31,6 MB. Servidor temporal apagado y pestaña nueva:
+  portada, los dos bloques, reproducción del pulso hasta 27 s y los 23 s completos
+  del bajo. No es una prueba de Safari/iPhone físico ni una validación pedagógica.
+- HTTPS ok/demo/615ba57, Docker healthy, checks BlueClue y BlueClue-HTTP up.
+  Mismo bind 127.0.0.1:3280:3000, límites y once audios (30.863.358 bytes).
+  Imagen sin `.local` ni música privada. `current` → 615ba57; rollback 1386868.
+  Sin cambios de proxy, puertos ni otros proyectos; commits locales sin push.
+- En el iPhone: recargar con conexión; entrar en un nivel → Ajustes → BlueClue
+  en tu bolsillo → Actualizar descarga. Falta la prueba del usuario en su móvil.
+- Notion principal, Desarrollo e infraestructura actualizados y verificados;
+  conservadas las cuatro páginas hijas y la reserva +280.
+
 ## Escucha el bajo — publicada como 1386868
 
 - Juan acepta la muestra y autoriza una práctica breve. Mismo audio sintético
