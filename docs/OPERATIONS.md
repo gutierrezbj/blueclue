@@ -2,6 +2,32 @@
 
 Estado actualizado el 7 de octubre de 2026.
 
+## ¿Bajo o batería? — publicada como db8b459
+
+- Juan confirma «total se distinguen los 2». Se conserva el WAV aprobado de
+  32 s, con tres segundos de acomodo y cuatro entradas sin cambios simultáneos.
+- Tercera tarjeta en Escucha el cambio; guía inicial y después dos botones
+  BAJO/BATERÍA. Primera respuesta por entrada; el resumen separa reconocidas,
+  instrumentos confundidos, omitidas y toques adicionales. Replay de cada
+  entrada y última ronda local independiente, sin niveles ni récords nuevos.
+- 133 tests locales pasan; Linux 131 pasan y dos privados omitidos; builds
+  correctos. Pruebas de entradas/salidas, tolerancias, errores, duplicados,
+  conservación del audio aprobado y actualización offline atómica incluidas.
+- Menú y práctica a 320 × 568 sin scroll. Ronda real de navegador: una
+  reconocida, una confundida, dos omitidas y un duplicado; feedback coherente.
+  Enter, click, Espacio sobre ambos botones, pausa y replay hasta 9,75 s
+  comprobados. La revisión conserva resultados y reabrir recupera última ronda.
+- Descarga local 34,1 MB con app; trece audios, 33.333.046 bytes. Servidor local
+  apagado y pestaña nueva: carga y reproducción completa de los 32 segundos.
+- Producción 375 × 667: navegación, dos botones, acierto del bajo, pausa y
+  reinicio comprobados. HTTPS ok/demo/db8b459, Docker healthy, checks existentes
+  BlueClue y BlueClue-HTTP up. Imagen sin `.local` ni música privada.
+- Mismo bind 127.0.0.1:3280:3000, límites y proxy; rollback c84b7d5. Sin tocar
+  servicios ajenos ni hacer push. Notion principal, Desarrollo e infraestructura
+  actualizados; páginas hijas conservadas.
+- Actualizar descarga en la PWA. Pendientes: utilidad del ejercicio sin guía
+  y validación de esta entrega en Safari/iPhone físico, no simulación de escritorio.
+
 ## Escucha la percusión — publicada como c84b7d5
 
 - Juan reconoce claramente la muestra de 24 s y autoriza continuar. Se integra

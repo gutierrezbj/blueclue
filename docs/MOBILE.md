@@ -18,7 +18,7 @@ La descarga se actualiza voluntariamente desde Ajustes y conserva el progreso.
 2. Compartir → Añadir a pantalla de inicio; activar Abrir como app si se muestra.
 3. Abrir BlueClue desde el icono, no continuar en la pestaña de Safari.
 4. Inicio → Marca el 1 → elegir nivel → Ajustes → «BlueClue en tu bolsillo»;
-   descargar los ejercicios con Wi-Fi. El paquete actual incluye once audios.
+   descargar los ejercicios con Wi-Fi. El paquete actual incluye trece audios.
 5. Esperar «Ejercicios disponibles sin conexión» antes de cambiar de app.
 6. Activar modo avión, cerrar y abrir BlueClue y comprobar cada pista.
 
@@ -26,6 +26,21 @@ El almacenamiento de Safari puede ser distinto del de la app instalada. El progr
 se guarda en ese navegador/dispositivo y no viaja desde el ordenador. iOS puede
 eliminar datos por presión de almacenamiento; se solicita persistencia sin prometerla.
 Eliminar la descarga libera solo cachés BlueClue, nunca el progreso de ejercicios.
+
+## ¿Bajo o batería? — comprobación local del 7 octubre
+
+- Tercer botón en Escucha el cambio. Menú y reconocimiento con dos botones
+  grandes caben a 320 × 568, sin desplazamiento horizontal ni vertical.
+- Se comprobó una ronda con una respuesta confundida, una reconocida y dos
+  omitidas; intentar ambos botones en la primera entrada cuenta un adicional,
+  no corrige el fallo. Enter, click y Espacio para pausar sobre BATERÍA funcionan.
+- Replay del fallo detiene la reproducción a 9,75 s y conserva el resumen.
+  Al volver a entrar, empieza pausado y recupera la última ronda independiente.
+- Actualización de doce a trece audios: 34,1 MB con app; 33.333.046 bytes de
+  audio. Pestaña nueva con servidor local apagado reproduce los 32 segundos
+  completos y permite pasar de Escuchar a Reconocer desde la descarga.
+- Esta comprobación usa el navegador de escritorio con tamaño móvil. Falta
+  probar esta nueva práctica en Safari/iPhone físico y validar su utilidad por oído.
 
 ## Diseño técnico
 
