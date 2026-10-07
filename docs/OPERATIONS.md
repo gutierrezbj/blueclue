@@ -1,6 +1,16 @@
 # Operación ligera — BlueClue
 
-Estado actualizado el 6 de octubre de 2026.
+Estado actualizado el 7 de octubre de 2026.
+
+## Botón de retorno — preparado, pendiente de publicar
+
+- Commit `0fd5dbf`: Inicio con forma de pastilla y flecha circular, área táctil
+  de 44 px y nombre accesible. Mismo destino; sin cambios en ejercicios o audio.
+- 114 tests locales pasan y build correcto. Retorno comprobado desde ambos
+  selectores; sin desbordamiento a 320 × 568 y 375 × 667.
+- Publicación pendiente: Tailscale SSH solicita reautenticación humana antes
+  de acceder al VPS. No se ha transferido ni activado esta versión; la última
+  publicación confirmada sigue siendo `615ba57`.
 
 ## Portada por bloques — publicada como 615ba57
 
