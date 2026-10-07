@@ -394,7 +394,10 @@ button, a, summary { touch-action: manipulation; }
 .menu-block:hover, .menu-level:hover { filter: brightness(1.15); }
 .menu-footer { margin: 20px 0 0; color: #a9bac6; text-align: center; font-size: 12px; line-height: 1.6; }
 .menu-back, .practice-menu-back { display: inline-flex; align-items: center; min-height: 44px; color: #f2f7fa; font-size: 14px; text-decoration: none; }
-.menu-back { margin-top: 10px; }
+.menu-back { margin-top: 10px; gap: 9px; padding: 0 15px 0 8px; border: 1px solid #34454f; border-radius: 999px; background: #131d24; font-weight: 600; box-shadow: 0 2px 8px #00000024; }
+.menu-back-icon { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: #203a3f; color: #68e0c4; font-size: 18px; }
+.menu-back:hover { border-color: #68e0c4; background: #18292f; }
+.menu-back:active { background: #203a3f; }
 .menu-eyebrow { margin: 12px 0 0; color: #a9bac6; text-transform: uppercase; letter-spacing: 1.2px; font-size: 11px; }
 .menu-eyebrow + h1 { margin-top: 7px; }
 .menu-level { --menu-accent: #68e0c4; --menu-fill: #10272a; display: grid; grid-template-columns: 38px 1fr 18px; align-items: center; gap: 11px; min-height: 90px; padding: 14px; border: 1px solid #34454f; border-left: 4px solid var(--menu-accent); border-radius: 14px; background: var(--menu-fill); color: #f2f7fa; text-decoration: none; }
