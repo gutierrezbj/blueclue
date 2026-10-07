@@ -2,6 +2,32 @@
 
 Estado actualizado el 7 de octubre de 2026.
 
+## Escucha la percusión — publicada como c84b7d5
+
+- Juan reconoce claramente la muestra de 24 s y autoriza continuar. Se integra
+  el mismo WAV aceptado, sin regenerar ni alterar el audio del bajo.
+- Segundo botón grande en Escucha el cambio; Escuchar → Reconocer → resumen
+  y revisión. Batería entra dos veces sobre una base continua. Margen posterior
+  de 2,5 s; repetidos separados, sin nuevos récords ni cuarto nivel.
+- Entrenador y motor compartidos; mensajes, referencias y última ronda propios.
+  Al cambiar de ejercicio se destruye el reproductor y se empieza pausado.
+  La clave anterior del bajo y los niveles/Challenge permanecen intactos.
+- 123 tests locales pasan; Linux 121 pasan y dos privados omitidos. Builds
+  correctos. Menú y práctica caben a 320 × 568. Navegador: guía, reconocimiento
+  por Enter, duplicado por click, pausa, resumen 1/2 con un adicional, replay
+  detenido a 9,75 s y regreso con resultado conservado comprobados.
+- Descarga actualizada de 32,7 MB; doce audios suman 31.921.802 bytes. Servidor
+  temporal apagado, pestaña nueva: percusión carga desde caché y reproduce los
+  24 segundos hasta el resumen. No equivale a probar Safari/iPhone físico.
+- HTTPS ok/demo/c84b7d5, Docker healthy, checks BlueClue y BlueClue-HTTP up.
+  Imagen sin `.local` ni música privada. Mismo bind 127.0.0.1:3280:3000, límites
+  y proxy; rollback c880c1e. Sin reinicios de otros proyectos ni push.
+- Producción a 375 × 667: dos tarjetas, percusión completa hasta el resumen de
+  escucha y entrada pausada en Reconocer comprobadas. Notion principal,
+  Desarrollo e infraestructura actualizados; páginas hijas conservadas.
+- Actualizar descarga en la PWA con conexión. Quedan la prueba del ejercicio
+  completo por Juan y su uso en iPhone; aceptar el audio no acredita aprendizaje.
+
 ## Botón de retorno — publicado como c880c1e
 
 - Commit `0fd5dbf`: Inicio con forma de pastilla y flecha circular, área táctil

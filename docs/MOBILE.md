@@ -150,6 +150,19 @@ reapertura desde pestaña nueva con el servidor apagado y cinco pistas reproduci
 Actualiza la descarga dentro de la PWA antes de salir. HTTPS y Docker saludables;
 la aceptación pedagógica y Safari en iPhone físico siguen pendientes.
 
+## Percusión — 7 octubre 2026
+
+Release `c84b7d5`: Inicio → Escucha el cambio → Escucha la percusión. Segunda
+tarjeta grande y práctica breve con el audio de 24 segundos aceptado por Juan.
+Menú y Reconocer caben sin desplazamiento a 320 × 568; guía, TAP, pausa, resumen
+y replay comprobados. No arranca música al entrar o cambiar de ejercicio.
+
+Actualizar la descarga dentro de la PWA: paquete local de 32,7 MB, doce audios.
+Servidor temporal apagado y pestaña nueva: abre percusión y reproduce los
+24 segundos completos hasta el resumen. Motor offline también prueba actualización
+interrumpida sin perder el paquete anterior y rangos de audio. No se repite la
+escucha de los once audios anteriores ni se certifica Safari en iPhone físico.
+
 ## Referencias técnicas
 
 Tercer paso V0.2 (5 octubre): release `86f6473`, `/#compases-32`. Grupos de ocho
