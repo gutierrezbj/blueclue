@@ -2,15 +2,20 @@
 
 Estado actualizado el 7 de octubre de 2026.
 
-## Botón de retorno — preparado, pendiente de publicar
+## Botón de retorno — publicado como c880c1e
 
 - Commit `0fd5dbf`: Inicio con forma de pastilla y flecha circular, área táctil
   de 44 px y nombre accesible. Mismo destino; sin cambios en ejercicios o audio.
 - 114 tests locales pasan y build correcto. Retorno comprobado desde ambos
   selectores; sin desbordamiento a 320 × 568 y 375 × 667.
-- Publicación pendiente: Tailscale SSH solicita reautenticación humana antes
-  de acceder al VPS. No se ha transferido ni activado esta versión; la última
-  publicación confirmada sigue siendo `615ba57`.
+- Tras reautenticación de Tailscale, release `c880c1e` publicada: Linux 112 tests
+  pasan y dos privados omitidos; build correcto. HTTPS ok/demo/c880c1e, Docker
+  healthy y checks BlueClue y BlueClue-HTTP up. Mismo bind 127.0.0.1:3280:3000
+  y límites; imagen sin `.local` ni música privada. Rollback `615ba57`.
+- Botón y regreso comprobados en web pública a 375 × 667. No se repite offline
+  ni Safari físico en esta entrega; actualizar descarga con conexión.
+- Notion principal, Desarrollo e infraestructura actualizados. Sin push ni
+  cambios de proxy, puertos u otros proyectos.
 
 ## Portada por bloques — publicada como 615ba57
 
