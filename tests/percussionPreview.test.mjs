@@ -1,9 +1,23 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { readFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
 import { renderPercussionPreview } from "../scripts/percussion-preview.mjs";
 
 const { wav, metadata } = renderPercussionPreview();
 const sampleAt = index => wav.readInt16LE(44 + index * 2) / 32767;
+
+test("public percussion practice uses the accepted sample and matching annotations", async () => {
+  const published = await readFile(new URL("../public/tracks/listening/percussion.wav", import.meta.url));
+  const track = JSON.parse(await readFile(new URL("../data/listening/percussion.json", import.meta.url), "utf8"));
+  assert.deepEqual(published, wav);
+  assert.equal(createHash("sha256").update(published).digest("hex"), "e70f4c94cd7c3127b92a5f901b5ddc866158e1f8599fa8df349f6a4c4cd6f94c");
+  assert.equal(track.duration, metadata.duration);
+  assert.equal(track.leadInSeconds, metadata.leadInSeconds);
+  assert.equal(track.instrument, "percussion");
+  assert.deepEqual(track.changes, metadata.changes);
+  assert.ok(track.changes.every(change => track.beats.includes(change.time)));
+});
 
 function roughness(start, seconds = 0.12) {
   const first = Math.round(start * metadata.sampleRate);

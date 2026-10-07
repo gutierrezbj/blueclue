@@ -8,6 +8,7 @@ test("home contains two learning blocks with explicit level entry points", () =>
   assert.deepEqual(readAppRoute("#marca-el-1"), { screen: "rhythm" });
   assert.deepEqual(readAppRoute("#escucha-el-cambio"), { screen: "listening-menu" });
   assert.deepEqual(readAppRoute("#escucha-el-bajo"), { screen: "bass" });
+  assert.deepEqual(readAppRoute("#escucha-la-percusion"), { screen: "percussion" });
   for (const [index, moduleId] of ["pulse", "count", "downbeat"].entries()) assert.deepEqual(readAppRoute(`#nivel-${index + 1}`), { screen: "practice", moduleId });
 });
 

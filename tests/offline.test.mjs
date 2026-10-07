@@ -126,6 +126,28 @@ test("listening sample upgrades ten audios atomically and plays offline with Saf
   assert.equal((await response).status, 206);
 });
 
+test("percussion upgrades eleven audios atomically and both listening audios play offline", async () => {
+  const worker = createWorker();
+  worker.specification.audio.push(...Array.from({ length: 5 }, (_, index) => `/tracks/count-32/${index}.wav?v=demo`), "/tracks/listening/bass.wav?v=demo");
+  worker.specification.audioBytes = 44;
+  await worker.context.downloadPack(worker.specification.id, () => {});
+  worker.specification.id = "percussion-build";
+  worker.specification.audio.push("/tracks/listening/percussion.wav?v=demo");
+  worker.specification.audioBytes = 48;
+  worker.failures.add("/tracks/listening/percussion.wav");
+  await assert.rejects(worker.context.downloadPack(worker.specification.id, () => {}));
+  assert.equal((await worker.context.verifiedPack()).id, "build-demo");
+  worker.failures.clear();
+  await worker.context.downloadPack(worker.specification.id, () => {});
+  assert.equal((await worker.context.verifiedPack()).resources.length, 15);
+  worker.setOffline(true);
+  for (const audio of worker.specification.audio.slice(-2)) {
+    let response;
+    worker.listeners.get("fetch")({ request: new Request(origin + audio, { headers: { Range: "bytes=0-1" } }), respondWith: promise => { response = promise; } });
+    assert.equal((await response).status, 206);
+  }
+});
+
 test("offline packs reject foreign URLs, duplicate resources and incomplete audio sets", async () => {
   for (const invalid of ["foreign", "duplicate", "missing"]) {
     const worker = createWorker();

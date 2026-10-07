@@ -2,7 +2,7 @@ import type { LearningModuleId } from "./learningModules.ts";
 import type { PracticeSession } from "./practice.ts";
 
 export type AppRoute =
-  | { screen: "home" | "rhythm" | "listening-menu" | "bass" }
+  | { screen: "home" | "rhythm" | "listening-menu" | "bass" | "percussion" }
   | { screen: "bars"; bars: 8 | 16 | 32 }
   | { screen: "practice"; moduleId?: LearningModuleId };
 
@@ -10,6 +10,7 @@ export function readAppRoute(hash: string): AppRoute {
   if (hash === "#marca-el-1") return { screen: "rhythm" };
   if (hash === "#escucha-el-cambio") return { screen: "listening-menu" };
   if (hash === "#escucha-el-bajo") return { screen: "bass" };
+  if (hash === "#escucha-la-percusion") return { screen: "percussion" };
   if (hash === "#compases") return { screen: "bars", bars: 8 };
   if (hash === "#compases-16") return { screen: "bars", bars: 16 };
   if (hash === "#compases-32") return { screen: "bars", bars: 32 };

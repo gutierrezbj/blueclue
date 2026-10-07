@@ -40,7 +40,7 @@ Incluye:
 ### Inicio por bloques
 
 La portada ofrece dos botones grandes: **Marca el 1** → elegir uno de los tres
-niveles, y **Escucha el cambio** → Escucha el bajo. No hay ejercicios ficticios,
+niveles, y **Escucha el cambio** → bajo y percusión. No hay ejercicios ficticios,
 bloqueos ni audio al navegar. «Inicio» vuelve a los bloques; «Niveles» sale de
 la práctica de ritmo. Los enlaces anteriores siguen funcionando.
 Entrar en el mismo nivel recupera pista, ayudas, velocidad y posición en pausa;
@@ -56,6 +56,20 @@ resumen y revisión de cada cambio. No necesitas contar compases ni clavar un be
 Actualizar la descarga guarda también este audio sintético para usarlo sin red.
 La muestra fue aceptada; la utilidad del ejercicio completo aún requiere práctica
 del usuario. No sustituye ni cambia los tres niveles de V0.1.
+
+### Escucha la percusión — siguiente práctica de escucha
+
+En **Escucha el cambio → Escucha la percusión** (`#escucha-la-percusion`),
+reconoce la entrada de la batería mientras la melodía continúa. Misma muestra
+sintética de 24 segundos aceptada por Juan, con tres segundos para acomodarse.
+Primero escucha con guía; después pulsa al entrar o volver la batería, no en
+cada golpe ni cuando sale. Dos entradas, margen de 2,5 segundos, resumen y replay.
+No es un cuarto nivel ni añade récords. Guarda la última ronda aparte del bajo.
+Ambos ejercicios usan el mismo entrenador y conservan sus consignas propias.
+
+Regenerar solo este audio: `node scripts/create-percussion-preview.mjs --publish`.
+Actualizar la descarga añade 1,06 MB y conserva los once audios anteriores.
+La muestra se distingue por oído según Juan; el ejercicio requiere su prueba.
 
 ### Conteos V0.2 fuera del recorrido recomendado
 

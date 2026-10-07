@@ -3,13 +3,13 @@
 import { useEffect, useState, type ComponentProps } from "react";
 import { BeatTrainer } from "./BeatTrainer";
 import { BarCountingTrainer } from "./BarCountingTrainer";
-import { BassListeningTrainer } from "./BassListeningTrainer";
-import type { ListeningTrack } from "@/lib/bassListening";
+import { ListeningTrainer } from "./ListeningTrainer";
+import type { ListeningTrack } from "@/lib/listening";
 import { LearningMenu } from "./LearningMenu";
 import { readAppRoute, type AppRoute } from "@/lib/navigation";
 import type { TrainingTrack } from "@/lib/tracks";
 
-export function TrainingApp(props: ComponentProps<typeof BeatTrainer> & { longTracks: TrainingTrack[]; listeningTrack: ListeningTrack }) {
+export function TrainingApp(props: ComponentProps<typeof BeatTrainer> & { longTracks: TrainingTrack[]; listeningTrack: ListeningTrack; percussionTrack: ListeningTrack }) {
   const [route, setRoute] = useState<AppRoute>({ screen: "home" });
   useEffect(() => {
     function navigate() {
@@ -21,7 +21,10 @@ export function TrainingApp(props: ComponentProps<typeof BeatTrainer> & { longTr
     return () => window.removeEventListener("hashchange", navigate);
   }, []);
   useEffect(() => { window.scrollTo({ top: 0, behavior: "instant" }); }, [route.screen]);
-  if (route.screen === "bass") return <BassListeningTrainer track={props.listeningTrack} />;
+  if (route.screen === "bass" || route.screen === "percussion") {
+    const track = route.screen === "bass" ? props.listeningTrack : props.percussionTrack;
+    return <ListeningTrainer key={track.id} track={track} />;
+  }
   if (route.screen === "bars") {
     const bars = route.bars;
     return <BarCountingTrainer key={bars} bars={bars} tracks={bars === 32 ? props.longTracks : props.tracks} catalogKind={bars === 32 ? "demo" : props.catalogKind} />;

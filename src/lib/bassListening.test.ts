@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { readFileSync } from "node:fs";
-import { evaluateListeningTap, getBassEntries, getBassGuide, getListeningReview, summarizeListening, type ListeningTrack } from "./bassListening.ts";
+import { evaluateListeningTap, getListeningEntries as getBassEntries, getListeningGuide as getBassGuide, getListeningReview, summarizeListening, type ListeningTrack } from "./listening.ts";
 
 const track = JSON.parse(readFileSync(new URL("../../data/listening/bass.json", import.meta.url), "utf8")) as ListeningTrack;
 

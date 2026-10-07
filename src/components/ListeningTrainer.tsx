@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { evaluateListeningTap, getBassGuide, getListeningReview, summarizeListening, type ListeningTap, type ListeningTrack } from "@/lib/bassListening";
+import { evaluateListeningTap, getListeningGuide, getListeningReview, listeningStorageKey, summarizeListening, type ListeningTap, type ListeningTrack } from "@/lib/listening";
+import { listeningLessons } from "@/lib/listeningLessons";
 import { handleTapKeyDown } from "@/lib/tapInput";
 import { useWaveformPlayer } from "@/lib/useWaveformPlayer";
 
-export function BassListeningTrainer({ track }: { track: ListeningTrack }) {
+export function ListeningTrainer({ track }: { track: ListeningTrack }) {
+  const lesson = listeningLessons[track.instrument ?? "bass"];
   const [stage, setStage] = useState<"listen" | "detect">("listen");
   const [taps, setTaps] = useState<ListeningTap[]>([]);
   const tapsRef = useRef<ListeningTap[]>([]);
@@ -19,17 +21,18 @@ export function BassListeningTrainer({ track }: { track: ListeningTrack }) {
   const player = useWaveformPlayer(track, true, 1, "downbeat", false);
   const summary = summarizeListening(track, taps);
   const feedback = taps.at(-1);
-  const storageKey = `blueclue-listening-${track.id}`;
+  const totalEntries = summary.entries.length;
+  const storageKey = listeningStorageKey(track);
   const canTap = stage === "detect" && player.isReady && player.isPlaying && !finished && reviewTarget === null;
 
   useEffect(() => {
     try {
       const saved = JSON.parse(localStorage.getItem(storageKey) ?? "null");
-      if (saved && Number.isInteger(saved.recognized) && saved.recognized >= 0 && saved.recognized <= 2 && Number.isInteger(saved.extra) && saved.extra >= 0) {
-        setLastRound(`Última práctica: ${saved.recognized} de 2 entradas reconocidas. Toques adicionales: ${saved.extra}.`);
+      if (saved && Number.isInteger(saved.recognized) && saved.recognized >= 0 && saved.recognized <= totalEntries && Number.isInteger(saved.extra) && saved.extra >= 0) {
+        setLastRound(`Última práctica: ${saved.recognized} de ${totalEntries} entradas reconocidas. Toques adicionales: ${saved.extra}.`);
       }
     } catch { setStorageError(true); }
-  }, [storageKey]);
+  }, [storageKey, totalEntries]);
 
   useEffect(() => {
     if (canTap && focusTap.current) {
@@ -48,7 +51,7 @@ export function BassListeningTrainer({ track }: { track: ListeningTrack }) {
     setFinished(true);
     if (stage === "detect") {
       const result = summarizeListening(track, tapsRef.current);
-      setLastRound(`Última práctica: ${result.recognized} de 2 entradas reconocidas. Toques adicionales: ${result.extra}.`);
+      setLastRound(`Última práctica: ${result.recognized} de ${result.entries.length} entradas reconocidas. Toques adicionales: ${result.extra}.`);
       try { localStorage.setItem(storageKey, JSON.stringify({ recognized: result.recognized, extra: result.extra })); }
       catch { setStorageError(true); }
     }
@@ -115,9 +118,9 @@ export function BassListeningTrainer({ track }: { track: ListeningTrack }) {
 
   return <main className="phrase-shell bass-shell" data-level="downbeat">
     <header className="phrase-header"><a href="#escucha-el-cambio" onClick={() => player.pause()}>← Escucha el cambio</a><span>Práctica</span></header>
-    <div className="level-label">Práctica corta · 23 segundos</div>
-    <h1>Escucha el bajo</h1>
-    <p className="phrase-context">Notas graves que entran, salen y vuelven. No cuentes.</p>
+    <div className="level-label">Práctica corta · {track.duration} segundos</div>
+    <h1>{track.title}</h1>
+    <p className="phrase-context">{lesson.context}</p>
     <div className="mode-selector" role="group" aria-label="Pasos de escucha">
       <button type="button" className={stage === "listen" ? "mode-button active" : "mode-button"} aria-pressed={stage === "listen"} onClick={() => changeStage("listen")}>1 · Escuchar</button>
       <button type="button" className={stage === "detect" ? "mode-button active" : "mode-button"} aria-pressed={stage === "detect"} onClick={() => changeStage("detect")}>2 · Reconocer</button>
@@ -131,26 +134,27 @@ export function BassListeningTrainer({ track }: { track: ListeningTrack }) {
     {!player.isReady && !player.error && <p role="status">Preparando audio…</p>}
     {reviewTarget !== null ? <>
       <p className="phrase-instruction">Revisión guiada · no cambia tu resultado.</p>
-      <div className="phrase-guide" role="status"><strong>{getBassGuide(track, player.currentTime)}</strong></div>
+      <div className="phrase-guide" role="status"><strong>{getListeningGuide(track, player.currentTime)}</strong></div>
       <button type="button" className="previous-button" onClick={() => { player.pause(); setReviewTarget(null); }}>Volver al resumen</button>
-    </> : finished ? <section className="phrase-summary" aria-labelledby="bass-result">
-      <h2 id="bass-result">{stage === "listen" ? "Ahora, reconócelo por oído" : `${summary.recognized} de 2 entradas reconocidas`}</h2>
+    </> : finished ? <section className="phrase-summary" aria-labelledby="listening-result">
+      <h2 id="listening-result">{stage === "listen" ? "Ahora, reconócelo por oído" : `${summary.recognized} de ${totalEntries} entradas reconocidas`}</h2>
       {stage === "listen" ? <>
-        <p>Has escuchado cómo entra el bajo, desaparece y vuelve. Ahora pulsa cuando lo oigas entrar, sin guía visual.</p>
+        <p>{lesson.listened}</p>
         <button type="button" className="next-button" onClick={() => changeStage("detect")}>Probar sin guía →</button>
       </> : <>
         <p>Sin reconocer: {summary.missed} · Toques adicionales: {summary.extra}. Cada entrada cuenta una sola vez.</p>
         <p>No medimos precisión al milisegundo: tienes un margen para reconocer el cambio después de oírlo.</p>
-        {summary.entries.map((entry, index) => <button type="button" className="previous-button" key={entry.time} onClick={() => review(entry.time)}>{index === 0 ? "Primera entrada" : "Vuelve el bajo"} · {entry.recognized ? "Reconocida" : "Sin reconocer"} · Escuchar</button>)}
+        {summary.entries.map((entry, index) => <button type="button" className="previous-button" key={entry.time} onClick={() => review(entry.time)}>{index === 0 ? "Primera entrada" : lesson.returnLabel} · {entry.recognized ? "Reconocida" : "Sin reconocer"} · Escuchar</button>)}
         <button type="button" className="next-button" onClick={restart}>Practicar otra vez</button>
+        {track.instrument !== "percussion" && <a className="previous-button" href="#escucha-la-percusion">Siguiente práctica · La percusión →</a>}
       </>}
     </section> : stage === "listen" ? <>
-      <div className="phrase-guide" role="status"><strong>{getBassGuide(track, player.currentTime)}</strong></div>
-      <p className="phrase-instruction">Solo escucha. Fíjate en las notas graves, por debajo de la percusión.</p>
+      <div className="phrase-guide" role="status"><strong>{getListeningGuide(track, player.currentTime)}</strong></div>
+      <p className="phrase-instruction">{lesson.listen}</p>
     </> : <>
-      <p className="phrase-instruction">Pulsa al oír entrar o volver el bajo. No en cada golpe, ni cuando sale.</p>
-      <button ref={tapRef} type="button" className="tap-button" disabled={!canTap} onPointerDown={event => { if (event.isPrimary && event.button === 0) tap(); }} onKeyDown={event => handleTapKeyDown(event, tap)} onClick={event => { if (event.detail === 0) tap(); }}><strong>ENTRA EL BAJO</strong><small>{!player.isPlaying ? "PULSA ▶ PARA EMPEZAR O CONTINUAR" : "PULSA CUANDO LO OIGAS"}</small></button>
-      <div className="phrase-feedback" role="status">{feedback ? feedback.result === "recognized" ? "Reconocida. Has oído entrar el bajo." : feedback.result === "repeated" ? "Esta entrada ya está registrada. Escucha, sin repetir el toque." : "Aquí no hay una nueva entrada del bajo. Sigue escuchando; puedes reconocer la siguiente." : "Primero sonará la base. Espera a escuchar las notas graves."}</div>
+      <p className="phrase-instruction">{lesson.instruction}</p>
+      <button ref={tapRef} type="button" className="tap-button" disabled={!canTap} onPointerDown={event => { if (event.isPrimary && event.button === 0) tap(); }} onKeyDown={event => handleTapKeyDown(event, tap)} onClick={event => { if (event.detail === 0) tap(); }}><strong>{lesson.button}</strong><small>{!player.isPlaying ? "PULSA ▶ PARA EMPEZAR O CONTINUAR" : "PULSA CUANDO LO OIGAS"}</small></button>
+      <div className="phrase-feedback" role="status">{feedback ? feedback.result === "recognized" ? lesson.recognized : feedback.result === "repeated" ? "Esta entrada ya está registrada. Escucha, sin repetir el toque." : lesson.outside : lesson.ready}</div>
     </>}
     <p className="keyboard-hint">Espacio inicia o pausa · Enter sobre el botón grande marca la entrada.</p>
     {lastRound && !finished && <p className="phrase-context">{lastRound}</p>}

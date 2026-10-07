@@ -14,8 +14,11 @@ Objetivo:
 
 **Revisión tras probarlo:** los conteos de 8/16/32 salen del recorrido principal
 por falta de utilidad percibida con audio monótono. No se consideran aprendizaje
-validado. Enlaces antiguos opcionales; siguiente propuesta pendiente de escuchar:
-fragmento corto con cambios audibles, sin construir otro módulo hasta validarlo.
+validado. Enlaces antiguos opcionales; se priorizan fragmentos cortos con cambios
+audibles, escuchando y aceptando la muestra antes de construir cada ejercicio.
+Escucha el bajo está publicada. Juan acepta la muestra de percusión el 7 octubre;
+se convierte en la segunda práctica breve de Escucha el cambio. Queda pendiente
+la prueba pedagógica del ejercicio sin guía, no la claridad de la muestra.
 Las entregas que siguen documentan el historial técnico, no el recorrido vigente.
 
 Primer incremento publicado el 5 octubre de 2026: **cuenta ocho compases**.
