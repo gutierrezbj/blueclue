@@ -1,4 +1,5 @@
 export type ListeningInstrument = "bass" | "percussion";
+export type ListeningLesson = ListeningInstrument | "choice";
 
 export const listeningLessons = {
   bass: {
@@ -30,5 +31,20 @@ export const listeningLessons = {
     ongoing: "La batería sigue. No es otra entrada.",
     returnLabel: "Vuelve la batería",
     listened: "Has oído cómo aparece y desaparece la batería mientras la melodía continúa. Ahora reconoce sus entradas sin guía."
+  },
+  choice: {
+    context: "Dos sonidos, una decisión: ¿qué acaba de entrar?",
+    listen: "Escucha el bajo grave y los golpes de la batería. La guía nombra cada cambio.",
+    instruction: "Cuando entre un instrumento, elige cuál. No pulses cuando sale ni en cada golpe.",
+    button: "ELIGE QUÉ ENTRA",
+    recognized: "Reconocido.",
+    outside: "Aquí no entra un instrumento. Sigue escuchando: espera una nueva entrada.",
+    ready: "Acomódate. Primero suena solo la melodía.",
+    base: "Solo la melodía, sin bajo ni batería.",
+    entry: "Escucha qué entra.",
+    exit: "Escucha qué sale.",
+    ongoing: "Sigue escuchando. No es otra entrada.",
+    returnLabel: "Nueva entrada",
+    listened: "Ya has oído ambos sonidos. Ahora elige BAJO o BATERÍA al reconocer una entrada, sin guía."
   }
-} satisfies Record<ListeningInstrument, Record<string, string>>;
+} satisfies Record<ListeningLesson, Record<string, string>>;

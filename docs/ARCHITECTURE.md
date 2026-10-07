@@ -175,7 +175,7 @@ empaqueta los cinco audios del catálogo activo más los cinco largos; no cambia
 los JSON ni WAV previos. El worker acepta paquetes anteriores de cinco y nuevos
 de diez, verifica todos sus recursos y conserva el paquete anterior ante fallos.
 
-Las prácticas `#escucha-el-bajo` y `#escucha-la-percusion` usan `ListeningTrainer`,
+Las prácticas `#escucha-el-bajo`, `#escucha-la-percusion` y `#bajo-o-bateria` usan `ListeningTrainer`,
 con un remount por id al cambiar: no arrastran audio, ronda ni revisión.
 `listeningLessons.ts` centraliza consignas y mensajes por instrumento.
 No mezclan su evaluación con el scoring de beats. `listening.ts` evalúa entradas
@@ -184,9 +184,15 @@ después; calcula resumen y límites de replay. No analiza el audio. Datos y WAV
 en `data/listening` y `public/tracks/listening`; el reproductor existente se
 reutiliza sin onda visible ni seek manual. `trainingCatalog` mantiene cinco
 pistas principales y cinco largas, y expone `listeningTrack` (bajo) y
-`percussionTrack` por separado. La clave de persistencia del bajo no cambia.
-La descarga actual contiene doce audios; sigue aceptando paquetes de cinco,
-diez y once. Un fallo en el nuevo audio conserva el paquete anterior completo.
+`percussionTrack` y `choiceTrack` por separado. Las claves anteriores no cambian.
+`instrument: "choice"` acepta ambas entradas y exige la elección del instrumento.
+La primera respuesta dentro de la ventana consume esa entrada, acertada o
+equivocada; los duplicados y toques fuera se informan aparte. Reconocidas,
+confundidas y omitidas suman las cuatro oportunidades. El motor devuelve el
+instrumento esperado para explicar el error; Reconocer no anuncia cambios futuros.
+La última ronda de elección se guarda en `blueclue-listening-choice-listening-v1`.
+La descarga actual contiene trece audios; sigue aceptando paquetes de cinco,
+diez, once y doce. Un fallo en el nuevo audio conserva el paquete anterior completo.
 
 Essentia y análisis automático quedan fuera de V0.1.
 

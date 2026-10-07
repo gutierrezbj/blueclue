@@ -392,9 +392,14 @@ button, a, summary { touch-action: manipulation; }
 .menu-block > span:not(.menu-block-top) { margin-top: 6px; color: #a9bac6; font-size: 13px; line-height: 1.4; }
 .menu-block small { margin-top: 16px; color: #d8e4eb; font-size: 12px; }
 .menu-block:hover, .menu-level:hover { filter: brightness(1.15); }
-.menu-listening .menu-block { min-height: 140px; padding: 14px; }
-.menu-listening .menu-block-top { font-size: 13px; margin-bottom: 8px; }
-.menu-listening .menu-block small { margin-top: 10px; }
+.menu-listening-card { display: grid; grid-template-columns: 24px 1fr 12px; align-items: center; gap: 10px; min-height: 94px; padding: 12px; border: 1px solid #34454f; border-radius: 14px; background: #131d24; color: #f2f7fa; text-decoration: none; }
+.menu-listening-card .menu-digit { color: #ffdb00; font-size: 24px; }
+.menu-listening-card strong { display: block; font-size: 18px; line-height: 1.25; }
+.menu-listening-card small { display: block; margin-top: 6px; color: #a9bac6; font-size: 12px; }
+.menu-listening-card:hover { border-color: #ffdb00; }
+.listening-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.listening-choices .tap-button { padding: 12px 6px; }
+.listening-choices .tap-button strong { font-size: 23px; }
 .menu-footer { margin: 20px 0 0; color: #a9bac6; text-align: center; font-size: 12px; line-height: 1.6; }
 .menu-back, .practice-menu-back { display: inline-flex; align-items: center; min-height: 44px; color: #f2f7fa; font-size: 14px; text-decoration: none; }
 .menu-back { margin-top: 10px; gap: 9px; padding: 0 15px 0 8px; border: 1px solid #34454f; border-radius: 999px; background: #131d24; font-weight: 600; box-shadow: 0 2px 8px #00000024; }

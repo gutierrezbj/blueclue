@@ -9,7 +9,7 @@ import { LearningMenu } from "./LearningMenu";
 import { readAppRoute, type AppRoute } from "@/lib/navigation";
 import type { TrainingTrack } from "@/lib/tracks";
 
-export function TrainingApp(props: ComponentProps<typeof BeatTrainer> & { longTracks: TrainingTrack[]; listeningTrack: ListeningTrack; percussionTrack: ListeningTrack }) {
+export function TrainingApp(props: ComponentProps<typeof BeatTrainer> & { longTracks: TrainingTrack[]; listeningTrack: ListeningTrack; percussionTrack: ListeningTrack; choiceTrack: ListeningTrack }) {
   const [route, setRoute] = useState<AppRoute>({ screen: "home" });
   useEffect(() => {
     function navigate() {
@@ -21,8 +21,8 @@ export function TrainingApp(props: ComponentProps<typeof BeatTrainer> & { longTr
     return () => window.removeEventListener("hashchange", navigate);
   }, []);
   useEffect(() => { window.scrollTo({ top: 0, behavior: "instant" }); }, [route.screen]);
-  if (route.screen === "bass" || route.screen === "percussion") {
-    const track = route.screen === "bass" ? props.listeningTrack : props.percussionTrack;
+  if (route.screen === "bass" || route.screen === "percussion" || route.screen === "choice") {
+    const track = route.screen === "bass" ? props.listeningTrack : route.screen === "percussion" ? props.percussionTrack : props.choiceTrack;
     return <ListeningTrainer key={track.id} track={track} />;
   }
   if (route.screen === "bars") {

@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { evaluateListeningTap, getListeningGuide, getListeningReview, listeningStorageKey, summarizeListening, type ListeningTap, type ListeningTrack } from "@/lib/listening";
-import { listeningLessons } from "@/lib/listeningLessons";
+import { evaluateListeningTap, getListeningFeedback, getListeningGuide, getListeningReview, listeningStorageKey, summarizeListening, type ListeningTap, type ListeningTrack } from "@/lib/listening";
+import { listeningLessons, type ListeningInstrument } from "@/lib/listeningLessons";
 import { handleTapKeyDown } from "@/lib/tapInput";
 import { useWaveformPlayer } from "@/lib/useWaveformPlayer";
 
 export function ListeningTrainer({ track }: { track: ListeningTrack }) {
   const lesson = listeningLessons[track.instrument ?? "bass"];
+  const isChoice = track.instrument === "choice";
   const [stage, setStage] = useState<"listen" | "detect">("listen");
   const [taps, setTaps] = useState<ListeningTap[]>([]);
   const tapsRef = useRef<ListeningTap[]>([]);
@@ -17,6 +18,7 @@ export function ListeningTrainer({ track }: { track: ListeningTrack }) {
   const [lastRound, setLastRound] = useState<string | null>(null);
   const [storageError, setStorageError] = useState(false);
   const tapRef = useRef<HTMLButtonElement>(null);
+  const percussionRef = useRef<HTMLButtonElement>(null);
   const focusTap = useRef(false);
   const player = useWaveformPlayer(track, true, 1, "downbeat", false);
   const summary = summarizeListening(track, taps);
@@ -29,10 +31,11 @@ export function ListeningTrainer({ track }: { track: ListeningTrack }) {
     try {
       const saved = JSON.parse(localStorage.getItem(storageKey) ?? "null");
       if (saved && Number.isInteger(saved.recognized) && saved.recognized >= 0 && saved.recognized <= totalEntries && Number.isInteger(saved.extra) && saved.extra >= 0) {
-        setLastRound(`Última práctica: ${saved.recognized} de ${totalEntries} entradas reconocidas. Toques adicionales: ${saved.extra}.`);
+        if (isChoice && (!Number.isInteger(saved.wrong) || saved.wrong < 0 || saved.wrong > totalEntries - saved.recognized)) return;
+        setLastRound(`Última práctica: ${saved.recognized} de ${totalEntries} entradas reconocidas.${isChoice ? ` Confusiones: ${saved.wrong}.` : ""} Toques adicionales: ${saved.extra}.`);
       }
     } catch { setStorageError(true); }
-  }, [storageKey, totalEntries]);
+  }, [isChoice, storageKey, totalEntries]);
 
   useEffect(() => {
     if (canTap && focusTap.current) {
@@ -51,17 +54,17 @@ export function ListeningTrainer({ track }: { track: ListeningTrack }) {
     setFinished(true);
     if (stage === "detect") {
       const result = summarizeListening(track, tapsRef.current);
-      setLastRound(`Última práctica: ${result.recognized} de ${result.entries.length} entradas reconocidas. Toques adicionales: ${result.extra}.`);
-      try { localStorage.setItem(storageKey, JSON.stringify({ recognized: result.recognized, extra: result.extra })); }
+      setLastRound(`Última práctica: ${result.recognized} de ${result.entries.length} entradas reconocidas.${isChoice ? ` Confusiones: ${result.wrong}.` : ""} Toques adicionales: ${result.extra}.`);
+      try { localStorage.setItem(storageKey, JSON.stringify({ recognized: result.recognized, wrong: result.wrong, extra: result.extra })); }
       catch { setStorageError(true); }
     }
-  }, [player.currentTime, player.isReady, player.pause, reviewTarget, stage, storageKey, track]);
+  }, [isChoice, player.currentTime, player.isReady, player.pause, reviewTarget, stage, storageKey, track]);
 
   useEffect(() => {
     function handleSpace(event: KeyboardEvent) {
       if (event.code !== "Space" || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
       const target = event.target;
-      if (target instanceof HTMLElement && (target.isContentEditable || (target.closest("button, a, select, input, textarea, summary") && target !== tapRef.current))) return;
+      if (target instanceof HTMLElement && (target.isContentEditable || (target.closest("button, a, select, input, textarea, summary") && target !== tapRef.current && target !== percussionRef.current))) return;
       event.preventDefault();
       if (!event.repeat) toggle();
     }
@@ -101,9 +104,9 @@ export function ListeningTrainer({ track }: { track: ListeningTrack }) {
     else { focusTap.current = stage === "detect"; void player.play(); }
   }
 
-  function tap() {
+  function tap(choice?: ListeningInstrument) {
     if (!canTap) return;
-    const result = evaluateListeningTap(track, tapsRef.current, player.getTime());
+    const result = evaluateListeningTap(track, tapsRef.current, player.getTime(), choice);
     if (!result) return;
     tapsRef.current = [...tapsRef.current, result];
     setTaps(tapsRef.current);
@@ -142,19 +145,23 @@ export function ListeningTrainer({ track }: { track: ListeningTrack }) {
         <p>{lesson.listened}</p>
         <button type="button" className="next-button" onClick={() => changeStage("detect")}>Probar sin guía →</button>
       </> : <>
-        <p>Sin reconocer: {summary.missed} · Toques adicionales: {summary.extra}. Cada entrada cuenta una sola vez.</p>
+        <p>{isChoice && <>Instrumento confundido: {summary.wrong} · </>}Sin reconocer: {summary.missed} · Toques adicionales: {summary.extra}. Cada entrada cuenta una sola vez.</p>
         <p>No medimos precisión al milisegundo: tienes un margen para reconocer el cambio después de oírlo.</p>
-        {summary.entries.map((entry, index) => <button type="button" className="previous-button" key={entry.time} onClick={() => review(entry.time)}>{index === 0 ? "Primera entrada" : lesson.returnLabel} · {entry.recognized ? "Reconocida" : "Sin reconocer"} · Escuchar</button>)}
+        {summary.entries.map((entry, index) => <button type="button" className="previous-button" key={entry.time} onClick={() => review(entry.time)}>{isChoice ? `${index + 1} · ${track.changes.find(change => change.time === entry.time)?.action === "bass-in" ? "Bajo" : "Batería"}` : index === 0 ? "Primera entrada" : lesson.returnLabel} · {entry.recognized ? "Reconocida" : entry.wrong ? "Confundida" : "Sin reconocer"} · Escuchar</button>)}
         <button type="button" className="next-button" onClick={restart}>Practicar otra vez</button>
-        {track.instrument !== "percussion" && <a className="previous-button" href="#escucha-la-percusion">Siguiente práctica · La percusión →</a>}
+        {(track.instrument ?? "bass") === "bass" && <a className="previous-button" href="#escucha-la-percusion">Siguiente práctica · La percusión →</a>}
+        {track.instrument === "percussion" && <a className="previous-button" href="#bajo-o-bateria">Siguiente práctica · ¿Bajo o batería? →</a>}
+        {isChoice && <a className="previous-button" href="#escucha-el-cambio">Volver a las prácticas de escucha</a>}
       </>}
     </section> : stage === "listen" ? <>
       <div className="phrase-guide" role="status"><strong>{getListeningGuide(track, player.currentTime)}</strong></div>
       <p className="phrase-instruction">{lesson.listen}</p>
     </> : <>
       <p className="phrase-instruction">{lesson.instruction}</p>
-      <button ref={tapRef} type="button" className="tap-button" disabled={!canTap} onPointerDown={event => { if (event.isPrimary && event.button === 0) tap(); }} onKeyDown={event => handleTapKeyDown(event, tap)} onClick={event => { if (event.detail === 0) tap(); }}><strong>{lesson.button}</strong><small>{!player.isPlaying ? "PULSA ▶ PARA EMPEZAR O CONTINUAR" : "PULSA CUANDO LO OIGAS"}</small></button>
-      <div className="phrase-feedback" role="status">{feedback ? feedback.result === "recognized" ? lesson.recognized : feedback.result === "repeated" ? "Esta entrada ya está registrada. Escucha, sin repetir el toque." : lesson.outside : lesson.ready}</div>
+      {isChoice ? <div className="listening-choices" role="group" aria-label="Qué instrumento entra">
+        {(["bass", "percussion"] as const).map(instrument => <button key={instrument} ref={instrument === "bass" ? tapRef : percussionRef} type="button" className="tap-button" disabled={!canTap} onPointerDown={event => { if (event.isPrimary && event.button === 0) tap(instrument); }} onKeyDown={event => handleTapKeyDown(event, () => tap(instrument))} onClick={event => { if (event.detail === 0) tap(instrument); }}><strong>{instrument === "bass" ? "BAJO" : "BATERÍA"}</strong></button>)}
+      </div> : <button ref={tapRef} type="button" className="tap-button" disabled={!canTap} onPointerDown={event => { if (event.isPrimary && event.button === 0) tap(); }} onKeyDown={event => handleTapKeyDown(event, tap)} onClick={event => { if (event.detail === 0) tap(); }}><strong>{lesson.button}</strong><small>{!player.isPlaying ? "PULSA ▶ PARA EMPEZAR O CONTINUAR" : "PULSA CUANDO LO OIGAS"}</small></button>}
+      <div className="phrase-feedback" role="status">{getListeningFeedback(track, feedback)}</div>
     </>}
     <p className="keyboard-hint">Espacio inicia o pausa · Enter sobre el botón grande marca la entrada.</p>
     {lastRound && !finished && <p className="phrase-context">{lastRound}</p>}

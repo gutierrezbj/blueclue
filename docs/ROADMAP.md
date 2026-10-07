@@ -19,6 +19,9 @@ audibles, escuchando y aceptando la muestra antes de construir cada ejercicio.
 Escucha el bajo está publicada. Juan acepta la muestra de percusión el 7 octubre;
 se convierte en la segunda práctica breve de Escucha el cambio. Queda pendiente
 la prueba pedagógica del ejercicio sin guía, no la claridad de la muestra.
+Juan también confirma que distingue ambos instrumentos en la muestra conjunta:
+se convierte en la tercera práctica corta, ¿Bajo o batería?, con dos botones y
+revisión de errores. No añade niveles; aún requiere validar aprendizaje sin guía.
 Las entregas que siguen documentan el historial técnico, no el recorrido vigente.
 
 Primer incremento publicado el 5 octubre de 2026: **cuenta ocho compases**.

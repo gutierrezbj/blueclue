@@ -40,7 +40,7 @@ Incluye:
 ### Inicio por bloques
 
 La portada ofrece dos botones grandes: **Marca el 1** → elegir uno de los tres
-niveles, y **Escucha el cambio** → bajo y percusión. No hay ejercicios ficticios,
+niveles, y **Escucha el cambio** → bajo, percusión y distinguir ambos. No hay ejercicios ficticios,
 bloqueos ni audio al navegar. «Inicio» vuelve a los bloques; «Niveles» sale de
 la práctica de ritmo. Los enlaces anteriores siguen funcionando.
 Entrar en el mismo nivel recupera pista, ayudas, velocidad y posición en pausa;
@@ -70,6 +70,22 @@ Ambos ejercicios usan el mismo entrenador y conservan sus consignas propias.
 Regenerar solo este audio: `node scripts/create-percussion-preview.mjs --publish`.
 Actualizar la descarga añade 1,06 MB y conserva los once audios anteriores.
 La muestra se distingue por oído según Juan; el ejercicio requiere su prueba.
+
+### ¿Bajo o batería? — distinguir lo que entra
+
+Tercera práctica de **Escucha el cambio** (`#bajo-o-bateria`): la muestra
+sintética de 32 segundos aceptada por Juan, sin cambiar su audio. Primero guía;
+después dos botones grandes, **BAJO** y **BATERÍA**, para identificar cuatro
+entradas (dos de cada instrumento). No se pulsa en las salidas ni en cada golpe.
+Hay 2,5 segundos para responder después de cada entrada. La primera respuesta
+cuenta: cambiar de botón después no suma un acierto. El resumen separa reconocidas,
+instrumentos confundidos, sin reconocer y toques adicionales; cada entrada tiene
+replay guiado. Guarda su última ronda aparte, sin nuevos niveles ni récords.
+
+`node scripts/create-change-choice-preview.mjs --publish` regenera exactamente
+el audio aprobado. Actualizar la descarga incorpora 1,41 MB: trece audios en total,
+sin modificar los doce anteriores. La claridad del sonido está aceptada;
+la utilidad pedagógica del ejercicio sin guía sigue pendiente de práctica real.
 
 ### Conteos V0.2 fuera del recorrido recomendado
 

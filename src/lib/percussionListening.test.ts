@@ -21,7 +21,7 @@ test("early taps and duplicates do not consume another percussion entry or infla
   const second = evaluateListeningTap(percussion, [early, first, repeated, exit], 17)!;
   assert.equal(repeated.result, "repeated");
   assert.deepEqual(summarizeListening(percussion, [early, first, repeated, exit, second]), {
-    entries: [{ time: 6.75, recognized: true }, { time: 16.125, recognized: true }], recognized: 2, missed: 0, extra: 3
+    entries: [{ time: 6.75, recognized: true, wrong: false }, { time: 16.125, recognized: true, wrong: false }], recognized: 2, wrong: 0, missed: 0, extra: 3
   });
   assert.equal(summarizeListening(percussion, []).missed, 2);
   assert.equal(summarizeListening(percussion, [first]).missed, 1);

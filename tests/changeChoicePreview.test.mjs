@@ -1,9 +1,22 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { readFileSync } from "node:fs";
 import { renderChangeChoicePreview } from "../scripts/change-choice-preview.mjs";
 
 const { wav, metadata } = renderChangeChoicePreview();
 const sampleAt = index => wav.readInt16LE(44 + index * 2) / 32767;
+
+test("published choice audio and annotations exactly preserve the accepted sample", () => {
+  assert.deepEqual(readFileSync(new URL("../public/tracks/listening/choice.wav", import.meta.url)), wav);
+  const track = JSON.parse(readFileSync(new URL("../data/listening/choice.json", import.meta.url), "utf8"));
+  assert.equal(track.instrument, "choice");
+  assert.equal(track.duration, metadata.duration);
+  assert.equal(track.leadInSeconds, metadata.leadInSeconds);
+  assert.equal(track.bpm, metadata.bpm);
+  assert.deepEqual(track.changes, metadata.changes);
+  assert.equal(track.beats.length, 44);
+  assert.equal(track.downbeats.length, 11);
+});
 
 function energy(start, derivative = false) {
   const first = Math.round(start * metadata.sampleRate);
