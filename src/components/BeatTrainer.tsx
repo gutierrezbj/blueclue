@@ -12,7 +12,8 @@ import { type AttemptClassification, type AttemptResult } from "@/lib/scoring";
 import { difficultyLabels, type TrainingMode, type TrainingTrack } from "@/lib/tracks";
 import { useWaveformPlayer } from "@/lib/useWaveformPlayer";
 import { getPracticeNeighbor, getResumePosition, modeLabels, modeTaglines, practiceModes, readPracticeSession, type PracticeLocation, type PracticeSession } from "@/lib/practice";
-import { ROUNDS_STORAGE_KEY, assessReadiness, readRoundHistory, recordRound, type Readiness, type RoundHistory } from "@/lib/readiness";
+import { ROUNDS_STORAGE_KEY, assessReadiness, incompleteRoundReadiness, readRoundHistory, recordRound, type Readiness, type RoundHistory } from "@/lib/readiness";
+import { GUIDED_PATH_STORAGE_KEY, serializeGuidedPathState } from "@/lib/guidedPath";
 import { getBeatPosition } from "@/lib/beatGrid";
 import { getCountIn } from "@/lib/countIn";
 import { evaluateRoundTap, reviewOutcome, summarizeRound, type ExerciseRound, type RoundOutcome } from "@/lib/exerciseRound";
@@ -234,12 +235,18 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack, i
     if (!hasEnded || isReviewing || isChallenge || isReferencePending || roundRecordedRef.current || roundSummary.total === 0) return;
     roundRecordedRef.current = true;
     const slot = { moduleId, mode, speed: playbackSpeed };
-    const latest = { total: roundSummary.total, perfect: roundSummary.perfect, close: roundSummary.close };
+    if (round.start > 0.05) { setReadiness(incompleteRoundReadiness(roundHistory, slot)); return; }
+    const latest = { total: roundSummary.total, perfect: roundSummary.perfect, close: roundSummary.close, extra: roundSummary.extra + roundSummary.offTarget };
     const history = recordRound(roundHistory, slot, latest);
     setRoundHistory(history);
     setReadiness(assessReadiness(history, slot, latest));
     try { localStorage.setItem(ROUNDS_STORAGE_KEY, JSON.stringify(history)); } catch { setStorageUnavailable(true); }
-  }, [round, hasEnded, isReviewing, isChallenge, isReferencePending, roundSummary.total, roundSummary.perfect, roundSummary.close, moduleId, mode, playbackSpeed, roundHistory]);
+  }, [round, hasEnded, isReviewing, isChallenge, isReferencePending, roundSummary.total, roundSummary.perfect, roundSummary.close, roundSummary.extra, roundSummary.offTarget, moduleId, mode, playbackSpeed, roundHistory]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    try { localStorage.setItem(GUIDED_PATH_STORAGE_KEY, serializeGuidedPathState(moduleId)); } catch { /* sin almacenamiento: el camino sigue funcionando */ }
+  }, [hydrated, moduleId]);
 
   useEffect(() => {
     if (window.matchMedia("(max-width: 900px)").matches) {

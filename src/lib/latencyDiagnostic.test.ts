@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { CLICK_COUNT, buildLatencyReport, describeLatency, interquartileRange, median, nearestClickOffsetMs, scheduleClicks } from "./latencyDiagnostic.ts";
+import { CLICK_COUNT, buildLatencyReport, describeLatency, firstTapPerClick, interquartileRange, median, nearestClickOffsetMs, scheduleClicks } from "./latencyDiagnostic.ts";
 
 test("twelve clicks one second apart from the first click", () => {
   const clicks = scheduleClicks(2.5);
@@ -34,6 +34,16 @@ test("the report discards the two settling taps and taps far from any click", ()
   assert.ok(report.meanMs !== null && report.meanMs >= 95 && report.meanMs <= 105);
   assert.ok(report.spreadMs !== null && report.spreadMs <= 30);
   assert.match(describeLatency(report), /100 ms después del clic/);
+});
+
+test("several taps on one click count as a single sample", () => {
+  const clicks = scheduleClicks(1);
+  const taps = [1.1, 2.1, 3.05, 3.1, 3.15, 3.2, 3.25, 4.1];
+  assert.deepEqual(firstTapPerClick(taps.slice(2), clicks), [3.05, 4.1]);
+  const report = buildLatencyReport(taps, clicks);
+  assert.equal(report.usedTaps, 2);
+  assert.equal(report.discardedTaps, 6);
+  assert.match(describeLatency(report), /Pocos toques/);
 });
 
 test("too few useful taps asks to repeat", () => {

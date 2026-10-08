@@ -1,7 +1,8 @@
 # Hito «Empieza aquí» — BlueClue para nivel 0
 
-Fecha de especificación: 8 de octubre de 2026. Estado: **especificado y construido
-en la rama `empieza-aqui`; pendiente de prueba por Juan en iPhone**.
+Fecha de especificación: 8 de octubre de 2026. Estado: **construido en la rama
+`empieza-aqui`, revisado por el constructor (cuatro fallos corregidos el mismo día);
+pendiente de prueba por Juan en iPhone**.
 
 ## Para quién
 
@@ -91,8 +92,12 @@ sola frase: «Vas bien. Otra vez.» o «Ya puedes probar con menos ayuda: Assist
 
 Criterio inicial, ajustable con la práctica real, en `src/lib/readiness.ts`:
 
-- una ronda es **buena** si tuvo al menos 8 oportunidades y el 80 % o más
-  fueron clavadas o cerca (mismo umbral que Challenge);
+- solo cuentan rondas **completas**: empezadas desde el principio del
+  fragmento y escuchadas hasta el final;
+- una ronda es **buena** si tuvo al menos 8 oportunidades, el 80 % o más
+  fueron clavadas o cerca (mismo umbral que Challenge) y los toques de más
+  (repetidos o lejos de cualquier objetivo) no pasan del 20 % de las
+  oportunidades: acertar todos los 1 pulsando todos los golpes no es bueno;
 - se sugiere avanzar cuando **3 de las últimas 5 rondas** del mismo nivel, ayuda
   y velocidad son buenas;
 - el orden sugerido es el del recorrido existente: Teach → Assist → Train en
@@ -114,6 +119,12 @@ con cada clic. Al terminar muestra:
 - lo que informa el navegador sobre su salida de audio (`baseLatency` y
   `outputLatency`), cuando lo informa;
 - cuántos toques se descartaron por quedar a más de 300 ms de cualquier clic.
+
+Cuenta una sola muestra por clic: el primer toque cercano a cada clic; los
+demás se descartan. Usa un reproductor distinto al de los ejercicios (Web Audio
+frente a WaveSurfer), así que su resultado no puede convertirse directamente en
+una corrección del scoring: sirve para decidir si hace falta medir dentro del
+propio ejercicio.
 
 No corrige nada. Juan lo ejecuta tres veces en su iPhone con sus auriculares;
 si el desvío mediano es consistente (misma señal y dentro de ±40 ms entre

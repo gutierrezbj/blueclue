@@ -46,14 +46,33 @@ export function interquartileRange(values: readonly number[]): number | null {
   return quartile(sorted, 0.75) - quartile(sorted, 0.25);
 }
 
+export function nearestClickIndex(tapTime: number, clicks: readonly number[]): number {
+  let best = -1;
+  for (const [index, click] of clicks.entries()) {
+    if (best < 0 || Math.abs(tapTime - click) < Math.abs(tapTime - clicks[best])) best = index;
+  }
+  return best;
+}
+
+/** One sample per click: the first tap that lands within the window of that click. Later taps on the same click are discarded. */
+export function firstTapPerClick(tapTimes: readonly number[], clicks: readonly number[]): number[] {
+  const chosen = new Map<number, number>();
+  for (const tap of [...tapTimes].sort((a, b) => a - b)) {
+    const index = nearestClickIndex(tap, clicks);
+    if (index < 0 || Math.abs(tap - clicks[index]) * 1000 > MAX_TAP_DISTANCE_MS || chosen.has(index)) continue;
+    chosen.set(index, tap);
+  }
+  return [...chosen.values()];
+}
+
 /**
  * Compares taps with the clicks. The first taps are discarded as settling; taps far from any click are
- * discarded as misses. Positive offsets mean the tap registered after the click.
+ * discarded as misses, and only the first tap on each click counts. Positive offsets mean the tap registered after the click.
  */
 export function buildLatencyReport(tapTimes: readonly number[], clicks: readonly number[]): LatencyReport {
   const considered = tapTimes.slice(DISCARDED_LEADING_TAPS);
-  const offsets = considered.map(tap => nearestClickOffsetMs(tap, clicks)).filter((offset): offset is number => offset !== null);
-  const kept = offsets.filter(offset => Math.abs(offset) <= MAX_TAP_DISTANCE_MS).map(offset => Math.round(offset));
+  const samples = firstTapPerClick(considered, clicks);
+  const kept = samples.map(tap => Math.round(nearestClickOffsetMs(tap, clicks) ?? 0));
   const mean = kept.length ? Math.round(kept.reduce((sum, value) => sum + value, 0) / kept.length) : null;
   const medianValue = median(kept);
   const spread = interquartileRange(kept);

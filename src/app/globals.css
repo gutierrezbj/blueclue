@@ -515,3 +515,4 @@ button, a, summary { touch-action: manipulation; }
 .readiness-line strong { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--level-accent); }
 .readiness-line.advance { border-color: var(--level-accent); }
 .latency-tap { margin-top: 14px; min-height: 180px; }
+.sound-card-state { color: #68e0c4; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }

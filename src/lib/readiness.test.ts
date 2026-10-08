@@ -1,17 +1,37 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { assessReadiness, isGoodRound, nextSuggestedSlot, readRoundHistory, recordRound, type RoundHistory } from "./readiness.ts";
+import { assessReadiness, incompleteRoundReadiness, isGoodRound, nextSuggestedSlot, readRoundHistory, recordRound, type RoundHistory } from "./readiness.ts";
 
-const good = { total: 10, perfect: 6, close: 2 };
-const weak = { total: 10, perfect: 3, close: 2 };
-const short = { total: 5, perfect: 5, close: 0 };
+const good = { total: 10, perfect: 6, close: 2, extra: 1 };
+const weak = { total: 10, perfect: 3, close: 2, extra: 0 };
+const short = { total: 5, perfect: 5, close: 0, extra: 0 };
+const spray = { total: 22, perfect: 20, close: 2, extra: 66 };
 
 test("a good round needs eight opportunities and eighty percent on target", () => {
   assert.equal(isGoodRound(good), true);
   assert.equal(isGoodRound(weak), false);
   assert.equal(isGoodRound(short), false);
-  assert.equal(isGoodRound({ total: 8, perfect: 4, close: 2 }), false);
-  assert.equal(isGoodRound({ total: 8, perfect: 4, close: 3 }), true);
+  assert.equal(isGoodRound({ total: 8, perfect: 4, close: 2, extra: 0 }), false);
+  assert.equal(isGoodRound({ total: 8, perfect: 4, close: 3, extra: 1 }), true);
+});
+
+test("tapping every beat is not a good round even when every target is hit", () => {
+  assert.equal(isGoodRound(spray), false);
+  assert.equal(isGoodRound({ total: 20, perfect: 20, close: 0, extra: 4 }), true);
+  assert.equal(isGoodRound({ total: 20, perfect: 20, close: 0, extra: 5 }), false);
+  const slot = { moduleId: "count" as const, mode: "teach" as const, speed: 0.65 as const };
+  const readiness = assessReadiness(recordRound({}, slot, spray), slot, spray);
+  assert.equal(readiness.verdict, "repeat");
+  assert.match(readiness.message, /tocas de más/);
+});
+
+test("an incomplete round is not recorded and says so", () => {
+  const slot = { moduleId: "pulse" as const, mode: "teach" as const, speed: 0.65 as const };
+  const history = recordRound({}, slot, good);
+  const readiness = incompleteRoundReadiness(history, slot);
+  assert.equal(readiness.verdict, "repeat");
+  assert.equal(readiness.goodRounds, 1);
+  assert.match(readiness.message, /empieza desde el principio/);
 });
 
 test("the suggested order removes help, then speeds up, then changes level", () => {
@@ -27,7 +47,7 @@ test("history keeps the last five rounds per slot and survives bad input", () =>
   const slot = { moduleId: "count" as const, mode: "teach" as const, speed: 0.65 as const };
   for (let index = 0; index < 7; index++) history = recordRound(history, slot, index % 2 ? good : weak);
   assert.equal(history["count/teach/0.65"].length, 5);
-  const reread = readRoundHistory(JSON.stringify({ ...history, junk: [{ total: 1, perfect: 5, close: 0 }, "x"] }));
+  const reread = readRoundHistory(JSON.stringify({ ...history, junk: [{ total: 1, perfect: 5, close: 0, extra: 0 }, { total: 9, perfect: 9, close: 0 }, "x"] }));
   assert.deepEqual(reread["count/teach/0.65"], history["count/teach/0.65"]);
   assert.deepEqual(reread.junk, []);
 });

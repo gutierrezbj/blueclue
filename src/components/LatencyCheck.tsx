@@ -74,7 +74,7 @@ export function LatencyCheck() {
     <p className="menu-eyebrow">Pantalla oculta</p>
     <h1>Medir el retraso del toque</h1>
     <p className="menu-intro">Sonarán {CLICK_COUNT} clics, uno por segundo. Toca el botón grande con cada clic, como si siguieras el pulso. Solo mide: no corrige nada ni cambia tus puntuaciones.</p>
-    {phase !== "running" && <button type="button" className="continue-button sounds-replay" onClick={() => void start()}>{phase === "done" ? "▶ Medir otra vez" : "▶ Empezar los clics"}</button>}
+    {phase !== "running" && <button type="button" className="continue-button sounds-replay" onClick={() => void start()}>{phase === "done" ? "Medir otra vez" : "Empezar los clics"}</button>}
     <button type="button" className="tap-button latency-tap" disabled={phase !== "running"} onPointerDown={event => { if (event.isPrimary && event.button === 0) tap(); }} onKeyDown={event => handleTapKeyDown(event, tap)} onClick={event => { if (event.detail === 0) tap(); }}>
       <strong>{phase === "running" ? "TOCA CON EL CLIC" : phase === "done" ? "MEDICIÓN HECHA" : "ESPERA A LOS CLICS"}</strong>
       <small>{phase === "running" ? `${taps} toques` : "ENTER TAMBIÉN VALE"}</small>

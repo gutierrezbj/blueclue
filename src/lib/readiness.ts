@@ -9,8 +9,10 @@ export const GOOD_ROUND_MIN_TARGETS = 8;
 export const GOOD_ROUND_RATIO = 0.8;
 export const ROUNDS_KEPT = 5;
 export const GOOD_ROUNDS_TO_ADVANCE = 3;
+/** Stray taps (off target or repeated) allowed in a good round, as a share of the opportunities. */
+export const GOOD_ROUND_EXTRA_RATIO = 0.2;
 
-export type RoundRecord = { total: number; perfect: number; close: number };
+export type RoundRecord = { total: number; perfect: number; close: number; extra: number };
 export type RoundSlot = { moduleId: LearningModuleId; mode: TrainingMode; speed: PlaybackSpeed };
 export type RoundHistory = Record<string, RoundRecord[]>;
 
@@ -19,13 +21,15 @@ export function slotKey(slot: RoundSlot): string {
 }
 
 export function isGoodRound(round: RoundRecord): boolean {
-  return round.total >= GOOD_ROUND_MIN_TARGETS && (round.perfect + round.close) / round.total >= GOOD_ROUND_RATIO;
+  return round.total >= GOOD_ROUND_MIN_TARGETS &&
+    (round.perfect + round.close) / round.total >= GOOD_ROUND_RATIO &&
+    round.extra <= Math.floor(round.total * GOOD_ROUND_EXTRA_RATIO);
 }
 
 function isRoundRecord(value: unknown): value is RoundRecord {
   if (typeof value !== "object" || value === null) return false;
   const record = value as Record<string, unknown>;
-  return [record.total, record.perfect, record.close].every(field => Number.isInteger(field) && (field as number) >= 0) &&
+  return [record.total, record.perfect, record.close, record.extra].every(field => Number.isInteger(field) && (field as number) >= 0) &&
     (record.perfect as number) + (record.close as number) <= (record.total as number);
 }
 
@@ -66,7 +70,9 @@ export function assessReadiness(history: RoundHistory, slot: RoundSlot, latest: 
   const goodRounds = rounds.filter(isGoodRound).length;
   const next = nextSuggestedSlot(slot);
   if (goodRounds < GOOD_ROUNDS_TO_ADVANCE) {
+    const tooManyExtra = latest.extra > Math.floor(latest.total * GOOD_ROUND_EXTRA_RATIO) && (latest.perfect + latest.close) / Math.max(1, latest.total) >= GOOD_ROUND_RATIO;
     const message = latest.total < GOOD_ROUND_MIN_TARGETS ? "Ronda corta. Escucha el fragmento entero y vuelve a probar."
+      : tooManyExtra ? "Aciertas, pero tocas de más. Pulsa solo donde toca: una vez por objetivo."
       : isGoodRound(latest) ? `Buena ronda. ${goodRounds} de ${GOOD_ROUNDS_TO_ADVANCE} para avanzar: otra vez.` : "Vas bien. Otra vez, sin prisa.";
     return { verdict: "repeat", message, goodRounds, next };
   }
@@ -76,4 +82,10 @@ export function assessReadiness(history: RoundHistory, slot: RoundSlot, latest: 
     : next.speed !== slot.speed ? `Ya puedes probar más rápido: ${speedLabels[next.speed]}, otra vez con ${modeNames[next.mode]}.`
     : `Ya puedes probar con menos ayuda: ${modeNames[next.mode]}.`;
   return { verdict: "advance", message, goodRounds, next };
+}
+
+/** A round that did not start at the beginning of the fragment is not recorded; it only gets this notice. */
+export function incompleteRoundReadiness(history: RoundHistory, slot: RoundSlot): Readiness {
+  const goodRounds = (history[slotKey(slot)] ?? []).filter(isGoodRound).length;
+  return { verdict: "repeat", message: "Ronda incompleta: para que cuente, empieza desde el principio del fragmento.", goodRounds, next: nextSuggestedSlot(slot) };
 }
