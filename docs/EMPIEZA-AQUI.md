@@ -116,17 +116,21 @@ Pantalla `#latencia`, sin enlace en los menús, documentada aquí y en MOBILE.md
 Reproduce doce clics a 60 por minuto con Web Audio y pide tocar el botón grande
 con cada clic. Al terminar muestra:
 
-- desvío mediano y medio respecto al clic más cercano, en milisegundos,
-  descartando los dos primeros toques;
+- desvío mediano y medio respecto al clic más cercano, en milisegundos.
+  Solo se admite el primer toque válido por clic; los dos primeros clics son
+  de preparación y quedan fuera. Como máximo quedan diez muestras;
 - dispersión (rango entre el cuartil 1 y el 3);
 - lo que informa el navegador sobre su salida de audio (`baseLatency` y
   `outputLatency`), cuando lo informa;
-- cuántos toques se descartaron por quedar a más de 300 ms de cualquier clic.
+- cuántos toques se descartaron por preparación, repetición o por quedar a más
+  de 300 ms de cualquier clic. Con menos de cuatro clics útiles pide repetir.
 
-No corrige nada. Juan lo ejecuta tres veces en su iPhone con sus auriculares;
-si el desvío mediano es consistente (misma señal y dentro de ±40 ms entre
-ejecuciones), se abrirá una compensación opcional en otro incremento, y los
-récords indicarán con qué ajuste se hicieron. Motor en
+No corrige nada. Juan lo ejecuta tres veces en su iPhone con sus auriculares.
+Un desvío consistente (misma señal y dentro de ±40 ms entre ejecuciones) es
+un dato exploratorio, no una medida aislada de la latencia del dispositivo:
+incluye la respuesta humana y utiliza Web Audio, mientras el ejercicio usa
+MediaElement. Antes de plantear compensación hay que validar el desfase en el
+mismo recorrido de reproducción del ejercicio. Motor en
 `src/lib/latencyDiagnostic.ts`, con tests de estadística; la pantalla no calcula.
 
 ### 6. Variantes de escucha

@@ -14,10 +14,16 @@ La descarga se actualiza voluntariamente desde Ajustes y conserva el progreso.
 
 ## Medir la latencia del toque
 
-Abrir `blueclue.jrgblanco.com/#latencia` en el iPhone con los auriculares de
-práctica. Doce clics, uno por segundo; tocar el botón grande con cada clic.
-Anotar la mediana tres veces seguidas. Si las tres se parecen (misma señal,
-±40 ms), ese es el desfase del dispositivo. La pantalla no corrige nada.
+Disponible en la rama `empieza-aqui`, pendiente de publicar. Tras desplegarla,
+abrir `blueclue.jrgblanco.com/#latencia` en el iPhone con los auriculares de
+práctica. Doce clics, uno por segundo; un toque por clic. Los dos primeros clics
+son de preparación; los repetidos no añaden muestras. Con menos de cuatro
+clics útiles, repetir la medición.
+Anotar mediana, dispersión y clics útiles tres veces seguidas, junto al dispositivo
+y los auriculares. Una mediana parecida no demuestra por sí sola la latencia del
+dispositivo: mezcla respuesta humana y audio. Este diagnóstico usa Web Audio,
+no el reproductor MediaElement del ejercicio; no trasladar el número al scoring.
+La pantalla no corrige nada ni altera récords.
 
 ## Instalación
 

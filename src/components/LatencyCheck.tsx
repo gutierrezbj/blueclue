@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { CLICK_COUNT, CLICK_INTERVAL_SECONDS, buildLatencyReport, describeLatency, scheduleClicks, type LatencyReport } from "@/lib/latencyDiagnostic";
+import { CLICK_COUNT, CLICK_INTERVAL_SECONDS, MIN_USEFUL_CLICKS, buildLatencyReport, describeLatency, scheduleClicks, type LatencyReport } from "@/lib/latencyDiagnostic";
 import { handleTapKeyDown } from "@/lib/tapInput";
 
 type Phase = "idle" | "running" | "done";
@@ -81,16 +81,17 @@ export function LatencyCheck() {
     </button>
     {error && <p className="audio-error" role="alert">{error}</p>}
     {report && <section className="phrase-summary" aria-labelledby="latency-result">
-      <h2 id="latency-result">{report.medianMs === null ? "Sin medida" : `${report.medianMs > 0 ? "+" : ""}${report.medianMs} ms`}</h2>
+      <h2 id="latency-result">{report.medianMs === null || report.usedTaps < MIN_USEFUL_CLICKS ? "Repite la medición" : `${report.medianMs > 0 ? "+" : ""}${report.medianMs} ms`}</h2>
       <p>{describeLatency(report)}</p>
       <dl className="round-totals">
         <div><dt>Mediana</dt><dd>{report.medianMs ?? "—"}</dd></div>
         <div><dt>Media</dt><dd>{report.meanMs ?? "—"}</dd></div>
         <div><dt>Dispersión</dt><dd>{report.spreadMs ?? "—"}</dd></div>
-        <div><dt>Toques útiles</dt><dd>{report.usedTaps}</dd></div>
+        <div><dt>Clics respondidos útiles</dt><dd>{report.usedTaps}</dd></div>
       </dl>
-      <p>Descartados: {report.discardedTaps} (los dos primeros y los que quedaron a más de 300 ms de un clic). Positivo: tocas después del clic.</p>
-      <p>El navegador informa: salida base {browserLatency?.base ?? "—"} ms · salida total {browserLatency?.output ?? "—"} ms. Safari puede no informar.</p>
+      <p>Descartados: {report.discardedTaps}. Preparación: {report.warmupTaps}; repetidos: {report.duplicateTaps}; fuera de ±300 ms: {report.outOfWindowTaps}. Solo cuenta el primer toque válido de cada clic; los dos primeros clics son de preparación. Positivo: tocas después del clic.</p>
+      <p>El navegador informa: baseLatency {browserLatency?.base ?? "—"} ms · outputLatency {browserLatency?.output ?? "—"} ms. Safari puede no informar.</p>
+      <p>Es una medida de tus toques con este clic, no del retraso del dispositivo por separado. El ejercicio usa otro reproductor: este número no sirve directamente para corregir sus puntuaciones.</p>
       <p className="menu-footer">Repite tres veces con los mismos auriculares. Si la mediana se parece en las tres, apunta el número junto al dispositivo.</p>
       <details><summary>Toques uno a uno</summary><p>{report.offsetsMs.join(" · ")}</p></details>
     </section>}

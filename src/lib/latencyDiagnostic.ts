@@ -1,7 +1,8 @@
 export const CLICK_COUNT = 12;
 export const CLICK_INTERVAL_SECONDS = 1;
-export const DISCARDED_LEADING_TAPS = 2;
+export const DISCARDED_LEADING_CLICKS = 2;
 export const MAX_TAP_DISTANCE_MS = 300;
+export const MIN_USEFUL_CLICKS = 4;
 
 export type LatencyReport = {
   medianMs: number | null;
@@ -9,6 +10,9 @@ export type LatencyReport = {
   spreadMs: number | null;
   usedTaps: number;
   discardedTaps: number;
+  warmupTaps: number;
+  duplicateTaps: number;
+  outOfWindowTaps: number;
   offsetsMs: number[];
 };
 
@@ -17,13 +21,19 @@ export function scheduleClicks(firstClick: number, count = CLICK_COUNT, interval
   return Array.from({ length: count }, (_, index) => firstClick + index * interval);
 }
 
-export function nearestClickOffsetMs(tapTime: number, clicks: readonly number[]): number | null {
-  let best: number | null = null;
-  for (const click of clicks) {
+function nearestClick(tapTime: number, clicks: readonly number[]): { index: number; offset: number } | null {
+  if (!Number.isFinite(tapTime)) return null;
+  let best: { index: number; offset: number } | null = null;
+  for (const [index, click] of clicks.entries()) {
+    if (!Number.isFinite(click)) continue;
     const offset = (tapTime - click) * 1000;
-    if (best === null || Math.abs(offset) < Math.abs(best)) best = offset;
+    if (best === null || Math.abs(offset) < Math.abs(best.offset)) best = { index, offset };
   }
   return best;
+}
+
+export function nearestClickOffsetMs(tapTime: number, clicks: readonly number[]): number | null {
+  return nearestClick(tapTime, clicks)?.offset ?? null;
 }
 
 export function median(values: readonly number[]): number | null {
@@ -46,14 +56,24 @@ export function interquartileRange(values: readonly number[]): number | null {
   return quartile(sorted, 0.75) - quartile(sorted, 0.25);
 }
 
-/**
- * Compares taps with the clicks. The first taps are discarded as settling; taps far from any click are
- * discarded as misses. Positive offsets mean the tap registered after the click.
- */
 export function buildLatencyReport(tapTimes: readonly number[], clicks: readonly number[]): LatencyReport {
-  const considered = tapTimes.slice(DISCARDED_LEADING_TAPS);
-  const offsets = considered.map(tap => nearestClickOffsetMs(tap, clicks)).filter((offset): offset is number => offset !== null);
-  const kept = offsets.filter(offset => Math.abs(offset) <= MAX_TAP_DISTANCE_MS).map(offset => Math.round(offset));
+  const usedClicks = new Set<number>();
+  const kept: number[] = [];
+  let warmupTaps = 0;
+  let duplicateTaps = 0;
+  let outOfWindowTaps = 0;
+  for (const tap of tapTimes) {
+    const match = nearestClick(tap, clicks);
+    if (!match || Math.abs(match.offset) > MAX_TAP_DISTANCE_MS + 1e-7) {
+      outOfWindowTaps++;
+    } else if (usedClicks.has(match.index)) {
+      duplicateTaps++;
+    } else {
+      usedClicks.add(match.index);
+      if (match.index < DISCARDED_LEADING_CLICKS) warmupTaps++;
+      else kept.push(Math.round(match.offset));
+    }
+  }
   const mean = kept.length ? Math.round(kept.reduce((sum, value) => sum + value, 0) / kept.length) : null;
   const medianValue = median(kept);
   const spread = interquartileRange(kept);
@@ -63,12 +83,15 @@ export function buildLatencyReport(tapTimes: readonly number[], clicks: readonly
     spreadMs: spread === null ? null : Math.round(spread),
     usedTaps: kept.length,
     discardedTaps: tapTimes.length - kept.length,
+    warmupTaps,
+    duplicateTaps,
+    outOfWindowTaps,
     offsetsMs: kept
   };
 }
 
 export function describeLatency(report: LatencyReport): string {
-  if (report.medianMs === null || report.usedTaps < 4) return "Pocos toques útiles para medir. Repite con los doce clics.";
+  if (report.medianMs === null || report.usedTaps < MIN_USEFUL_CLICKS) return "Pocos clics respondidos para medir. Repite con los doce clics.";
   const direction = report.medianMs > 0 ? "después" : report.medianMs < 0 ? "antes" : "exactamente en";
   return `Tus toques llegan de mediana ${Math.abs(report.medianMs)} ms ${direction} del clic. Dispersión: ${report.spreadMs ?? 0} ms.`;
 }

@@ -39,5 +39,43 @@ test("the report discards the two settling taps and taps far from any click", ()
 test("too few useful taps asks to repeat", () => {
   const report = buildLatencyReport([1.1, 2.1, 3.1], scheduleClicks(1));
   assert.equal(report.usedTaps, 1);
-  assert.match(describeLatency(report), /Pocos toques/);
+  assert.match(describeLatency(report), /Pocos clics/);
+});
+
+test("each click contributes only its first valid tap, never a better duplicate", () => {
+  const report = buildLatencyReport([1.1, 1.11, 2.1, 3.2, 3.01, 3.02, 3.03, 3.04], scheduleClicks(1));
+  assert.equal(report.usedTaps, 1);
+  assert.equal(report.medianMs, 200);
+  assert.equal(report.warmupTaps, 2);
+  assert.equal(report.duplicateTaps, 5);
+  assert.match(describeLatency(report), /Pocos clics/);
+});
+
+test("twelve clicks provide at most ten samples even with repeated input", () => {
+  const clicks = scheduleClicks(1);
+  const taps = clicks.flatMap(click => [click + 0.1, click + 0.12]);
+  const report = buildLatencyReport(taps, clicks);
+  assert.equal(report.usedTaps, 10);
+  assert.equal(report.medianMs, 100);
+  assert.equal(report.duplicateTaps, 12);
+  assert.equal(report.warmupTaps, 2);
+  assert.equal(report.discardedTaps, 14);
+});
+
+test("settling belongs to the first two clicks, not the first two arbitrary taps", () => {
+  const report = buildLatencyReport([0, 0.1, 3.1, 4.1, 5.1, 6.1], scheduleClicks(1));
+  assert.equal(report.usedTaps, 4);
+  assert.equal(report.warmupTaps, 0);
+  assert.equal(report.outOfWindowTaps, 2);
+  assert.equal(report.medianMs, 100);
+});
+
+test("outliers do not consume a click and invalid or boundary input stays safe", () => {
+  const report = buildLatencyReport([NaN, Infinity, -Infinity, 3.4, 3.3, 3.1, 3.7, 5.300001], scheduleClicks(1));
+  assert.deepEqual(report.offsetsMs, [300, -300]);
+  assert.equal(report.outOfWindowTaps, 5);
+  assert.equal(report.duplicateTaps, 1);
+  assert.equal(report.discardedTaps + report.usedTaps, 8);
+  assert.equal(buildLatencyReport([1, 2, 3], []).usedTaps, 0);
+  assert.equal(nearestClickOffsetMs(NaN, scheduleClicks(1)), null);
 });

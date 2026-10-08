@@ -211,6 +211,9 @@ incluye duplicados y toques alejados en el denominador. El historial v1 no se
 migra por no contener esa información; sesión y récords siguen intactos.
 `latencyDiagnostic.ts` calcula mediana, media y dispersión de los toques frente a
 los clics programados con Web Audio en `LatencyCheck`; no hay compensación.
+Conserva el primer toque válido por clic, excluye los dos clics iniciales y separa
+descartes de preparación, duplicados y fuera de ventana. No mide exclusivamente
+el dispositivo ni la ruta MediaElement de los ejercicios.
 `listeningVariants.ts` ordena la muestra aprobada primero y elige otra sin repetir
 la inmediata; `ListeningPractice` remonta `ListeningTrainer` por id.
 `trainingCatalog` añade los cuatro sonidos y las variantes publicadas
