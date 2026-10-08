@@ -402,8 +402,7 @@ button, a, summary { touch-action: manipulation; }
 .listening-choices .tap-button strong { font-size: 23px; }
 .menu-footer { margin: 20px 0 0; color: #a9bac6; text-align: center; font-size: 12px; line-height: 1.6; }
 .menu-back, .practice-menu-back { display: inline-flex; align-items: center; min-height: 44px; color: #f2f7fa; font-size: 14px; text-decoration: none; }
-.menu-back { margin-top: 10px; gap: 9px; padding: 0 15px 0 8px; border: 1px solid #34454f; border-radius: 999px; background: #131d24; font-weight: 600; box-shadow: 0 2px 8px #00000024; }
-.menu-back-icon { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: #203a3f; color: #68e0c4; font-size: 18px; }
+.menu-back { margin-top: 10px; gap: 9px; padding: 0 16px; border: 1px solid #34454f; border-radius: 999px; background: #131d24; font-weight: 600; box-shadow: 0 2px 8px #00000024; }
 .menu-back:hover { border-color: #68e0c4; background: #18292f; }
 .menu-back:active { background: #203a3f; }
 .menu-eyebrow { margin: 12px 0 0; color: #a9bac6; text-transform: uppercase; letter-spacing: 1.2px; font-size: 11px; }

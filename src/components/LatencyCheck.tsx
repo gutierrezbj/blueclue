@@ -70,7 +70,7 @@ export function LatencyCheck() {
   }
 
   return <main className="learning-menu latency-check" data-level="count">
-    <header className="menu-header"><a className="menu-back" href="#inicio" aria-label="Volver al inicio"><span className="menu-back-icon" aria-hidden="true">←</span><span>Inicio</span></a><span className="menu-kicker">Diagnóstico</span></header>
+    <header className="menu-header"><a className="menu-back" href="#inicio" aria-label="Volver al inicio"><span>Inicio</span></a><span className="menu-kicker">Diagnóstico</span></header>
     <p className="menu-eyebrow">Pantalla oculta</p>
     <h1>Medir el retraso del toque</h1>
     <p className="menu-intro">Sonarán {CLICK_COUNT} clics, uno por segundo. Toca el botón grande con cada clic, como si siguieras el pulso. Solo mide: no corrige nada ni cambia tus puntuaciones.</p>
