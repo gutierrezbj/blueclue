@@ -1,1 +1,419 @@
-[]
+[
+  {
+    "id": "choice-variant-b",
+    "instrument": "choice",
+    "title": "¿Bajo o batería?",
+    "bpm": 96,
+    "timeSignature": "4/4",
+    "difficulty": "easy",
+    "description": "Escucha qué instrumento entra y elige bajo o batería.",
+    "audioFile": "/tracks/listening/variants/choice-variant-b.wav",
+    "duration": 32,
+    "leadInSeconds": 3,
+    "beats": [
+      3,
+      3.625,
+      4.25,
+      4.875,
+      5.5,
+      6.125,
+      6.75,
+      7.375,
+      8,
+      8.625,
+      9.25,
+      9.875,
+      10.5,
+      11.125,
+      11.75,
+      12.375,
+      13,
+      13.625,
+      14.25,
+      14.875,
+      15.5,
+      16.125,
+      16.75,
+      17.375,
+      18,
+      18.625,
+      19.25,
+      19.875,
+      20.5,
+      21.125,
+      21.75,
+      22.375,
+      23,
+      23.625,
+      24.25,
+      24.875,
+      25.5,
+      26.125,
+      26.75,
+      27.375,
+      28,
+      28.625,
+      29.25,
+      29.875
+    ],
+    "downbeats": [
+      3,
+      5.5,
+      8,
+      10.5,
+      13,
+      15.5,
+      18,
+      20.5,
+      23,
+      25.5,
+      28
+    ],
+    "changes": [
+      {
+        "time": 6.125,
+        "action": "percussion-in"
+      },
+      {
+        "time": 9.875,
+        "action": "bass-in"
+      },
+      {
+        "time": 13.625,
+        "action": "percussion-out"
+      },
+      {
+        "time": 16.75,
+        "action": "percussion-in"
+      },
+      {
+        "time": 19.875,
+        "action": "bass-out"
+      },
+      {
+        "time": 23,
+        "action": "bass-in"
+      }
+    ],
+    "referenceStatus": "listening-verified"
+  },
+  {
+    "id": "percussion-variant-b",
+    "instrument": "percussion",
+    "title": "Escucha la percusión",
+    "bpm": 96,
+    "timeSignature": "4/4",
+    "difficulty": "easy",
+    "description": "Reconoce cuándo entra y vuelve la batería mientras la melodía continúa.",
+    "audioFile": "/tracks/listening/variants/percussion-variant-b.wav",
+    "duration": 24,
+    "leadInSeconds": 3,
+    "beats": [
+      3,
+      3.625,
+      4.25,
+      4.875,
+      5.5,
+      6.125,
+      6.75,
+      7.375,
+      8,
+      8.625,
+      9.25,
+      9.875,
+      10.5,
+      11.125,
+      11.75,
+      12.375,
+      13,
+      13.625,
+      14.25,
+      14.875,
+      15.5,
+      16.125,
+      16.75,
+      17.375,
+      18,
+      18.625,
+      19.25,
+      19.875,
+      20.5,
+      21.125,
+      21.75,
+      22.375
+    ],
+    "downbeats": [
+      3,
+      5.5,
+      8,
+      10.5,
+      13,
+      15.5,
+      18,
+      20.5
+    ],
+    "changes": [
+      {
+        "time": 5.5,
+        "action": "percussion-in"
+      },
+      {
+        "time": 9.25,
+        "action": "percussion-out"
+      },
+      {
+        "time": 14.25,
+        "action": "percussion-in"
+      }
+    ],
+    "referenceStatus": "listening-verified"
+  },
+  {
+    "id": "bass-variant-b",
+    "instrument": "bass",
+    "title": "Escucha el bajo",
+    "bpm": 96,
+    "timeSignature": "4/4",
+    "difficulty": "easy",
+    "description": "Reconoce cuándo entra y vuelve el bajo. No necesitas contar.",
+    "audioFile": "/tracks/listening/variants/bass-variant-b.wav",
+    "duration": 23,
+    "leadInSeconds": 2,
+    "beats": [
+      2,
+      2.625,
+      3.25,
+      3.875,
+      4.5,
+      5.125,
+      5.75,
+      6.375,
+      7,
+      7.625,
+      8.25,
+      8.875,
+      9.5,
+      10.125,
+      10.75,
+      11.375,
+      12,
+      12.625,
+      13.25,
+      13.875,
+      14.5,
+      15.125,
+      15.75,
+      16.375,
+      17,
+      17.625,
+      18.25,
+      18.875,
+      19.5,
+      20.125,
+      20.75,
+      21.375
+    ],
+    "downbeats": [
+      2,
+      4.5,
+      7,
+      9.5,
+      12,
+      14.5,
+      17,
+      19.5
+    ],
+    "changes": [
+      {
+        "time": 2,
+        "action": "percussion-in"
+      },
+      {
+        "time": 5.75,
+        "action": "bass-in"
+      },
+      {
+        "time": 10.125,
+        "action": "bass-out"
+      },
+      {
+        "time": 15.75,
+        "action": "bass-in"
+      }
+    ],
+    "referenceStatus": "listening-verified"
+  },
+  {
+    "id": "choice-variant-c",
+    "instrument": "choice",
+    "title": "¿Bajo o batería?",
+    "bpm": 96,
+    "timeSignature": "4/4",
+    "difficulty": "easy",
+    "description": "Escucha qué instrumento entra y elige bajo o batería.",
+    "audioFile": "/tracks/listening/variants/choice-variant-c.wav",
+    "duration": 32,
+    "leadInSeconds": 3,
+    "beats": [
+      3,
+      3.625,
+      4.25,
+      4.875,
+      5.5,
+      6.125,
+      6.75,
+      7.375,
+      8,
+      8.625,
+      9.25,
+      9.875,
+      10.5,
+      11.125,
+      11.75,
+      12.375,
+      13,
+      13.625,
+      14.25,
+      14.875,
+      15.5,
+      16.125,
+      16.75,
+      17.375,
+      18,
+      18.625,
+      19.25,
+      19.875,
+      20.5,
+      21.125,
+      21.75,
+      22.375,
+      23,
+      23.625,
+      24.25,
+      24.875,
+      25.5,
+      26.125,
+      26.75,
+      27.375,
+      28,
+      28.625,
+      29.25,
+      29.875
+    ],
+    "downbeats": [
+      3,
+      5.5,
+      8,
+      10.5,
+      13,
+      15.5,
+      18,
+      20.5,
+      23,
+      25.5,
+      28
+    ],
+    "changes": [
+      {
+        "time": 5.5,
+        "action": "bass-in"
+      },
+      {
+        "time": 8.625,
+        "action": "bass-out"
+      },
+      {
+        "time": 11.125,
+        "action": "percussion-in"
+      },
+      {
+        "time": 14.875,
+        "action": "bass-in"
+      },
+      {
+        "time": 18,
+        "action": "percussion-out"
+      },
+      {
+        "time": 21.125,
+        "action": "percussion-in"
+      }
+    ],
+    "referenceStatus": "listening-verified"
+  },
+  {
+    "id": "percussion-variant-c",
+    "instrument": "percussion",
+    "title": "Escucha la percusión",
+    "bpm": 96,
+    "timeSignature": "4/4",
+    "difficulty": "easy",
+    "description": "Reconoce cuándo entra y vuelve la batería mientras la melodía continúa.",
+    "audioFile": "/tracks/listening/variants/percussion-variant-c.wav",
+    "duration": 24,
+    "leadInSeconds": 3,
+    "beats": [
+      3,
+      3.625,
+      4.25,
+      4.875,
+      5.5,
+      6.125,
+      6.75,
+      7.375,
+      8,
+      8.625,
+      9.25,
+      9.875,
+      10.5,
+      11.125,
+      11.75,
+      12.375,
+      13,
+      13.625,
+      14.25,
+      14.875,
+      15.5,
+      16.125,
+      16.75,
+      17.375,
+      18,
+      18.625,
+      19.25,
+      19.875,
+      20.5,
+      21.125,
+      21.75,
+      22.375
+    ],
+    "downbeats": [
+      3,
+      5.5,
+      8,
+      10.5,
+      13,
+      15.5,
+      18,
+      20.5
+    ],
+    "changes": [
+      {
+        "time": 8,
+        "action": "percussion-in"
+      },
+      {
+        "time": 12.375,
+        "action": "percussion-out"
+      },
+      {
+        "time": 16.75,
+        "action": "percussion-in"
+      },
+      {
+        "time": 19.875,
+        "action": "percussion-out"
+      }
+    ],
+    "referenceStatus": "listening-verified"
+  }
+]

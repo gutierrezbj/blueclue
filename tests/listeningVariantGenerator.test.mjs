@@ -9,11 +9,20 @@ const approved = {
   choice: JSON.parse(await readFile(new URL("../data/listening/choice.json", import.meta.url), "utf8"))
 };
 
-test("twelve variants, four per practice, none published by default", async () => {
+test("twelve variants, four per practice, published audio matches verified metadata", async () => {
   assert.equal(allVariantIds().length, 12);
   const published = JSON.parse(await readFile(new URL("../data/listening/variants.json", import.meta.url), "utf8"));
   assert.ok(Array.isArray(published));
-  for (const track of published) assert.equal(track.referenceStatus, "listening-verified");
+  assert.equal(new Set(published.map(track => track.id)).size, published.length);
+  for (const track of published) {
+    assert.equal(track.referenceStatus, "listening-verified");
+    assert.ok(allVariantIds().includes(track.id));
+    const [instrument, , letter] = track.id.split("-");
+    const generated = buildVariant(instrument, letter);
+    assert.deepEqual(track, { ...generated.track, referenceStatus: "listening-verified" });
+    const audio = await readFile(new URL(`../public${track.audioFile}`, import.meta.url));
+    assert.ok(audio.equals(generated.wav), `${track.id}: WAV y referencias corresponden al mismo generador`);
+  }
 });
 
 test("variants never reuse the approved entry times, leave room to react and keep changes apart", () => {

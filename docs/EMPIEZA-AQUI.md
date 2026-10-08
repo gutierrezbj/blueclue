@@ -151,6 +151,24 @@ botones hacen lo de siempre. Selección en `src/lib/listeningVariants.ts`.
 Se da por bueno cuando Juan reconoce el instrumento en una muestra que no ha
 practicado.
 
+#### Aceptación auditiva y subida a GitHub — 8 octubre 2026
+
+Juan confirma por escucha estas cinco muestras y autoriza subir el desarrollo:
+
+| Muestra | Práctica | Estado |
+| --- | --- | --- |
+| `choice-variant-b` | Bajo o batería | Aceptada |
+| `percussion-variant-b` | Percusión | Aceptada |
+| `bass-variant-b` | Bajo | Aceptada |
+| `choice-variant-c` | Bajo o batería | Aceptada |
+| `percussion-variant-c` | Percusión | Aceptada |
+
+Se incorporan sus WAV sintéticos y referencias al catálogo de la rama. Las siete
+restantes (`bass-variant-c/d/e`, `percussion-variant-d/e`, `choice-variant-d/e`)
+permanecen locales, pendientes de escucha. La aceptación confirma claridad de
+esas muestras, no certifica aprendizaje ni latencia. Subir a GitHub no despliega
+automáticamente en el VPS ni implica fusionar esta rama con `main`.
+
 ## Qué no entra
 
 - Música real, Essentia, anatomía de canción, dos decks, FLX4, cuentas, nube.
@@ -175,10 +193,11 @@ pública correcta. Recorrido móvil, juego completo, reanudación interna,
 resumen de ronda, diagnóstico sin respuestas y los cuatro sonidos offline
 comprobados en Edge de escritorio con perfil temporal. Detalle en
 [validación móvil](MOBILE.md#validación-local-de-empieza-aquí--8-octubre-2026).
-Las doce variantes están generadas localmente; ninguna aceptada ni publicada.
+En esa comprobación las doce variantes estaban solo en local. Posteriormente
+se aceptaron las cinco enumeradas arriba; las siete restantes siguen pendientes.
 
 - `npm test`, `npm run build`.
 - Navegador a 375 × 667: portada, Paso 0 completo, una ronda de Nivel 1 con su
   frase de avance, `#latencia` con doce clics.
 - Pendiente de Juan: iPhone físico, auriculares, tres medidas de latencia y
-  escuchar las variantes.
+  escuchar las siete variantes restantes.

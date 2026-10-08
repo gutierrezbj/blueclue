@@ -52,6 +52,12 @@ escritorio a 375 × 667 y perfil temporal; no equivale a Safari/iPhone físico.
 Pendiente: prueba física de Juan en iPhone, tres mediciones con sus auriculares
 y aceptación individual de las variantes. Esta comprobación no publica la rama.
 
+Después de esa prueba, Juan acepta cinco variantes: bajo B, percusión B/C y
+bajo-o-batería B/C. Se incorporan al catálogo de `empieza-aqui`, todavía sin
+desplegar. La próxima descarga de esa rama incluirá 22 audios; la prueba offline
+descrita arriba corresponde al paquete anterior de 17, no valida estos cinco
+audios nuevos en el iPhone. Las otras siete variantes siguen fuera del catálogo.
+
 ### Uso de la versión pública
 
 1. Abrir [blueclue.jrgblanco.com](https://blueclue.jrgblanco.com) en Safari del iPhone.
