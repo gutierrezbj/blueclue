@@ -1,0 +1,175 @@
+<div id="blueclue-construction-map">
+  <style>
+    #blueclue-construction-map { color: var(--foreground); }
+    #blueclue-construction-map .map-title { text-align: center; margin-bottom: 16px; }
+    #blueclue-construction-map .map-title h2 { margin: 0 0 4px; }
+    #blueclue-construction-map .legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 18px; margin: 12px 0 22px; }
+    #blueclue-construction-map .legend-item { display: inline-flex; align-items: center; gap: 7px; }
+    #blueclue-construction-map .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; background: var(--border); }
+    #blueclue-construction-map .done-dot { background: var(--viz-series-2); }
+    #blueclue-construction-map .active-dot { background: var(--viz-series-1); }
+    #blueclue-construction-map .tree { list-style: none; padding: 0; margin: 0; }
+    #blueclue-construction-map .stage { display: grid; grid-template-columns: 28px minmax(135px, 190px) minmax(0, 1fr); column-gap: 16px; position: relative; padding: 0 0 22px; }
+    #blueclue-construction-map .stage:not(:last-child)::before { content: ""; position: absolute; left: 13px; top: 28px; bottom: 0; width: 1px; background: var(--border); }
+    #blueclue-construction-map .stage-number { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--muted); color: var(--foreground); font-weight: 500; }
+    #blueclue-construction-map .stage-built .stage-number { background: color-mix(in srgb, var(--viz-series-2) 20%, transparent); }
+    #blueclue-construction-map .stage-current .stage-number { background: color-mix(in srgb, var(--viz-series-1) 20%, transparent); }
+    #blueclue-construction-map .stage-header { position: relative; padding-top: 2px; }
+    #blueclue-construction-map .stage-header::after { content: ""; position: absolute; top: 14px; right: -16px; width: 12px; height: 1px; background: var(--border); }
+    #blueclue-construction-map .stage-header h3 { margin: 5px 0; }
+    #blueclue-construction-map .stage-header small { display: block; }
+    #blueclue-construction-map .stage-state { margin-top: 7px; display: flex; align-items: center; gap: 6px; }
+    #blueclue-construction-map .branch { display: grid; gap: 2px; padding-left: 14px; position: relative; }
+    #blueclue-construction-map .branch::before { content: ""; position: absolute; left: 0; top: 14px; bottom: 20px; width: 1px; background: var(--border); }
+    #blueclue-construction-map .leaf { position: relative; min-width: 0; }
+    #blueclue-construction-map .branch .leaf::before { content: ""; position: absolute; left: -14px; top: 20px; width: 10px; height: 1px; background: var(--border); }
+    #blueclue-construction-map .leaf.checked { text-decoration: line-through; text-decoration-color: var(--muted-foreground); }
+    #blueclue-construction-map .next-label { margin: 4px 0 0; }
+    #blueclue-construction-map .support { margin-top: 2px; }
+    #blueclue-construction-map .support h3 { margin-bottom: 8px; }
+    #blueclue-construction-map .foot { margin-top: 16px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
+    @media (max-width: 520px) {
+      #blueclue-construction-map .stage { grid-template-columns: 28px minmax(0, 1fr); column-gap: 12px; }
+      #blueclue-construction-map .stage-header::after { display: none; }
+      #blueclue-construction-map .branch { grid-column: 2; margin-top: 8px; }
+      #blueclue-construction-map .stage-header h3 { margin-top: 4px; }
+    }
+  </style>
+
+  <div class="map-title">
+    <h2>BlueClue · la foto completa</h2>
+    <span class="text-small text-muted">Del pulso a tu primera mezcla en la FLX4</span>
+  </div>
+  <div class="legend text-small" aria-label="Estado de construcción">
+    <span class="legend-item"><span class="dot done-dot" aria-hidden="true"></span>Construido</span>
+    <span class="legend-item"><span class="dot active-dot" aria-hidden="true"></span>Aquí estamos</span>
+    <span class="legend-item"><span class="dot" aria-hidden="true"></span>Por construir</span>
+  </div>
+
+  <ol class="tree" aria-label="Recorrido de construcción de BlueClue">
+    <li class="stage stage-built" data-stage="rhythm">
+      <span class="stage-number" aria-hidden="true">1</span>
+      <div class="stage-header">
+        <span class="text-small text-muted">V0.1 · BASE RÍTMICA</span>
+        <h3>Marca el 1</h3>
+        <small class="text-small text-muted">Los tres niveles actuales</small>
+        <div class="stage-state text-small"><span class="dot done-dot" aria-hidden="true"></span><span data-stage-state>Construido</span></div>
+      </div>
+      <div class="branch">
+        <div class="leaf checked"><label class="form-check"><input class="form-check-input" type="checkbox" data-item="pulse" checked><span class="form-check-label">Nivel 1 · Sigue el pulso</span></label></div>
+        <div class="leaf checked"><label class="form-check"><input class="form-check-input" type="checkbox" data-item="count" checked><span class="form-check-label">Nivel 2 · Cuenta 1-2-3-4</span></label></div>
+        <div class="leaf checked"><label class="form-check"><input class="form-check-input" type="checkbox" data-item="downbeat" checked><span class="form-check-label">Nivel 3 · Encuentra el 1</span></label></div>
+        <div class="leaf checked"><label class="form-check"><input class="form-check-input" type="checkbox" data-item="rhythm-tools" checked><span class="form-check-label">5 pistas · velocidades · Teach / Assist / Train</span></label></div>
+        <div class="leaf checked"><label class="form-check"><input class="form-check-input" type="checkbox" data-item="challenge" checked><span class="form-check-label">Feedback, replay y Challenge con récords</span></label></div>
+      </div>
+    </li>
+    <li class="stage stage-current" data-stage="listening">
+      <span class="stage-number" aria-hidden="true">2</span>
+      <div class="stage-header">
+        <span class="text-small text-muted">V0.2 · OÍDO Y CAMBIOS</span>
+        <h3>Escucha el cambio</h3>
+        <small class="text-small text-muted">Reconocer, no memorizar</small>
+        <div class="stage-state text-small"><span class="dot active-dot" aria-hidden="true"></span><span data-stage-state>Aquí estamos · afinando</span></div>
+      </div>
+      <div class="branch">
+        <div class="leaf checked"><label class="form-check"><input class="form-check-input" type="checkbox" data-item="bass" checked><span class="form-check-label">Escucha el bajo</span></label></div>
+        <div class="leaf checked"><label class="form-check"><input class="form-check-input" type="checkbox" data-item="drums" checked><span class="form-check-label">Escucha la percusión</span></label></div>
+        <div class="leaf checked"><label class="form-check"><input class="form-check-input" type="checkbox" data-item="choice" checked><span class="form-check-label">¿Bajo o batería?</span></label></div>
+        <div class="leaf"><label class="form-check"><input class="form-check-input" type="checkbox" data-item="new-samples"><span class="form-check-label">Otras muestras, mismo oído</span></label></div>
+        <div class="leaf"><label class="form-check"><input class="form-check-input" type="checkbox" data-item="phrases"><span class="form-check-label">Reconocer cambios de frase</span></label></div>
+        <span class="next-label text-small text-muted">Próximo propuesto: variar sonidos y orden de entrada</span>
+      </div>
+    </li>
+    <li class="stage" data-stage="structure">
+      <span class="stage-number" aria-hidden="true">3</span>
+      <div class="stage-header">
+        <span class="text-small text-muted">V0.3 · ESTRUCTURA</span>
+        <h3>Entiende la canción</h3>
+        <div class="stage-state text-small"><span class="dot" aria-hidden="true"></span><span data-stage-state>Por construir</span></div>
+      </div>
+      <div class="branch">
+        <div class="leaf"><label class="form-check"><input class="form-check-input" type="checkbox" data-item="intro-outro"><span class="form-check-label">Intro y salida</span></label></div>
+        <div class="leaf"><label class="form-check"><input class="form-check-input" type="checkbox" data-item="sections"><span class="form-check-label">Partes principales, break y drop</span></label></div>
+        <div class="leaf"><label class="form-check"><input class="form-check-input" type="checkbox" data-item="song-map"><span class="form-check-label">Mapa visual de la canción</span></label></div>
+      </div>
+    </li>
+    <li class="stage" data-stage="mix">
+      <span class="stage-number" aria-hidden="true">4</span>
+      <div class="stage-header">
+        <span class="text-small text-muted">V0.4 · MEZCLA</span>
+        <h3>Prepara la transición</h3>
+        <div class="stage-state text-small"><span class="dot" aria-hidden="true"></span><span data-stage-state>Por construir</span></div>
+      </div>
+      <div class="branch">
+        <div class="leaf"><label class="form-check"><input class="form-check-input" type="checkbox" data-item="entry-exit"><span class="form-check-label">Elegir dónde entrar y salir</span></label></div>
+        <div class="leaf"><label class="form-check"><input class="form-check-input" type="checkbox" data-item="align"><span class="form-check-label">Alinear dos canciones y sus frases</span></label></div>
+        <div class="leaf"><label class="form-check"><input class="form-check-input" type="checkbox" data-item="mix-feedback"><span class="form-check-label">Práctica guiada de mezcla y feedback</span></label></div>
+      </div>
+    </li>
+    <li class="stage" data-stage="controller">
+      <span class="stage-number" aria-hidden="true">5</span>
+      <div class="stage-header">
+        <span class="text-small text-muted">V0.5 · CONTROLADORA</span>
+        <h3>Llévalo a la FLX4</h3>
+        <div class="stage-state text-small"><span class="dot" aria-hidden="true"></span><span data-stage-state>Por construir</span></div>
+      </div>
+      <div class="branch">
+        <div class="leaf"><label class="form-check"><input class="form-check-input" type="checkbox" data-item="cue"><span class="form-check-label">Preparar cue y lanzar en el 1</span></label></div>
+        <div class="leaf"><label class="form-check"><input class="form-check-input" type="checkbox" data-item="controller-transition"><span class="form-check-label">Repetir transiciones en la controladora</span></label></div>
+      </div>
+    </li>
+  </ol>
+  <hr>
+  <section class="support" aria-label="Base común de la app">
+    <h3>La mochila · para todo el recorrido</h3>
+    <div class="viz-grid">
+      <div class="leaf checked"><label class="form-check"><input class="form-check-input" type="checkbox" data-item="mobile" checked><span class="form-check-label">iPhone · PWA · modo avión</span></label></div>
+      <div class="leaf checked"><label class="form-check"><input class="form-check-input" type="checkbox" data-item="navigation" checked><span class="form-check-label">Menú claro y progreso local</span></label></div>
+    </div>
+  </section>
+  <div class="foot text-small text-muted">
+    <span>Construcción ≠ aprendizaje validado</span>
+    <span>Futuro: alcance por concretar · 8 oct 2026</span>
+  </div>
+  <div id="blueclue-map-status" class="sr-only" role="status" aria-live="polite"></div>
+  <script>
+    (() => {
+      const root = document.getElementById('blueclue-construction-map');
+      const checkboxes = Array.from(root.querySelectorAll('input[data-item]'));
+      const baseline = checkboxes.filter(input => input.checked).map(input => input.dataset.item);
+      const knownIds = new Set(checkboxes.map(input => input.dataset.item));
+      const stageLabels = new Map(Array.from(root.querySelectorAll('[data-stage]')).map(stage => [stage.dataset.stage, stage.querySelector('[data-stage-state]').textContent]));
+      function render(checkedIds) {
+        const selected = new Set(checkedIds);
+        checkboxes.forEach(input => {
+          input.checked = selected.has(input.dataset.item);
+          input.closest('.leaf').classList.toggle('checked', input.checked);
+        });
+        root.querySelectorAll('[data-stage]').forEach(stage => {
+          const inputs = Array.from(stage.querySelectorAll('input[data-item]'));
+          const changed = inputs.some(input => input.checked !== baseline.includes(input.dataset.item));
+          const completed = inputs.every(input => input.checked);
+          stage.querySelector('[data-stage-state]').textContent = changed ? (completed ? 'Marcado completo por ti' : 'Seguimiento manual') : stageLabels.get(stage.dataset.stage);
+        });
+      }
+      function restore(state) {
+        const content = state?.modelContent;
+        const valid = content?.mapId === 'blueclue-construction-v1' && Array.isArray(content.checkedIds) && content.checkedIds.every(id => typeof id === 'string' && knownIds.has(id));
+        render(valid ? content.checkedIds : baseline);
+      }
+      restore(window.openai?.widgetState);
+      root.addEventListener('change', event => {
+        if (!event.target.matches('input[data-item]')) return;
+        const checkedIds = checkboxes.filter(input => input.checked).map(input => input.dataset.item);
+        render(checkedIds);
+        root.querySelector('#blueclue-map-status').textContent = 'Seguimiento del mapa actualizado. La aplicación no se modifica.';
+        if (window.openai?.setWidgetState) {
+          window.openai.setWidgetState({ modelContent: { mapId: 'blueclue-construction-v1', checkedIds, tracking: 'Marcas manuales de construcción; no certifican aprendizaje ni despliegue.' }, privateContent: null }).catch(() => {});
+        }
+      });
+      window.addEventListener('openai:set_globals', event => {
+        if (event.detail?.globals && 'widgetState' in event.detail.globals) restore(event.detail.globals.widgetState);
+      });
+    })();
+  </script>
+</div>

@@ -2,6 +2,8 @@
 
 **BlueClue** es un entrenador interactivo para aprender a pinchar.
 
+**[Mapa de construcción: lo hecho, dónde estamos y lo que falta](docs/MAPA.md)**
+
 No es un clon de Rekordbox, no es un reproductor generalista y no es un curso de vídeos. Su objetivo es enseñar a **escuchar**, entender y ejecutar conceptos DJ mediante práctica visual, auditiva y corrección inmediata.
 
 ## Objetivo
