@@ -10,6 +10,12 @@ export const modeLabels: Record<TrainingMode, string> = {
   train: "Train · Solo oído"
 };
 
+export const modeTaglines: Record<TrainingMode, string> = {
+  teach: "te lo enseño todo",
+  assist: "te quito pistas",
+  train: "tú solo"
+};
+
 export type PracticeLocation = { trackId: string; moduleId: LearningModuleId; mode: TrainingMode };
 export type PracticeStep = PracticeLocation & { playbackSpeed: PlaybackSpeed };
 export type SavedAttempt = { trackId: string; moduleId?: LearningModuleId; playbackSpeed?: PlaybackSpeed; classification: AttemptClassification; errorMs: number | null };

@@ -2,7 +2,7 @@ import type { RefObject } from "react";
 import type { TrainingMode, TrainingTrack } from "@/lib/tracks";
 import { isDownbeat } from "@/lib/beatGrid";
 import type { RoundOutcome } from "@/lib/exerciseRound";
-import { WAVEFORM_SECONDS, waveformPosition, type WaveformWindow } from "@/lib/waveformWindow";
+import { waveformPosition, type WaveformWindow } from "@/lib/waveformWindow";
 
 type Props = {
   track: TrainingTrack;
@@ -26,7 +26,7 @@ export function WaveformDisplay({ track, mode, targetLabel, duration, currentTim
 
   return (
     <div className="waveform-frame">
-      <div className="waveform-labels"><span>VISTA AMPLIADA · {WAVEFORM_SECONDS} S DE PISTA</span><span>{Math.floor(viewport.start)}–{Math.round(Math.min(duration, viewport.end))} S</span></div>
+      <div className="waveform-labels"><span>LO QUE SUENA AHORA</span><span>{Math.floor(viewport.start)}–{Math.round(Math.min(duration, viewport.end))} S</span></div>
       <div className="waveform-surface">
         <div ref={containerRef} className="waveform" aria-label={`Forma de onda de ${track.title}`} />
         {duration > 0 && (

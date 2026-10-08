@@ -7,7 +7,12 @@ Las casillas indican construcción, no dominio del alumno ni aprendizaje validad
 
 ```mermaid
 flowchart TD
-    ROOT["BlueClue · del pulso a la FLX4"] --> RHYTHM["1 · Marca el 1 · CONSTRUIDO"]
+    ROOT["BlueClue · del pulso a la FLX4"] --> START["0 · Empieza aquí · CONSTRUIDO, SIN PROBAR"]
+    START --> SOUNDS["✓ Paso 0 · Conoce los sonidos"]
+    START --> READY["✓ Frase de avance en Marca el 1"]
+    START --> LAT["✓ #latencia · diagnóstico oculto"]
+    START --> VARS["Variantes de escucha · en .local, sin publicar"]
+    ROOT --> RHYTHM["1 · Marca el 1 · CONSTRUIDO"]
     RHYTHM --> PULSE["✓ Nivel 1 · Sigue el pulso"]
     RHYTHM --> COUNT["✓ Nivel 2 · Cuenta 1-2-3-4"]
     RHYTHM --> ONE["✓ Nivel 3 · Encuentra el 1"]
@@ -31,6 +36,19 @@ automático de biblioteca queda fuera de este recorrido pedagógico inmediato.
 Los conteos monótonos de 8/16/32 no vuelven al recorrido recomendado.
 
 ## Seguimiento compartido
+
+### 0. Empieza aquí — nivel 0, rama `empieza-aqui`
+
+- [x] Portada con «Empieza aquí» / «Seguir donde lo dejé» y el mapa debajo.
+- [x] Paso 0 · Conoce los sonidos: bombo, caja, charles y bajo; «¿Cuál suena?».
+- [x] Teach / Assist / Train con su frase; sin «BPM» ni «vista ampliada».
+- [x] Frase de avance tras cada ronda (3 buenas de 5, 80 %).
+- [x] `#latencia`: mide, no corrige.
+- [x] Doce variantes de escucha generadas en `.local/variants/`.
+- [ ] Juan: iPhone físico, tres medidas de latencia, escuchar variantes.
+- [ ] Juan reconoce lo aprendido en una muestra no practicada.
+
+Detalle: [EMPIEZA-AQUI.md](EMPIEZA-AQUI.md).
 
 ### 1. Marca el 1 — V0.1
 

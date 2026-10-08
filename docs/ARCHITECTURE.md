@@ -194,6 +194,23 @@ La última ronda de elección se guarda en `blueclue-listening-choice-listening-
 La descarga actual contiene trece audios; sigue aceptando paquetes de cinco,
 diez, once y doce. Un fallo en el nuevo audio conserva el paquete anterior completo.
 
+### Empieza aquí (nivel 0)
+
+`guidedPath.ts` define el orden del camino y guarda «donde lo dejé»
+(`blueclue-path-v1`) cada vez que se entra en un paso, por el camino o por el mapa.
+`soundQuiz.ts` elige el sonido sin repetir el anterior, evalúa la primera respuesta
+y resume ocho preguntas; `SoundsIntro` reproduce los WAV de `public/tracks/sounds/`
+con `HTMLAudioElement` y no calcula. `readiness.ts` guarda las últimas cinco
+rondas completas por nivel, ayuda y velocidad (`blueclue-rounds-v1`) y devuelve
+una frase; `BeatTrainer` registra una vez por ronda terminada y `RoundSummary`
+solo la muestra. Challenge y referencias provisionales no cuentan.
+`latencyDiagnostic.ts` calcula mediana, media y dispersión de los toques frente a
+los clics programados con Web Audio en `LatencyCheck`; no hay compensación.
+`listeningVariants.ts` ordena la muestra aprobada primero y elige otra sin repetir
+la inmediata; `ListeningPractice` remonta `ListeningTrainer` por id.
+`trainingCatalog` añade los cuatro sonidos y las variantes publicadas
+(`data/listening/variants.json`) a la descarga; el worker acepta de 5 a 40 audios.
+
 Essentia y análisis automático quedan fuera de V0.1.
 
 Cuando lleguen, deben alimentar el mismo modelo de datos, no obligar a reescribir la UI ni el motor de ejercicios.

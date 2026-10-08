@@ -12,6 +12,13 @@ Las cinco sintéticas tienen 24 compases cada una (51–62 segundos a velocidad
 original). Sus WAV suman 12,13 MB; el paquete añade los recursos de la aplicación.
 La descarga se actualiza voluntariamente desde Ajustes y conserva el progreso.
 
+## Medir la latencia del toque
+
+Abrir `blueclue.jrgblanco.com/#latencia` en el iPhone con los auriculares de
+práctica. Doce clics, uno por segundo; tocar el botón grande con cada clic.
+Anotar la mediana tres veces seguidas. Si las tres se parecen (misma señal,
+±40 ms), ese es el desfase del dispositivo. La pantalla no corrige nada.
+
 ## Instalación
 
 1. Abrir [blueclue.jrgblanco.com](https://blueclue.jrgblanco.com) en Safari del iPhone.

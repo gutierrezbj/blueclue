@@ -6,7 +6,7 @@ import { listeningLessons, type ListeningInstrument } from "@/lib/listeningLesso
 import { handleTapKeyDown } from "@/lib/tapInput";
 import { useWaveformPlayer } from "@/lib/useWaveformPlayer";
 
-export function ListeningTrainer({ track }: { track: ListeningTrack }) {
+export function ListeningTrainer({ track, variantCount = 1, onAnother }: { track: ListeningTrack; variantCount?: number; onAnother?: () => void }) {
   const lesson = listeningLessons[track.instrument ?? "bass"];
   const isChoice = track.instrument === "choice";
   const [stage, setStage] = useState<"listen" | "detect">("listen");
@@ -148,7 +148,8 @@ export function ListeningTrainer({ track }: { track: ListeningTrack }) {
         <p>{isChoice && <>Instrumento confundido: {summary.wrong} · </>}Sin reconocer: {summary.missed} · Toques adicionales: {summary.extra}. Cada entrada cuenta una sola vez.</p>
         <p>No medimos precisión al milisegundo: tienes un margen para reconocer el cambio después de oírlo.</p>
         {summary.entries.map((entry, index) => <button type="button" className="previous-button" key={entry.time} onClick={() => review(entry.time)}>{isChoice ? `${index + 1} · ${track.changes.find(change => change.time === entry.time)?.action === "bass-in" ? "Bajo" : "Batería"}` : index === 0 ? "Primera entrada" : lesson.returnLabel} · {entry.recognized ? "Reconocida" : entry.wrong ? "Confundida" : "Sin reconocer"} · Escuchar</button>)}
-        <button type="button" className="next-button" onClick={restart}>Practicar otra vez</button>
+        <button type="button" className="next-button" onClick={onAnother ?? restart}>{onAnother ? "Practicar otra vez · otra muestra" : "Practicar otra vez"}</button>
+        {onAnother && <p className="phrase-context">«▶ Repetir» conserva esta muestra. Hay {variantCount} muestras de esta práctica.</p>}
         {(track.instrument ?? "bass") === "bass" && <a className="previous-button" href="#escucha-la-percusion">Siguiente práctica · La percusión →</a>}
         {track.instrument === "percussion" && <a className="previous-button" href="#bajo-o-bateria">Siguiente práctica · ¿Bajo o batería? →</a>}
         {isChoice && <a className="previous-button" href="#escucha-el-cambio">Volver a las prácticas de escucha</a>}

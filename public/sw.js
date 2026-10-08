@@ -31,7 +31,7 @@ async function downloadPack(expectedId, report) {
   const specification = await (await fetchFresh("/offline-pack")).json();
   if (!specification || specification.id !== expectedId) throw new Error("La app ha cambiado. Recarga antes de descargar las pistas.");
   const resources = ["/", ...specification.assets, ...specification.audio];
-  if (![5, 10, 11, 12, 13].includes(specification.audio.length) || new Set(resources).size !== resources.length || resources.some(resource => typeof resource !== "string" || new URL(resource, self.location.origin).origin !== self.location.origin)) {
+  if (!(specification.audio.length >= 5 && specification.audio.length <= 40) || new Set(resources).size !== resources.length || resources.some(resource => typeof resource !== "string" || new URL(resource, self.location.origin).origin !== self.location.origin)) {
     throw new Error("El paquete de práctica no es válido.");
   }
   const cacheName = `${PACK_PREFIX}${crypto.randomUUID()}`;
