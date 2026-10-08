@@ -169,6 +169,13 @@ practicado.
 
 ## Comprobación
 
+Validación local del 8 octubre sobre `1339dba`: 166 pruebas pasan y compilación
+pública correcta. Recorrido móvil, juego completo, reanudación interna,
+resumen de ronda, diagnóstico sin respuestas y los cuatro sonidos offline
+comprobados en Edge de escritorio con perfil temporal. Detalle en
+[validación móvil](MOBILE.md#validación-local-de-empieza-aquí--8-octubre-2026).
+Las doce variantes están generadas localmente; ninguna aceptada ni publicada.
+
 - `npm test`, `npm run build`.
 - Navegador a 375 × 667: portada, Paso 0 completo, una ronda de Nivel 1 con su
   frase de avance, `#latencia` con doce clics.

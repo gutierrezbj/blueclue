@@ -27,6 +27,33 @@ La pantalla no corrige nada ni altera récords.
 
 ## Instalación
 
+### Validación local de «Empieza aquí» — 8 octubre 2026
+
+Comprobado sobre `1339dba` en una compilación pública aislada, con Edge de
+escritorio a 375 × 667 y perfil temporal; no equivale a Safari/iPhone físico.
+
+- Portada sin desbordamiento horizontal, cuatro tarjetas de sonidos, ocho
+  preguntas completas y resumen guardado. Las respuestas automatizadas prueban
+  el flujo, no demuestran reconocimiento auditivo.
+- Desde Ajustes, cambiar internamente a nivel 3, Train y Original; volver a
+  Inicio y usar «Seguir donde lo dejé» conserva esas elecciones.
+- Reproducción completa de Pulso claro al tempo original: 88 oportunidades,
+  resumen y exactamente una ronda guardada. Sin toques, no recomienda avanzar.
+- Doce clics del diagnóstico sin respuestas piden repetir, sin dar una medida
+  válida. No se han medido la latencia física ni la sincronía percibida.
+- Descarga desde el botón de la app; nueva pestaña con red desactivada:
+  abre Paso 0, reproduce completos los cuatro sonidos e inicia el juego.
+  El paquete incluye 17 audios (33.774.222 bytes de audio más la app).
+- Sin errores JavaScript en el recorrido probado. Las capturas se revisaron
+  visualmente; la práctica conserva su pantalla móvil independiente.
+- Doce variantes regeneradas solo en `.local/variants/`, todas pendientes de
+  aceptación auditiva. `data/listening/variants.json` continúa vacío.
+
+Pendiente: prueba física de Juan en iPhone, tres mediciones con sus auriculares
+y aceptación individual de las variantes. Esta comprobación no publica la rama.
+
+### Uso de la versión pública
+
 1. Abrir [blueclue.jrgblanco.com](https://blueclue.jrgblanco.com) en Safari del iPhone.
 2. Compartir → Añadir a pantalla de inicio; activar Abrir como app si se muestra.
 3. Abrir BlueClue desde el icono, no continuar en la pestaña de Safari.
