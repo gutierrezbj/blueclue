@@ -1,17 +1,53 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { assessReadiness, isGoodRound, nextSuggestedSlot, readRoundHistory, recordRound, type RoundHistory } from "./readiness.ts";
+import { assessReadiness, completedReadinessRound, isGoodRound, nextSuggestedSlot, readRoundHistory, recordRound, type RoundHistory } from "./readiness.ts";
+import { recordRoundTap, type ExerciseRound } from "./exerciseRound.ts";
+import type { TrainingTrack } from "./tracks.ts";
 
-const good = { total: 10, perfect: 6, close: 2 };
-const weak = { total: 10, perfect: 3, close: 2 };
-const short = { total: 5, perfect: 5, close: 0 };
+const good = { total: 10, perfect: 6, close: 2, extra: 0, offTarget: 0 };
+const weak = { ...good, perfect: 3 };
+const short = { ...good, total: 5, perfect: 5, close: 0 };
 
 test("a good round needs eight opportunities and eighty percent on target", () => {
   assert.equal(isGoodRound(good), true);
   assert.equal(isGoodRound(weak), false);
   assert.equal(isGoodRound(short), false);
-  assert.equal(isGoodRound({ total: 8, perfect: 4, close: 2 }), false);
-  assert.equal(isGoodRound({ total: 8, perfect: 4, close: 3 }), true);
+  assert.equal(isGoodRound({ ...good, total: 8, perfect: 4, close: 2 }), false);
+  assert.equal(isGoodRound({ ...good, total: 8, perfect: 4, close: 3 }), true);
+});
+
+const track: TrainingTrack = { id: "test", title: "Test", bpm: 120, timeSignature: "4/4", audioFile: "test.wav", difficulty: "very-easy", description: "", beats: Array.from({ length: 96 }, (_, index) => 3 + index * 0.5), downbeats: Array.from({ length: 24 }, (_, index) => 3 + index * 2) };
+const slot = { moduleId: "downbeat", mode: "train", speed: 1 } as const;
+
+function practice(times: number[], start = 0): ExerciseRound {
+  let round: ExerciseRound = { start, end: start, taps: [] };
+  for (const time of times) round = recordRoundTap(round, time, track, slot.moduleId, slot.speed, 51);
+  return { ...round, end: 51 };
+}
+
+test("tapping every beat cannot qualify as recognizing the downbeat", () => {
+  const result = completedReadinessRound(practice(track.beats), track, slot, 51)!;
+  assert.deepEqual([result.total, result.perfect, result.offTarget], [22, 22, 66]);
+  assert.equal(isGoodRound(result), false);
+  assert.equal(isGoodRound({ ...good, extra: 1 }), false);
+  const accurate = completedReadinessRound(practice(track.downbeats), track, slot, 51)!;
+  assert.equal(isGoodRound(accurate), true);
+});
+
+test("partial, resumed and unverified rounds never become advancement records", () => {
+  const full = practice(track.downbeats);
+  assert.equal(completedReadinessRound(practice(track.downbeats, 32), track, slot, 51), null);
+  assert.equal(completedReadinessRound({ ...full, end: 50.99 }, track, slot, 51), null);
+  assert.equal(completedReadinessRound(full, { ...track, referenceStatus: "pending-listening" }, slot, 51), null);
+  for (const duration of [0, NaN, Infinity]) assert.equal(completedReadinessRound(full, track, slot, duration), null);
+  assert.ok(completedReadinessRound(full, track, slot, 51));
+  const history = recordRound(recordRound(recordRound({}, slot, good), slot, good), slot, good);
+  assert.equal(assessReadiness(history, slot, null).verdict, "repeat");
+  assert.match(assessReadiness(history, slot, null).message, /desde el principio/);
+});
+
+test("old records without additional taps are not treated as trustworthy", () => {
+  assert.deepEqual(readRoundHistory(JSON.stringify({ "downbeat/train/1": [{ total: 22, perfect: 22, close: 0 }] })), { "downbeat/train/1": [] });
 });
 
 test("the suggested order removes help, then speeds up, then changes level", () => {

@@ -91,16 +91,22 @@ sola frase: «Vas bien. Otra vez.» o «Ya puedes probar con menos ayuda: Assist
 
 Criterio inicial, ajustable con la práctica real, en `src/lib/readiness.ts`:
 
-- una ronda es **buena** si tuvo al menos 8 oportunidades y el 80 % o más
-  fueron clavadas o cerca (mismo umbral que Challenge);
+- una ronda es **buena** si tuvo al menos 8 oportunidades y
+  `(clavadas + cerca) / (oportunidades + repetidas + fuera de objetivo)` alcanza
+  el 80 % (mismo denominador que Challenge);
+- solo cuentan rondas desde 0:00 hasta el final. Practicar un fragmento, reanudar
+  tras recargar o cambiar ayudas/velocidad a mitad permite practicar, pero no
+  acredita una ronda completa; pausa y continuación sí conservan la ronda;
 - se sugiere avanzar cuando **3 de las últimas 5 rondas** del mismo nivel, ayuda
   y velocidad son buenas;
 - el orden sugerido es el del recorrido existente: Teach → Assist → Train en
   Despacio, después Intermedio y Original, después el siguiente nivel.
 
-Las rondas se guardan por nivel, ayuda y velocidad en `blueclue-rounds-v1`
+Las rondas se guardan por nivel, ayuda y velocidad en `blueclue-rounds-v2`
 (últimas cinco de cada combinación). Las rondas provisionales (referencias sin
 validar) y las de Challenge no cuentan. Es una sugerencia: nada se bloquea.
+El historial v1 no se importa porque no permite comprobar pulsaciones adicionales
+ni rondas completas. No se borran la sesión, los intentos ni los récords anteriores.
 
 ### 5. Diagnóstico de latencia (oculto)
 

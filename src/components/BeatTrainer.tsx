@@ -12,7 +12,7 @@ import { type AttemptClassification, type AttemptResult } from "@/lib/scoring";
 import { difficultyLabels, type TrainingMode, type TrainingTrack } from "@/lib/tracks";
 import { useWaveformPlayer } from "@/lib/useWaveformPlayer";
 import { getPracticeNeighbor, getResumePosition, modeLabels, modeTaglines, practiceModes, readPracticeSession, type PracticeLocation, type PracticeSession } from "@/lib/practice";
-import { ROUNDS_STORAGE_KEY, assessReadiness, readRoundHistory, recordRound, type Readiness, type RoundHistory } from "@/lib/readiness";
+import { ROUNDS_STORAGE_KEY, assessReadiness, completedReadinessRound, readRoundHistory, recordRound, type Readiness, type RoundHistory } from "@/lib/readiness";
 import { getBeatPosition } from "@/lib/beatGrid";
 import { getCountIn } from "@/lib/countIn";
 import { evaluateRoundTap, reviewOutcome, summarizeRound, type ExerciseRound, type RoundOutcome } from "@/lib/exerciseRound";
@@ -231,15 +231,19 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack, i
 
   useEffect(() => {
     if (!round) { setReadiness(null); return; }
-    if (!hasEnded || isReviewing || isChallenge || isReferencePending || roundRecordedRef.current || roundSummary.total === 0) return;
+    if (!player.isReady || player.isPlaying || player.currentTime < player.duration || isReviewing || isChallenge || isReferencePending || roundRecordedRef.current) return;
     roundRecordedRef.current = true;
     const slot = { moduleId, mode, speed: playbackSpeed };
-    const latest = { total: roundSummary.total, perfect: roundSummary.perfect, close: roundSummary.close };
+    const latest = completedReadinessRound({ ...round, end: player.duration }, track, slot, player.duration);
+    if (!latest) {
+      setReadiness(assessReadiness(roundHistory, slot, null));
+      return;
+    }
     const history = recordRound(roundHistory, slot, latest);
     setRoundHistory(history);
     setReadiness(assessReadiness(history, slot, latest));
     try { localStorage.setItem(ROUNDS_STORAGE_KEY, JSON.stringify(history)); } catch { setStorageUnavailable(true); }
-  }, [round, hasEnded, isReviewing, isChallenge, isReferencePending, roundSummary.total, roundSummary.perfect, roundSummary.close, moduleId, mode, playbackSpeed, roundHistory]);
+  }, [round, player.isReady, player.isPlaying, player.currentTime, player.duration, isReviewing, isChallenge, isReferencePending, track, moduleId, mode, playbackSpeed, roundHistory]);
 
   useEffect(() => {
     if (window.matchMedia("(max-width: 900px)").matches) {
