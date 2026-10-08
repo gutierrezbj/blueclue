@@ -29,6 +29,7 @@ test("tapping every beat cannot qualify as recognizing the downbeat", () => {
   const result = completedReadinessRound(practice(track.beats), track, slot, 51)!;
   assert.deepEqual([result.total, result.perfect, result.offTarget], [22, 22, 66]);
   assert.equal(isGoodRound(result), false);
+  assert.match(assessReadiness(recordRound({}, slot, result), slot, result).message, /tocas de más/);
   assert.equal(isGoodRound({ ...good, extra: 1 }), false);
   const accurate = completedReadinessRound(practice(track.downbeats), track, slot, 51)!;
   assert.equal(isGoodRound(accurate), true);
@@ -63,7 +64,7 @@ test("history keeps the last five rounds per slot and survives bad input", () =>
   const slot = { moduleId: "count" as const, mode: "teach" as const, speed: 0.65 as const };
   for (let index = 0; index < 7; index++) history = recordRound(history, slot, index % 2 ? good : weak);
   assert.equal(history["count/teach/0.65"].length, 5);
-  const reread = readRoundHistory(JSON.stringify({ ...history, junk: [{ total: 1, perfect: 5, close: 0 }, "x"] }));
+  const reread = readRoundHistory(JSON.stringify({ ...history, junk: [{ total: 1, perfect: 5, close: 0, extra: 0 }, { total: 9, perfect: 9, close: 0 }, "x"] }));
   assert.deepEqual(reread["count/teach/0.65"], history["count/teach/0.65"]);
   assert.deepEqual(reread.junk, []);
 });

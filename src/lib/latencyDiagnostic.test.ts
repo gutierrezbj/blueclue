@@ -36,6 +36,16 @@ test("the report discards the two settling taps and taps far from any click", ()
   assert.match(describeLatency(report), /100 ms después del clic/);
 });
 
+test("several taps on one click count as a single sample", () => {
+  const clicks = scheduleClicks(1);
+  const taps = [1.1, 2.1, 3.05, 3.1, 3.15, 3.2, 3.25, 4.1];
+  const report = buildLatencyReport(taps, clicks);
+  assert.deepEqual(report.offsetsMs, [50, 100]);
+  assert.equal(report.usedTaps, 2);
+  assert.equal(report.discardedTaps, 6);
+  assert.match(describeLatency(report), /Pocos clics/);
+});
+
 test("too few useful taps asks to repeat", () => {
   const report = buildLatencyReport([1.1, 2.1, 3.1], scheduleClicks(1));
   assert.equal(report.usedTaps, 1);

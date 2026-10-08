@@ -21,7 +21,7 @@ export function LearningMenu({ screen }: { screen: "home" | "rhythm" | "listenin
       <h1 ref={headingRef} tabIndex={-1}>{pathState ? "Seguimos." : "Empezamos desde cero."}</h1>
       <p className="menu-intro">{pathState ? "Retomas donde lo dejaste. Sin prisa." : "No hace falta saber nada. Primero escuchas, luego tocas."}</p>
       <a className="menu-start" href={entry.hash} data-step={entry.id}>
-        <span className="menu-start-top"><span>{pathState ? "Seguir donde lo dejé" : "Empieza aquí"}</span><span aria-hidden="true">→</span></span>
+        <span className="menu-start-top"><span>{pathState ? "Seguir donde lo dejé" : "Empieza aquí"}</span></span>
         <strong>{pathState ? `Paso ${entryIndex} · ${entry.title}` : `Paso 0 · ${entry.title}`}</strong>
         <small>{entry.hint}</small>
       </a>

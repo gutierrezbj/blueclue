@@ -74,7 +74,9 @@ export function assessReadiness(history: RoundHistory, slot: RoundSlot, latest: 
   const next = nextSuggestedSlot(slot);
   if (!latest) return { verdict: "repeat", message: "Fragmento practicado. Para orientar el avance, reinicia y completa la ronda desde el principio.", goodRounds, next };
   if (goodRounds < GOOD_ROUNDS_TO_ADVANCE) {
+    const tooManyExtra = !isGoodRound(latest) && latest.extra + latest.offTarget > 0 && (latest.perfect + latest.close) / Math.max(1, latest.total) >= GOOD_ROUND_RATIO;
     const message = latest.total < GOOD_ROUND_MIN_TARGETS ? "Ronda corta. Escucha el fragmento entero y vuelve a probar."
+      : tooManyExtra ? "Aciertas, pero tocas de más. Pulsa solo donde toca: una vez por objetivo."
       : isGoodRound(latest) ? `Buena ronda. ${goodRounds} de ${GOOD_ROUNDS_TO_ADVANCE} para avanzar: otra vez.` : "Vas bien. Otra vez, sin prisa.";
     return { verdict: "repeat", message, goodRounds, next };
   }

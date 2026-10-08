@@ -88,13 +88,13 @@ export function SoundsIntro({ audioVersion }: { audioVersion: string }) {
       <p className="menu-intro">Todo lo que viene después se hace con estos cuatro. Toca cada uno las veces que quieras. Nada se puntúa.</p>
       <div className="sound-cards">
         {soundCards.map(card => <button key={card.id} type="button" className={`sound-card${playing === card.id ? " playing" : ""}${heard.has(card.id) ? " heard" : ""}`} onClick={() => play(card.id)} aria-pressed={playing === card.id}>
-          <span className="sound-card-top"><strong>{card.name}</strong><span aria-hidden="true">{playing === card.id ? "♪" : "▶"}</span></span>
+          <span className="sound-card-top"><strong>{card.name}</strong><span className="sound-card-state">{playing === card.id ? "Sonando" : "Oír"}</span></span>
           <span>{card.hint}</span>
           <small>{heard.has(card.id) ? "Escuchado · toca para repetir" : "Toca para oírlo"}</small>
         </button>)}
       </div>
       {audioError && <p className="audio-error" role="alert">{audioError}</p>}
-      <button type="button" className="next-button sounds-next" onClick={startQuiz} disabled={heard.size < soundCards.length}>{heard.size < soundCards.length ? `Escucha los ${soundCards.length - heard.size} que faltan` : "¿Cuál suena? · 8 preguntas →"}</button>
+      <button type="button" className="next-button sounds-next" onClick={startQuiz} disabled={heard.size < soundCards.length}>{heard.size < soundCards.length ? `Escucha los ${soundCards.length - heard.size} que faltan` : "¿Cuál suena? · 8 preguntas"}</button>
       {lastRound && <p className="menu-footer">{lastRound}</p>}
     </> : <>
       <p className="menu-eyebrow">¿Cuál suena?</p>
@@ -103,14 +103,14 @@ export function SoundsIntro({ audioVersion }: { audioVersion: string }) {
         <p id="sounds-result" className="sounds-closing">{quizClosing(summary)}</p>
         {summary.confused.length > 0 && <p className="menu-intro">Confundiste: {summary.confused.map(item => `${getSoundCard(item.sound).name} con ${getSoundCard(item.answer).name}`).join(" · ")}.</p>}
         <div className="sound-cards compact">
-          {soundCards.map(card => <button key={card.id} type="button" className="sound-card" onClick={() => play(card.id)}><span className="sound-card-top"><strong>{card.name}</strong><span aria-hidden="true">▶</span></span></button>)}
+          {soundCards.map(card => <button key={card.id} type="button" className="sound-card" onClick={() => play(card.id)}><span className="sound-card-top"><strong>{card.name}</strong><span className="sound-card-state">Oír</span></span></button>)}
         </div>
-        {summary.passed ? <a className="next-button sounds-next" href={nextStep.hash}>Siguiente · {nextStep.title} →</a> : <button type="button" className="next-button sounds-next" onClick={startQuiz}>Otra vez · 8 preguntas</button>}
+        {summary.passed ? <a className="next-button sounds-next" href={nextStep.hash}>Siguiente · {nextStep.title}</a> : <button type="button" className="next-button sounds-next" onClick={startQuiz}>Otra vez · 8 preguntas</button>}
         <button type="button" className="previous-button sounds-secondary" onClick={() => { setStage("meet"); setRound(null); }}>Volver a conocer los sonidos</button>
         {summary.passed && <button type="button" className="previous-button sounds-secondary" onClick={startQuiz}>Repetir el juego</button>}
       </section> : <>
         <p className="menu-intro">{awaitingPlay ? "Cuando quieras, escucha el siguiente." : "Escucha y elige qué suena."}</p>
-        <button type="button" className="continue-button sounds-replay" onClick={playQuestion} disabled={playing !== null}>{playing !== null ? "♪ Sonando…" : awaitingPlay ? "▶ Siguiente sonido" : "↺ Volver a oírlo"}</button>
+        <button type="button" className="continue-button sounds-replay" onClick={playQuestion} disabled={playing !== null}>{playing !== null ? "Sonando…" : awaitingPlay ? "Siguiente sonido" : "Volver a oírlo"}</button>
         <div className="sound-choices" role="group" aria-label="Qué sonido es">
           {soundCards.map(card => <button key={card.id} type="button" className="tap-button sound-choice" disabled={!question || awaitingPlay} onClick={() => answer(card.id)}><strong>{card.name.toUpperCase()}</strong></button>)}
         </div>
