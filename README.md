@@ -39,6 +39,19 @@ Incluye:
 
 ## Modos
 
+### Empieza aquí — entrada para nivel 0
+
+La portada ofrece un botón grande **Empieza aquí** (o **Seguir donde lo dejé**)
+que recorre, en orden: Paso 0 · Conoce los sonidos (`#sonidos`), los tres niveles
+de Marca el 1 y las tres prácticas de Escucha el cambio. Los bloques siguen debajo
+como mapa. Teach, Assist y Train conservan su nombre y llevan una frase: «te lo
+enseño todo», «te quito pistas», «tú solo». Tras cada ronda completa, una frase
+dice si repetir o avanzar; nada se bloquea. `#latencia` es una pantalla oculta
+que mide el retraso del toque y no corrige nada. Las variantes de escucha se
+generan con `node scripts/create-listening-variants.mjs` en `.local/variants/`
+y solo se publican las que Juan acepta (`--publish <id>`).
+Especificación: [docs/EMPIEZA-AQUI.md](docs/EMPIEZA-AQUI.md).
+
 ### Inicio por bloques
 
 La portada ofrece dos botones grandes: **Marca el 1** → elegir uno de los tres

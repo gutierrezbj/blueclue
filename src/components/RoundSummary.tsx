@@ -1,16 +1,19 @@
 import type { RoundOutcome } from "@/lib/exerciseRound";
 import type { LearningModuleId } from "@/lib/learningModules";
+import type { Readiness } from "@/lib/readiness";
 
 type Props = {
   summary: { outcomes: RoundOutcome[]; total: number; perfect: number; close: number; outside: number; missed: number; extra: number; offTarget: number };
   provisional: boolean;
   moduleId: LearningModuleId;
+  readiness?: Readiness | null;
   onReview: (outcome: RoundOutcome) => void;
 };
 
-export function RoundSummary({ summary, moduleId, provisional, onReview }: Props) {
+export function RoundSummary({ summary, moduleId, provisional, readiness, onReview }: Props) {
   return (
     <section className="round-summary" aria-label="Resumen de esta ronda">
+      {readiness && !provisional && <p className={`readiness-line ${readiness.verdict}`} role="status"><strong>{readiness.verdict === "repeat" ? "Otra vez" : readiness.verdict === "advance" ? "Puedes avanzar" : "Completado"}</strong><span>{readiness.message}</span></p>}
       <h3>{provisional ? "Resumen provisional" : "Resumen de esta ronda"}</h3>
       <p>{summary.total} oportunidades escuchadas · cada una cuenta una sola vez.</p>
       {provisional && <p>Comparación con marcas pendientes de validar por oído. No es una nota ni se guarda como aciertos.</p>}

@@ -2,10 +2,11 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-test("menu return remains a labeled native home link with a decorative arrow", async () => {
+test("menu return remains a labeled native home link without decorative symbols", async () => {
   const source = await readFile(new URL("../src/components/LearningMenu.tsx", import.meta.url), "utf8");
   assert.match(source, /<a className="menu-back" href="#inicio" aria-label="Volver al inicio">/);
-  assert.match(source, /className="menu-back-icon" aria-hidden="true">←<\/span><span>Inicio<\/span>/);
+  assert.match(source, /aria-label="Volver al inicio"><span>Inicio<\/span><\/a>/);
+  assert.doesNotMatch(source, /menu-back-icon|←/);
 });
 
 test("menu return preserves a 44px touch target and visible keyboard focus", async () => {

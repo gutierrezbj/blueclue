@@ -2,11 +2,13 @@ import type { LearningModuleId } from "./learningModules.ts";
 import type { PracticeSession } from "./practice.ts";
 
 export type AppRoute =
-  | { screen: "home" | "rhythm" | "listening-menu" | "bass" | "percussion" | "choice" }
+  | { screen: "home" | "rhythm" | "listening-menu" | "bass" | "percussion" | "choice" | "sounds" | "latency" }
   | { screen: "bars"; bars: 8 | 16 | 32 }
   | { screen: "practice"; moduleId?: LearningModuleId };
 
 export function readAppRoute(hash: string): AppRoute {
+  if (hash === "#sonidos") return { screen: "sounds" };
+  if (hash === "#latencia") return { screen: "latency" };
   if (hash === "#marca-el-1") return { screen: "rhythm" };
   if (hash === "#escucha-el-cambio") return { screen: "listening-menu" };
   if (hash === "#escucha-el-bajo") return { screen: "bass" };

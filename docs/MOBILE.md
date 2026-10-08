@@ -12,7 +12,53 @@ Las cinco sintéticas tienen 24 compases cada una (51–62 segundos a velocidad
 original). Sus WAV suman 12,13 MB; el paquete añade los recursos de la aplicación.
 La descarga se actualiza voluntariamente desde Ajustes y conserva el progreso.
 
+## Medir la latencia del toque
+
+Disponible en la rama `empieza-aqui`, pendiente de publicar. Tras desplegarla,
+abrir `blueclue.jrgblanco.com/#latencia` en el iPhone con los auriculares de
+práctica. Doce clics, uno por segundo; un toque por clic. Los dos primeros clics
+son de preparación; los repetidos no añaden muestras. Con menos de cuatro
+clics útiles, repetir la medición.
+Anotar mediana, dispersión y clics útiles tres veces seguidas, junto al dispositivo
+y los auriculares. Una mediana parecida no demuestra por sí sola la latencia del
+dispositivo: mezcla respuesta humana y audio. Este diagnóstico usa Web Audio,
+no el reproductor MediaElement del ejercicio; no trasladar el número al scoring.
+La pantalla no corrige nada ni altera récords.
+
 ## Instalación
+
+### Validación local de «Empieza aquí» — 8 octubre 2026
+
+Comprobado sobre `1339dba` en una compilación pública aislada, con Edge de
+escritorio a 375 × 667 y perfil temporal; no equivale a Safari/iPhone físico.
+
+- Portada sin desbordamiento horizontal, cuatro tarjetas de sonidos, ocho
+  preguntas completas y resumen guardado. Las respuestas automatizadas prueban
+  el flujo, no demuestran reconocimiento auditivo.
+- Desde Ajustes, cambiar internamente a nivel 3, Train y Original; volver a
+  Inicio y usar «Seguir donde lo dejé» conserva esas elecciones.
+- Reproducción completa de Pulso claro al tempo original: 88 oportunidades,
+  resumen y exactamente una ronda guardada. Sin toques, no recomienda avanzar.
+- Doce clics del diagnóstico sin respuestas piden repetir, sin dar una medida
+  válida. No se han medido la latencia física ni la sincronía percibida.
+- Descarga desde el botón de la app; nueva pestaña con red desactivada:
+  abre Paso 0, reproduce completos los cuatro sonidos e inicia el juego.
+  El paquete incluye 17 audios (33.774.222 bytes de audio más la app).
+- Sin errores JavaScript en el recorrido probado. Las capturas se revisaron
+  visualmente; la práctica conserva su pantalla móvil independiente.
+- Doce variantes regeneradas solo en `.local/variants/`, todas pendientes de
+  aceptación auditiva. `data/listening/variants.json` continúa vacío.
+
+Pendiente: prueba física de Juan en iPhone, tres mediciones con sus auriculares
+y aceptación individual de las variantes. Esta comprobación no publica la rama.
+
+Después de esa prueba, Juan acepta cinco variantes: bajo B, percusión B/C y
+bajo-o-batería B/C. Se incorporan al catálogo de `empieza-aqui`, todavía sin
+desplegar. La próxima descarga de esa rama incluirá 22 audios; la prueba offline
+descrita arriba corresponde al paquete anterior de 17, no valida estos cinco
+audios nuevos en el iPhone. Las otras siete variantes siguen fuera del catálogo.
+
+### Uso de la versión pública
 
 1. Abrir [blueclue.jrgblanco.com](https://blueclue.jrgblanco.com) en Safari del iPhone.
 2. Compartir → Añadir a pantalla de inicio; activar Abrir como app si se muestra.

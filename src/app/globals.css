@@ -402,8 +402,7 @@ button, a, summary { touch-action: manipulation; }
 .listening-choices .tap-button strong { font-size: 23px; }
 .menu-footer { margin: 20px 0 0; color: #a9bac6; text-align: center; font-size: 12px; line-height: 1.6; }
 .menu-back, .practice-menu-back { display: inline-flex; align-items: center; min-height: 44px; color: #f2f7fa; font-size: 14px; text-decoration: none; }
-.menu-back { margin-top: 10px; gap: 9px; padding: 0 15px 0 8px; border: 1px solid #34454f; border-radius: 999px; background: #131d24; font-weight: 600; box-shadow: 0 2px 8px #00000024; }
-.menu-back-icon { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: #203a3f; color: #68e0c4; font-size: 18px; }
+.menu-back { margin-top: 10px; gap: 9px; padding: 0 16px; border: 1px solid #34454f; border-radius: 999px; background: #131d24; font-weight: 600; box-shadow: 0 2px 8px #00000024; }
 .menu-back:hover { border-color: #68e0c4; background: #18292f; }
 .menu-back:active { background: #203a3f; }
 .menu-eyebrow { margin: 12px 0 0; color: #a9bac6; text-transform: uppercase; letter-spacing: 1.2px; font-size: 11px; }
@@ -476,3 +475,43 @@ button, a, summary { touch-action: manipulation; }
   .count { font-size: 24px; }
   .feedback-panel { min-height: 58px; }
 }
+
+/* Empieza aquí · nivel 0 */
+.menu-start { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; padding: 20px 18px; border: 1px solid #68e0c4; border-radius: 18px; background: linear-gradient(145deg, #0f3a37, #10272a); color: #f2f7fa; text-decoration: none; box-shadow: 0 12px 34px #68e0c422; }
+.menu-start:hover { filter: brightness(1.1); }
+.menu-start-top { display: flex; justify-content: space-between; align-items: center; color: #68e0c4; font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.menu-start strong { font-size: 26px; line-height: 1.15; letter-spacing: -.5px; }
+.menu-start small { color: #c2d6dc; font-size: 13px; line-height: 1.4; }
+.menu-restart { display: inline-flex; align-items: center; min-height: 44px; margin-top: 4px; color: #a9bac6; font-size: 13px; text-decoration: underline; text-underline-offset: 4px; }
+.menu-map-label { margin-top: 22px; }
+.menu-map { margin-top: 10px; }
+.menu-block.compact { min-height: 0; padding: 14px 16px; }
+.menu-block.compact .menu-block-top { margin-bottom: 6px; font-size: 16px; }
+.menu-block.compact strong { font-size: 18px; }
+.menu-block.compact small { margin-top: 8px; }
+.menu-level[data-menu-level="sounds"] { --menu-accent: #f29ad6; --menu-fill: #26152a; }
+.sound-cards { display: grid; gap: 10px; margin: 6px 0 16px; }
+.sound-card { display: flex; flex-direction: column; gap: 6px; min-height: 92px; padding: 14px 16px; border: 1px solid #34454f; border-radius: 14px; background: #131d24; color: #f2f7fa; text-align: left; }
+.sound-card-top { display: flex; justify-content: space-between; align-items: center; font-size: 20px; }
+.sound-card-top strong { font-size: 20px; }
+.sound-card > span:not(.sound-card-top) { color: #a9bac6; font-size: 13px; line-height: 1.4; }
+.sound-card small { color: #68e0c4; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+.sound-card.heard { border-color: #68e0c4; }
+.sound-card.playing { background: #10332f; box-shadow: 0 0 0 2px #68e0c4 inset; }
+.sound-cards.compact .sound-card { min-height: 52px; padding: 10px 14px; }
+.sound-cards.compact .sound-card-top strong { font-size: 16px; }
+.sounds-next { width: 100%; min-height: 56px; font-size: 16px; }
+.sounds-secondary { width: 100%; margin-top: 8px; }
+.sounds-replay { width: 100%; margin-bottom: 12px; }
+.sound-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.sound-choice { min-height: 96px; padding: 10px; }
+.sound-choice strong { font-size: 20px; }
+.sounds-feedback { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+.sounds-feedback.right { border-color: #68e0c4; }
+.sounds-feedback.wrong { border-color: #ffb36b; }
+.sounds-closing { margin: 0 0 10px; font-size: 18px; line-height: 1.4; }
+.readiness-line { display: flex; flex-direction: column; gap: 4px; margin: 0 0 14px; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--level-border); background: var(--level-soft); font-size: 14px; line-height: 1.45; }
+.readiness-line strong { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--level-accent); }
+.readiness-line.advance { border-color: var(--level-accent); }
+.latency-tap { margin-top: 14px; min-height: 180px; }
+.sound-card-state { color: #68e0c4; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
