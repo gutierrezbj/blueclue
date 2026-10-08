@@ -198,6 +198,8 @@ diez, once y doce. Un fallo en el nuevo audio conserva el paquete anterior compl
 
 `guidedPath.ts` define el orden del camino y guarda «donde lo dejé»
 (`blueclue-path-v1`) cada vez que se entra en un paso, por el camino o por el mapa.
+`BeatTrainer` sincroniza también el módulo tras hidratar y en cada cambio interno,
+sin depender del hash genérico de práctica ni reiniciar la sesión al reentrar.
 `soundQuiz.ts` elige el sonido sin repetir el anterior, evalúa la primera respuesta
 y resume ocho preguntas; `SoundsIntro` reproduce los WAV de `public/tracks/sounds/`
 con `HTMLAudioElement` y no calcula. `readiness.ts` guarda las últimas cinco

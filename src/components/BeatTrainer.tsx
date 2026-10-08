@@ -6,6 +6,7 @@ import { RoundSummary } from "./RoundSummary";
 import { PocketMode } from "./PocketMode";
 import { ChallengePanel } from "./ChallengePanel";
 import { enterPractice } from "@/lib/navigation";
+import { GUIDED_PATH_STORAGE_KEY, serializeGuidedPathState } from "@/lib/guidedPath";
 import { completeChallenge, readChallengeRecords, saveChallengeRecord, type ChallengeRecord } from "@/lib/challenge";
 import type { OfflinePack } from "@/lib/offlineTypes";
 import { type AttemptClassification, type AttemptResult } from "@/lib/scoring";
@@ -153,6 +154,15 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack, i
     if (initialModule) window.history.replaceState(window.history.state, "", "#practice-controls");
     setHydrated(true);
   }, [trackIds, storageKey, tracks, challengeStorageKey, initialModule]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    try {
+      localStorage.setItem(GUIDED_PATH_STORAGE_KEY, serializeGuidedPathState(moduleId));
+    } catch {
+      setStorageUnavailable(true);
+    }
+  }, [hydrated, moduleId]);
 
   useEffect(() => {
     if (!hydrated) return;

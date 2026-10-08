@@ -47,8 +47,10 @@ El camino guiado es una lista ordenada en `src/lib/guidedPath.ts`:
 ```
 
 Entrar en cualquier paso, por el camino o por el mapa, guarda ese paso como
-«donde lo dejé» (`blueclue-path-v1`). No hay otro progreso nuevo. Los enlaces
-anteriores no cambian.
+«donde lo dejé» (`blueclue-path-v1`). El entrenador actualiza también ese paso
+al cambiar de nivel internamente, tras recuperar la sesión. Así «Seguir» mantiene
+el último nivel, ayudas, velocidad y posición en pausa. Los enlaces anteriores
+no cambian.
 
 ### 2. Paso 0 · Conoce los sonidos
 
