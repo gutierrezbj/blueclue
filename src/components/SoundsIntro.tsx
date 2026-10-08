@@ -81,7 +81,7 @@ export function SoundsIntro({ audioVersion }: { audioVersion: string }) {
   const nextStep = nextGuidedStep("sounds")!;
 
   return <main className="learning-menu sounds-intro" data-level="pulse">
-    <header className="menu-header"><a className="menu-back" href="#inicio" aria-label="Volver al inicio"><span className="menu-back-icon" aria-hidden="true">←</span><span>Inicio</span></a><span className="menu-kicker">Paso 0</span></header>
+    <header className="menu-header"><a className="menu-back" href="#inicio" aria-label="Volver al inicio"><span>Inicio</span></a><span className="menu-kicker">Paso 0</span></header>
     {stage === "meet" ? <>
       <p className="menu-eyebrow">Conoce los sonidos</p>
       <h1 ref={headingRef} tabIndex={-1}>Cuatro sonidos. Escúchalos.</h1>

@@ -33,7 +33,7 @@ export function LearningMenu({ screen }: { screen: "home" | "rhythm" | "listenin
       </nav>
       <p className="menu-footer">Todo se guarda en este dispositivo. Nada se bloquea.</p>
     </> : <>
-      <a className="menu-back" href="#inicio" aria-label="Volver al inicio"><span className="menu-back-icon" aria-hidden="true">←</span><span>Inicio</span></a>
+      <a className="menu-back" href="#inicio" aria-label="Volver al inicio"><span>Inicio</span></a>
       <p className="menu-eyebrow">{screen === "rhythm" ? "01 · Marca el 1" : "02 · Escucha el cambio"}</p>
       <h1 ref={headingRef} tabIndex={-1}>{screen === "rhythm" ? "Elige tu nivel" : "Entrena la escucha"}</h1>
       <p className="menu-intro">{screen === "rhythm" ? "Si es tu primera vez, empieza por el Nivel 1." : "Sin contar. Fíjate en el sonido."}</p>
