@@ -1,6 +1,24 @@
 # Operación ligera — BlueClue
 
-Estado actualizado el 7 de octubre de 2026.
+Estado actualizado el 9 de octubre de 2026.
+
+## Empieza aquí — publicada como 92d1ee5
+
+- Merge de `empieza-aqui` en `main` (92d1ee5) tras la revisión del constructor
+  y sus cinco variantes aceptadas por Juan. Release extraída de `git archive`
+  en `/opt/apps/blueclue/releases/92d1ee5`, sin `.local` ni música privada.
+- Imagen `blueclue:92d1ee5` (333 MB) construida en el VPS con `ops/build-image.sh`:
+  167 tests, 165 pasan y 2 privados omitidos; compilación en 57 s; 15 recursos offline.
+- `docker compose -p blueclue up -d --wait` → healthy en 6 s. `/health` local y por
+  HTTPS: ok/demo/92d1ee5. Portada pública con «Empieza aquí» y «Conoce los sonidos».
+  HTTP redirige a HTTPS. Mismo bind 127.0.0.1:3280:3000, límites y proxy.
+- Descarga offline: 22 audios, 39.727.942 bytes (trece anteriores, cuatro sonidos
+  del Paso 0 y cinco variantes). Audios nuevos servidos con 200 por HTTPS.
+- Runtime en reposo 42 MiB. `current` → 92d1ee5; rollback db8b459, que sigue sano
+  en imagen. Checks BlueClue y BlueClue-HTTP sin cambios (mismo contenedor); SA99
+  sin cambios. Acceso por Tailscale SSH con verificación aprobada por Juan.
+- Pendiente: Safari en iPhone físico, tres medidas de `#latencia`, escucha de las
+  siete variantes restantes y actualizar la descarga en la PWA.
 
 ## ¿Bajo o batería? — publicada como db8b459
 

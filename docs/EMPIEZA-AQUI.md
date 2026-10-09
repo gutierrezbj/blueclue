@@ -1,8 +1,7 @@
 # Hito «Empieza aquí» — BlueClue para nivel 0
 
-Fecha de especificación: 8 de octubre de 2026. Estado: **construido en la rama
-`empieza-aqui`, revisado por el constructor (cuatro fallos corregidos el mismo día);
-pendiente de prueba por Juan en iPhone**.
+Fecha de especificación: 8 de octubre de 2026. Estado: **fusionado en `main` y desplegado el 9 de octubre de 2026 (92d1ee5),
+revisado por el constructor; pendiente de prueba por Juan en iPhone**.
 
 ## Para quién
 

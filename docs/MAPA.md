@@ -1,17 +1,17 @@
 # BlueClue — mapa de construcción
 
-Estado de referencia: **8 de octubre de 2026**.
+Estado de referencia: **9 de octubre de 2026**.
 Las casillas indican construcción, no dominio del alumno ni aprendizaje validado.
 
 ## La foto completa
 
 ```mermaid
 flowchart TD
-    ROOT["BlueClue · del pulso a la FLX4"] --> START["0 · Empieza aquí · CONSTRUIDO, SIN PROBAR"]
+    ROOT["BlueClue · del pulso a la FLX4"] --> START["0 · Empieza aquí · DESPLEGADO 9 OCT · pendiente iPhone"]
     START --> SOUNDS["✓ Paso 0 · Conoce los sonidos"]
     START --> READY["✓ Frase de avance en Marca el 1"]
     START --> LAT["✓ #latencia · diagnóstico oculto"]
-    START --> VARS["Variantes de escucha · en .local, sin publicar"]
+    START --> VARS["Variantes de escucha · 5 publicadas, 7 pendientes"]
     ROOT --> RHYTHM["1 · Marca el 1 · CONSTRUIDO"]
     RHYTHM --> PULSE["✓ Nivel 1 · Sigue el pulso"]
     RHYTHM --> COUNT["✓ Nivel 2 · Cuenta 1-2-3-4"]
@@ -37,15 +37,15 @@ Los conteos monótonos de 8/16/32 no vuelven al recorrido recomendado.
 
 ## Seguimiento compartido
 
-### 0. Empieza aquí — nivel 0, rama `empieza-aqui`
+### 0. Empieza aquí — nivel 0, en `main` y desplegado (92d1ee5)
 
 - [x] Portada con «Empieza aquí» / «Seguir donde lo dejé» y el mapa debajo.
 - [x] Paso 0 · Conoce los sonidos: bombo, caja, charles y bajo; «¿Cuál suena?».
 - [x] Teach / Assist / Train con su frase; sin «BPM» ni «vista ampliada».
 - [x] Frase de avance tras cada ronda (3 buenas de 5, 80 %).
 - [x] `#latencia`: mide, no corrige.
-- [x] Doce variantes de escucha generadas en `.local/variants/`.
-- [ ] Juan: iPhone físico, tres medidas de latencia, escuchar variantes.
+- [x] Doce variantes de escucha generadas; cinco aceptadas y publicadas.
+- [ ] Juan: iPhone físico, tres medidas de latencia, escuchar las siete variantes restantes.
 - [ ] Juan reconoce lo aprendido en una muestra no practicada.
 
 Detalle: [EMPIEZA-AQUI.md](EMPIEZA-AQUI.md).
