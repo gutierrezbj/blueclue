@@ -194,6 +194,15 @@ La última ronda de elección se guarda en `blueclue-listening-choice-listening-
 La descarga actual contiene trece audios; sigue aceptando paquetes de cinco,
 diez, once y doce. Un fallo en el nuevo audio conserva el paquete anterior completo.
 
+### Navegación (un solo recorrido)
+
+`guidedPath.ts` fija el orden Oído → Escucha → Ritmo, las etapas, las futuras
+en gris y la lógica pura de la portada (`homeState`, `stageStatus`, `stepLabel`).
+Los pasos hechos se guardan en `blueclue-path-done-v1`; `legacyDoneSteps`
+recupera como hechos los resultados guardados antes (quiz, escucha, rondas v2).
+`pathProgress.ts` es el único punto que toca `localStorage` para el recorrido;
+cada pantalla llama a `markStepDone` al completar su paso.
+
 ### Empieza aquí (nivel 0)
 
 `guidedPath.ts` define el orden del camino y guarda «donde lo dejé»

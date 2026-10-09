@@ -37,6 +37,18 @@ Los conteos monótonos de 8/16/32 no vuelven al recorrido recomendado.
 
 ## Seguimiento compartido
 
+### Navegación — un solo recorrido (rama `navegacion`, 9 octubre)
+
+Decidido por Juan: Oído → Escucha → Ritmo, pasos «N de 7», un paso de canción
+real al final de cada etapa y etapas 4–6 en gris. Detalle en
+[NAVEGACION.md](NAVEGACION.md).
+
+- [x] Portada en tres estados y lista «Tu recorrido» con estados en palabras.
+- [x] Paso hecho al completarlo una vez; progreso previo recuperado.
+- [x] Cabecera «Paso N de 7 · Etapa», «Inicio» y «Siguiente paso» en cada paso.
+- [x] Fuera flechas y triángulos que iOS convertía en emoji.
+- [ ] Juan: probarlo en el iPhone tras desplegar.
+
 ### 0. Empieza aquí — nivel 0, en `main` y desplegado (92d1ee5)
 
 - [x] Portada con «Empieza aquí» / «Seguir donde lo dejé» y el mapa debajo.

@@ -5,6 +5,8 @@ import { evaluateListeningTap, getListeningFeedback, getListeningGuide, getListe
 import { listeningLessons, type ListeningInstrument } from "@/lib/listeningLessons";
 import { handleTapKeyDown } from "@/lib/tapInput";
 import { useWaveformPlayer } from "@/lib/useWaveformPlayer";
+import { guidedPath, nextGuidedStep, stepLabel, stepNumber } from "@/lib/guidedPath";
+import { markStepDone } from "@/lib/pathProgress";
 
 export function ListeningTrainer({ track, variantCount = 1, onAnother }: { track: ListeningTrack; variantCount?: number; onAnother?: () => void }) {
   const lesson = listeningLessons[track.instrument ?? "bass"];
@@ -25,6 +27,8 @@ export function ListeningTrainer({ track, variantCount = 1, onAnother }: { track
   const feedback = taps.at(-1);
   const totalEntries = summary.entries.length;
   const storageKey = listeningStorageKey(track);
+  const stepId = track.instrument ?? "bass";
+  const nextStep = nextGuidedStep(stepId);
   const canTap = stage === "detect" && player.isReady && player.isPlaying && !finished && reviewTarget === null;
 
   useEffect(() => {
@@ -53,6 +57,7 @@ export function ListeningTrainer({ track, variantCount = 1, onAnother }: { track
     completedRef.current = true;
     setFinished(true);
     if (stage === "detect") {
+      markStepDone(stepId);
       const result = summarizeListening(track, tapsRef.current);
       setLastRound(`Última práctica: ${result.recognized} de ${result.entries.length} entradas reconocidas.${isChoice ? ` Confusiones: ${result.wrong}.` : ""} Toques adicionales: ${result.extra}.`);
       try { localStorage.setItem(storageKey, JSON.stringify({ recognized: result.recognized, wrong: result.wrong, extra: result.extra })); }
@@ -120,7 +125,7 @@ export function ListeningTrainer({ track, variantCount = 1, onAnother }: { track
   }
 
   return <main className="phrase-shell bass-shell" data-level="downbeat">
-    <header className="phrase-header"><a href="#escucha-el-cambio" onClick={() => player.pause()}>← Escucha el cambio</a><span>Práctica</span></header>
+    <header className="phrase-header"><a className="menu-back" href="#inicio" aria-label="Volver al inicio" onClick={() => player.pause()}><span>Inicio</span></a><span>{stepLabel(stepId)}</span></header>
     <div className="level-label">Práctica corta · {track.duration} segundos</div>
     <h1>{track.title}</h1>
     <p className="phrase-context">{lesson.context}</p>
@@ -130,8 +135,8 @@ export function ListeningTrainer({ track, variantCount = 1, onAnother }: { track
     </div>
     <div className="bass-audio" ref={player.containerRef} aria-hidden="true" />
     <div className="phrase-transport">
-      <button type="button" className="continue-button" disabled={!player.isReady} onClick={toggle}>{player.isPlaying ? "Ⅱ Pausar" : reviewTarget !== null ? "▶ Escuchar revisión" : finished ? "▶ Repetir" : player.currentTime === 0 ? "▶ Empezar" : "▶ Continuar"}</button>
-      <button type="button" className="restart-button" disabled={!player.isReady} onClick={restart}>↺ Reiniciar</button>
+      <button type="button" className="continue-button" disabled={!player.isReady} onClick={toggle}>{player.isPlaying ? "Pausar" : reviewTarget !== null ? "Escuchar revisión" : finished ? "Repetir" : player.currentTime === 0 ? "Empezar" : "Continuar"}</button>
+      <button type="button" className="restart-button" disabled={!player.isReady} onClick={restart}>Reiniciar</button>
     </div>
     {player.error && <p className="audio-error" role="alert">{player.error}</p>}
     {!player.isReady && !player.error && <p role="status">Preparando audio…</p>}
@@ -143,16 +148,14 @@ export function ListeningTrainer({ track, variantCount = 1, onAnother }: { track
       <h2 id="listening-result">{stage === "listen" ? "Ahora, reconócelo por oído" : `${summary.recognized} de ${totalEntries} entradas reconocidas`}</h2>
       {stage === "listen" ? <>
         <p>{lesson.listened}</p>
-        <button type="button" className="next-button" onClick={() => changeStage("detect")}>Probar sin guía →</button>
+        <button type="button" className="next-button" onClick={() => changeStage("detect")}>Probar sin guía</button>
       </> : <>
         <p>{isChoice && <>Instrumento confundido: {summary.wrong} · </>}Sin reconocer: {summary.missed} · Toques adicionales: {summary.extra}. Cada entrada cuenta una sola vez.</p>
         <p>No medimos precisión al milisegundo: tienes un margen para reconocer el cambio después de oírlo.</p>
         {summary.entries.map((entry, index) => <button type="button" className="previous-button" key={entry.time} onClick={() => review(entry.time)}>{isChoice ? `${index + 1} · ${track.changes.find(change => change.time === entry.time)?.action === "bass-in" ? "Bajo" : "Batería"}` : index === 0 ? "Primera entrada" : lesson.returnLabel} · {entry.recognized ? "Reconocida" : entry.wrong ? "Confundida" : "Sin reconocer"} · Escuchar</button>)}
         <button type="button" className="next-button" onClick={onAnother ?? restart}>{onAnother ? "Practicar otra vez · otra muestra" : "Practicar otra vez"}</button>
-        {onAnother && <p className="phrase-context">«▶ Repetir» conserva esta muestra. Hay {variantCount} muestras de esta práctica.</p>}
-        {(track.instrument ?? "bass") === "bass" && <a className="previous-button" href="#escucha-la-percusion">Siguiente práctica · La percusión →</a>}
-        {track.instrument === "percussion" && <a className="previous-button" href="#bajo-o-bateria">Siguiente práctica · ¿Bajo o batería? →</a>}
-        {isChoice && <a className="previous-button" href="#escucha-el-cambio">Volver a las prácticas de escucha</a>}
+        {onAnother && <p className="phrase-context">«Repetir» conserva esta muestra. Hay {variantCount} muestras de esta práctica.</p>}
+        {nextStep && <a className="previous-button" href={nextStep.hash}>Siguiente paso · {stepNumber(nextStep.id)} de {guidedPath.length} · {nextStep.title}</a>}
       </>}
     </section> : stage === "listen" ? <>
       <div className="phrase-guide" role="status"><strong>{getListeningGuide(track, player.currentTime)}</strong></div>
@@ -161,7 +164,7 @@ export function ListeningTrainer({ track, variantCount = 1, onAnother }: { track
       <p className="phrase-instruction">{lesson.instruction}</p>
       {isChoice ? <div className="listening-choices" role="group" aria-label="Qué instrumento entra">
         {(["bass", "percussion"] as const).map(instrument => <button key={instrument} ref={instrument === "bass" ? tapRef : percussionRef} type="button" className="tap-button" disabled={!canTap} onPointerDown={event => { if (event.isPrimary && event.button === 0) tap(instrument); }} onKeyDown={event => handleTapKeyDown(event, () => tap(instrument))} onClick={event => { if (event.detail === 0) tap(instrument); }}><strong>{instrument === "bass" ? "BAJO" : "BATERÍA"}</strong></button>)}
-      </div> : <button ref={tapRef} type="button" className="tap-button" disabled={!canTap} onPointerDown={event => { if (event.isPrimary && event.button === 0) tap(); }} onKeyDown={event => handleTapKeyDown(event, tap)} onClick={event => { if (event.detail === 0) tap(); }}><strong>{lesson.button}</strong><small>{!player.isPlaying ? "PULSA ▶ PARA EMPEZAR O CONTINUAR" : "PULSA CUANDO LO OIGAS"}</small></button>}
+      </div> : <button ref={tapRef} type="button" className="tap-button" disabled={!canTap} onPointerDown={event => { if (event.isPrimary && event.button === 0) tap(); }} onKeyDown={event => handleTapKeyDown(event, tap)} onClick={event => { if (event.detail === 0) tap(); }}><strong>{lesson.button}</strong><small>{!player.isPlaying ? "PULSA EMPEZAR O CONTINUAR" : "PULSA CUANDO LO OIGAS"}</small></button>}
       <div className="phrase-feedback" role="status">{getListeningFeedback(track, feedback)}</div>
     </>}
     <p className="keyboard-hint">Espacio inicia o pausa · Enter sobre el botón grande marca la entrada.</p>
