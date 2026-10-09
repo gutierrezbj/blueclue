@@ -59,6 +59,7 @@ Entrenador interactivo para aprender a pinchar desde cero: escuchar, seguir el p
 - Merge a `main` (c58a22f) y despliegue: imagen `blueclue:c58a22f`, 172/174 tests (2 privados omitidos), HTTPS ok/demo/c58a22f. Registro en OPERATIONS (74403d8) y Notion.
 
 ### Que quedo pendiente
+- [ ] **PRIORIDAD — leer `docs/DIAGNOSTICO-NIVELES.md`.** Juan rechaza la navegacion desplegada `c58a22f` (etapas, «N de 7», «Tu recorrido»): confusa y sin plan de aprendizaje visible. Quiere la portada con el estilo de `#sonidos` (una tarjeta por nivel) y que cada nivel lleve a un modulo con que aprendes, ejercicio guiado y resultado. Propuesta escrita, NO aprobada: preguntar y ensenar boceto antes de construir. Juan pasa el proyecto al agente constructor.
 - [ ] Juan: probar c58a22f en el iPhone (recargar o actualizar la descarga offline); revisar sobre todo el triangulo de reproduccion del paso 5, unico glifo que queda (forzado a texto con U+FE0E).
 - [ ] Juan: tres medidas en `#latencia` con sus auriculares; anotar medianas antes de plantear compensacion.
 - [ ] Juan: escuchar las 7 variantes restantes (`node scripts/create-listening-variants.mjs` genera en `.local/variants/`; `--publish <id>` publica las aceptadas).

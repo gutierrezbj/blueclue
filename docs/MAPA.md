@@ -47,7 +47,7 @@ real al final de cada etapa y etapas 4–6 en gris. Detalle en
 - [x] Paso hecho al completarlo una vez; progreso previo recuperado.
 - [x] Cabecera «Paso N de 7 · Etapa», «Inicio» y «Siguiente paso» en cada paso.
 - [x] Fuera flechas y triángulos que iOS convertía en emoji.
-- [ ] Juan: probarlo en el iPhone tras desplegar.
+- [x] Juan lo probó en el iPhone el 9 octubre: **rechazado**, confuso y sin plan visible. Ver [diagnóstico por nivel](DIAGNOSTICO-NIVELES.md).
 
 ### 0. Empieza aquí — nivel 0, en `main` y desplegado (92d1ee5)
 
