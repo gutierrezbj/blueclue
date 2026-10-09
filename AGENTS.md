@@ -112,6 +112,18 @@ Añade pruebas del motor de scoring:
 - tolerancias
 - comportamiento en bordes de pista
 
+## Público y lenguaje (decisión de Juan, 2026-10-08)
+
+- El alumno es nivel 0 absoluto: no sabe qué es un beat, un bombo ni «el 1».
+  Un solo camino de entrada («Empieza aquí»); el mapa queda debajo.
+- Teach / Assist / Train conservan su nombre y llevan su frase
+  («te lo enseño todo», «te quito pistas», «tú solo»). Fuera «BPM»,
+  «vista ampliada», «downbeat» y cualquier jerga en pantalla.
+- Sin símbolos ni emojis en la interfaz (ni ♪, ▶, ↺, →, ←): texto.
+- Nada se bloquea; nada se da por aprendido por aceptar un sonido.
+- Las muestras de escucha solo se publican tras escucharlas Juan.
+- Consultar `SRS-BRIDGE.md` al empezar y actualizarlo al cerrar sesión.
+
 ## Calidad
 
 - TypeScript estricto
