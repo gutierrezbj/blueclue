@@ -5,7 +5,7 @@
 - **Repo**: https://github.com/gutierrezbj/blueclue
 - **Branch activo**: main
 - **Estado**: Produccion (web publica, perfil ligero ADR-001)
-- **Sprint actual**: Hito «Empieza aqui» (nivel 0) desplegado; siguiente por acordar (musica real verificada por oido o puente a la FLX4)
+- **Sprint actual**: Navegacion de un solo recorrido desplegada (c58a22f); siguiente por acordar (musica real verificada por oido o puente a la FLX4)
 
 ## Que es este proyecto (2-3 lineas)
 Entrenador interactivo para aprender a pinchar desde cero: escuchar, seguir el pulso, contar 1-2-3-4, encontrar el 1 y reconocer que instrumento entra. Publico objetivo: nivel 0 absoluto. No es software DJ completo; prepara el oido para la controladora FLX4.
@@ -54,10 +54,12 @@ Entrenador interactivo para aprender a pinchar desde cero: escuchar, seguir el p
 - Revision del agente constructor: 4 fallos corregidos en paralelo y reconciliados (115356a, 5a70e59, 1339dba, 4bad26a); 5 variantes aceptadas por Juan y publicadas (59ba187).
 - Quitados simbolos de la UI nueva y la flecha del boton Inicio (da3041e, ea6bea5). `allowedDevOrigins` para que `localhost` hidrate en dev.
 - Merge a `main` (92d1ee5) y despliegue en Servidor 2: imagen `blueclue:92d1ee5`, healthy, HTTPS ok/demo/92d1ee5, 22 audios offline (39,7 MB). Registro en `docs/OPERATIONS.md` (c241806) y en Notion (cuaderno, Desarrollo, catalogo).
+- Juan probo en iPhone (2026-10-09): portada confusa («Paso 0 de cuantos», «que mapa», dos botones al mismo sitio, flecha ↗ pintada como emoji). Organigrama del flujo y mockup de la portada; Juan decide el orden.
+- Navegacion de un solo recorrido (`docs/NAVEGACION.md`, ecd92ed): orden Oido → Escucha → Ritmo, pasos «N de 7», portada en tres estados y «Tu recorrido» (`guidedPath.ts`, `pathProgress.ts`, `LearningMenu.tsx`), pasos hechos en `blueclue-path-done-v1` con recuperacion del progreso previo, cabecera «Paso N de 7 · Etapa» + Inicio + «Siguiente paso», sin glifos emoji.
+- Merge a `main` (c58a22f) y despliegue: imagen `blueclue:c58a22f`, 172/174 tests (2 privados omitidos), HTTPS ok/demo/c58a22f. Registro en OPERATIONS (74403d8) y Notion.
 
 ### Que quedo pendiente
-- [ ] Navegacion de un solo recorrido DESPLEGADA 2026-10-09 como c58a22f (rollback 92d1ee5): falta prueba de Juan en iPhone.
-- [ ] Juan: Safari en iPhone fisico con «Empieza aqui»; actualizar la descarga offline en la PWA (22 audios).
+- [ ] Juan: probar c58a22f en el iPhone (recargar o actualizar la descarga offline); revisar sobre todo el triangulo de reproduccion del paso 5, unico glifo que queda (forzado a texto con U+FE0E).
 - [ ] Juan: tres medidas en `#latencia` con sus auriculares; anotar medianas antes de plantear compensacion.
 - [ ] Juan: escuchar las 7 variantes restantes (`node scripts/create-listening-variants.mjs` genera en `.local/variants/`; `--publish <id>` publica las aceptadas).
 - [ ] Criterio del hito sin validar: «Juan reconoce lo aprendido en una muestra no practicada».
@@ -69,9 +71,12 @@ Entrenador interactivo para aprender a pinchar desde cero: escuchar, seguir el p
 - Ronda buena = 8+ oportunidades y (clavadas+cerca)/(oportunidades+repetidas+fuera) >= 80 %; solo rondas completas desde 0:00; clave `blueclue-rounds-v2`.
 - La latencia se mide, no se corrige: `#latencia` usa Web Audio y el ejercicio MediaElement, su numero no sirve directamente para el scoring.
 - Variantes de escucha solo se publican tras escucha de Juan.
+- Recorrido (2026-10-09): Oido (paso 1) → Escucha (2-4) → Ritmo (5-7); cada etapa termina con «Ahora en una cancion de verdad» en gris hasta tener pistas verificadas; etapas 4-6 (Cancion, Mezcla, FLX4) en gris hasta construirse.
+- Paso «hecho» = completado una vez, no aprobado; el boton de la portada lleva al ultimo paso abierto si no esta hecho.
 
 ### Contexto importante
 - El agente constructor empuja a la MISMA rama de trabajo; comparar siempre `origin/<rama>` y no solo `main`.
 - Tailscale SSH al VPS pide verificacion en navegador (check mode) que debe aprobar Juan; despues vale varias horas.
 - `ops/build-image.sh` corre dentro del VPS con 0,6 CPU; lanzar con `nohup` y vigilar el log, la sesion SSH puede cortarse.
-- Rollback actual: `BLUECLUE_IMAGE=blueclue:db8b459 docker compose -p blueclue up -d --wait` desde su release.
+- Rollback actual: `BLUECLUE_IMAGE=blueclue:92d1ee5 docker compose -p blueclue up -d --wait` desde `/opt/apps/blueclue/releases/92d1ee5`.
+- Un mensaje de Juan decia solo «gma»; quedo sin aclarar.

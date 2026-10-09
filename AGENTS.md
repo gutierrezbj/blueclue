@@ -122,6 +122,9 @@ Añade pruebas del motor de scoring:
 - Sin símbolos ni emojis en la interfaz (ni ♪, ▶, ↺, →, ←): texto.
 - Nada se bloquea; nada se da por aprendido por aceptar un sonido.
 - Las muestras de escucha solo se publican tras escucharlas Juan.
+- Un solo recorrido (2026-10-09, `docs/NAVEGACION.md`): Oído → Escucha → Ritmo,
+  pasos «N de 7», etapas numeradas; lo futuro se ve en gris y no se abre.
+  Un paso nuevo se añade en `guidedPath.ts` y marca «hecho» con `markStepDone`.
 - Consultar `SRS-BRIDGE.md` al empezar y actualizarlo al cerrar sesión.
 
 ## Calidad
