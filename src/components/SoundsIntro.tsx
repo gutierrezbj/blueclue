@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { nextGuidedStep } from "@/lib/guidedPath";
+import { nextGuidedStep, stepLabel, stepNumber, guidedPath } from "@/lib/guidedPath";
+import { markStepDone } from "@/lib/pathProgress";
 import { QUIZ_LENGTH, SOUNDS_STORAGE_KEY, answerQuiz, currentQuestion, getSoundCard, isQuizFinished, quizClosing, quizFeedback, readSavedQuiz, soundCards, startQuizRound, summarizeQuiz, type QuizRound, type SoundId } from "@/lib/soundQuiz";
 
 type Stage = "meet" | "quiz";
@@ -57,6 +58,7 @@ export function SoundsIntro({ audioVersion }: { audioVersion: string }) {
     const next = answerQuiz(round, choice, Math.random);
     setRound(next);
     if (isQuizFinished(next)) {
+      markStepDone("sounds");
       const summary = summarizeQuiz(next);
       if (!savedRef.current) {
         savedRef.current = true;
@@ -81,7 +83,7 @@ export function SoundsIntro({ audioVersion }: { audioVersion: string }) {
   const nextStep = nextGuidedStep("sounds")!;
 
   return <main className="learning-menu sounds-intro" data-level="pulse">
-    <header className="menu-header"><a className="menu-back" href="#inicio" aria-label="Volver al inicio"><span>Inicio</span></a><span className="menu-kicker">Paso 0</span></header>
+    <header className="menu-header"><a className="menu-back" href="#inicio" aria-label="Volver al inicio"><span>Inicio</span></a><span className="menu-kicker">{stepLabel("sounds")}</span></header>
     {stage === "meet" ? <>
       <p className="menu-eyebrow">Conoce los sonidos</p>
       <h1 ref={headingRef} tabIndex={-1}>Cuatro sonidos. Escúchalos.</h1>
@@ -105,7 +107,7 @@ export function SoundsIntro({ audioVersion }: { audioVersion: string }) {
         <div className="sound-cards compact">
           {soundCards.map(card => <button key={card.id} type="button" className="sound-card" onClick={() => play(card.id)}><span className="sound-card-top"><strong>{card.name}</strong><span className="sound-card-state">Oír</span></span></button>)}
         </div>
-        {summary.passed ? <a className="next-button sounds-next" href={nextStep.hash}>Siguiente · {nextStep.title}</a> : <button type="button" className="next-button sounds-next" onClick={startQuiz}>Otra vez · 8 preguntas</button>}
+        {summary.passed ? <a className="next-button sounds-next" href={nextStep.hash}>Siguiente paso · {stepNumber(nextStep.id)} de {guidedPath.length} · {nextStep.title}</a> : <><button type="button" className="next-button sounds-next" onClick={startQuiz}>Otra vez · 8 preguntas</button><a className="previous-button sounds-secondary" href={nextStep.hash}>Seguir igualmente · {nextStep.title}</a></>}
         <button type="button" className="previous-button sounds-secondary" onClick={() => { setStage("meet"); setRound(null); }}>Volver a conocer los sonidos</button>
         {summary.passed && <button type="button" className="previous-button sounds-secondary" onClick={startQuiz}>Repetir el juego</button>}
       </section> : <>

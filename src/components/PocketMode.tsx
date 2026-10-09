@@ -102,7 +102,7 @@ export function PocketMode({ pack }: { pack: OfflinePack | null }) {
   return <details className="pocket-card" id="pocket-mode">
     <summary><span>BlueClue en tu bolsillo</span><span>{busy ? `Descargando · ${progress} %` : ready ? "Ejercicios disponibles sin conexión" : "iPhone · instalar y descargar"}</span></summary>
     <div className="pocket-content">
-      <p>{installed ? "Estás en la app instalada. Descarga aquí antes de salir." : "En iPhone: abre en Safari → Compartir → Añadir a pantalla de inicio → Abrir como app (si aparece). Después abre BlueClue desde su icono y descarga allí."}</p>
+      <p>{installed ? "Estás en la app instalada. Descarga aquí antes de salir." : "En iPhone: abre en Safari, Compartir, Añadir a pantalla de inicio, Abrir como app (si aparece). Después abre BlueClue desde su icono y descarga allí."}</p>
       <p>Primero instala, después descarga. Safari y la app instalada pueden guardar datos por separado. El progreso no se sincroniza con el ordenador.</p>
       <p>{pack ? `Los audios de práctica, incluidas las prácticas de escucha y los conteos opcionales, ocupan ${(pack.audioBytes / 1_000_000).toLocaleString("es-ES", { maximumFractionDigits: 1 })} MB, más la app. Usa Wi-Fi y mantén la app abierta durante la descarga.` : "Puedes seguir practicando online."}</p>
       <p role="status">{busy ? `Preparando app y audios de práctica: ${progress} %.` : message || (ready ? `Descarga completa · ${((status?.bytes ?? 0) / 1_000_000).toLocaleString("es-ES", { maximumFractionDigits: 1 })} MB. Compruébala en modo avión antes de salir.` : status ? "Tienes una descarga anterior. Actualízala con conexión para guardar esta versión." : "Aún no hay un paquete completo sin conexión.")}</p>

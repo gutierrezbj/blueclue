@@ -515,3 +515,26 @@ button, a, summary { touch-action: manipulation; }
 .readiness-line.advance { border-color: var(--level-accent); }
 .latency-tap { margin-top: 14px; min-height: 180px; }
 .sound-card-state { color: #68e0c4; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+
+/* Navegación · un solo recorrido */
+.path-list { margin-top: 24px; }
+.path-list h2.menu-eyebrow { margin: 0 0 10px; font-weight: 400; }
+.path-stage { border-top: 1px solid #34454f; }
+.path-stage:last-child { border-bottom: 1px solid #34454f; }
+.path-stage > summary, .path-stage.future { display: flex; justify-content: space-between; align-items: center; gap: 10px; min-height: 52px; padding: 0 4px; font-size: 16px; font-weight: 600; cursor: pointer; list-style: none; }
+.path-stage > summary::-webkit-details-marker { display: none; }
+.path-stage.future { color: #6f8290; font-weight: 500; cursor: default; }
+.path-steps { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 8px; }
+.path-step { display: flex; justify-content: space-between; align-items: center; gap: 10px; min-height: 56px; padding: 10px 14px; border: 1px solid #34454f; border-radius: 12px; background: #131d24; color: #f2f7fa; text-decoration: none; font-size: 15px; }
+.path-step small { display: block; color: #a9bac6; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 2px; }
+.path-step.future { border-style: dashed; background: transparent; color: #6f8290; }
+.path-step.future small { color: #5b6d79; }
+a.path-step:hover { border-color: #68e0c4; }
+.path-badge { flex: none; padding: 3px 9px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+.path-badge.done { background: #133a2f; color: #8ff0cf; }
+.path-badge.here { background: #68e0c4; color: #082028; }
+.path-badge.count { color: #a9bac6; font-weight: 500; }
+.path-badge.soon { color: #6f8290; font-weight: 500; border: 1px dashed #3a4a55; }
+.menu-start small b { color: #f2f7fa; font-weight: 600; }
+.phrase-header .menu-back { margin-top: 0; }
+.practice-menu-back.menu-back { margin-top: 0; }
