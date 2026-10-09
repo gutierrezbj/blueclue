@@ -56,7 +56,7 @@ Entrenador interactivo para aprender a pinchar desde cero: escuchar, seguir el p
 - Merge a `main` (92d1ee5) y despliegue en Servidor 2: imagen `blueclue:92d1ee5`, healthy, HTTPS ok/demo/92d1ee5, 22 audios offline (39,7 MB). Registro en `docs/OPERATIONS.md` (c241806) y en Notion (cuaderno, Desarrollo, catalogo).
 
 ### Que quedo pendiente
-- [ ] Rama `navegacion` (docs/NAVEGACION.md): un solo recorrido Oido → Escucha → Ritmo, portada en tres estados, sin glifos. Sin desplegar; pendiente revision y OK de Juan.
+- [ ] Navegacion de un solo recorrido DESPLEGADA 2026-10-09 como c58a22f (rollback 92d1ee5): falta prueba de Juan en iPhone.
 - [ ] Juan: Safari en iPhone fisico con «Empieza aqui»; actualizar la descarga offline en la PWA (22 audios).
 - [ ] Juan: tres medidas en `#latencia` con sus auriculares; anotar medianas antes de plantear compensacion.
 - [ ] Juan: escuchar las 7 variantes restantes (`node scripts/create-listening-variants.mjs` genera en `.local/variants/`; `--publish <id>` publica las aceptadas).

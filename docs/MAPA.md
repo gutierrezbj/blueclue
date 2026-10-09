@@ -37,7 +37,7 @@ Los conteos monótonos de 8/16/32 no vuelven al recorrido recomendado.
 
 ## Seguimiento compartido
 
-### Navegación — un solo recorrido (rama `navegacion`, 9 octubre)
+### Navegación — un solo recorrido (desplegada c58a22f, 9 octubre)
 
 Decidido por Juan: Oído → Escucha → Ritmo, pasos «N de 7», un paso de canción
 real al final de cada etapa y etapas 4–6 en gris. Detalle en

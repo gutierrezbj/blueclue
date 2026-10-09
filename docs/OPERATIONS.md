@@ -2,6 +2,18 @@
 
 Estado actualizado el 9 de octubre de 2026.
 
+## Navegación de un solo recorrido — publicada como c58a22f
+
+- Merge de `navegacion` en `main` (c58a22f): Oído → Escucha → Ritmo, pasos
+  «N de 7», portada en tres estados, «Tu recorrido», sin glifos que iOS pinte
+  como emoji. Decisiones de Juan en `docs/NAVEGACION.md`.
+- Imagen `blueclue:c58a22f` construida en el VPS: 174 tests, 172 pasan y dos
+  privados omitidos; compilación en 53 s. Healthy en 5 s; `/health` local y HTTPS
+  ok/demo/c58a22f; HTTP → HTTPS 301; portada pública en estado «Empieza aquí ·
+  Paso 1 de 7» comprobada a 375 × 812. Runtime 37 MiB. Mismo bind, límites y proxy.
+- `current` → c58a22f; rollback 92d1ee5. Audios sin cambios (22).
+- Pendiente: Juan en iPhone físico, incluido el triángulo de reproducción.
+
 ## Empieza aquí — publicada como 92d1ee5
 
 - Merge de `empieza-aqui` en `main` (92d1ee5) tras la revisión del constructor
