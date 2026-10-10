@@ -39,13 +39,17 @@ Incluye:
 
 ## Modos
 
-### Empieza aquí — entrada para nivel 0
+### Empieza aquí — siete niveles de aprendizaje
 
-La portada ofrece cinco tarjetas grandes: **Conoce los sonidos**, **Escucha el
-cambio**, **Sigue el pulso**, **Cuenta 1-2-3-4** y **Encuentra el 1**. Cada una
-explica qué entrenas, para qué sirve al pinchar y cómo practicar. No hay etapas
-futuras deshabilitadas ni numeración «N de 7». Los tres niveles de ritmo conservan
-sus números y colores. Teach, Assist y Train conservan su nombre y llevan una frase: «te lo
+Inicio muestra siete niveles: **Conocer los sonidos**, **Seguir el ritmo y
+encontrar el 1**, **Reconocer cambios, frases y partes de una canción**,
+**Preparar una entrada y una salida**, **Sincronizar y mezclar dos canciones**,
+**Practicar en tu FLX4** y **Construir una sesión**. Cada nivel abre sus
+lecciones. Solo las lecciones que ya tienen ejercicio son enlaces; el resto
+es un plan visible, no una práctica fingida. Pulso, Cuenta y Encuentra el 1
+son tres lecciones del nivel 2, no niveles independientes.
+
+Teach, Assist y Train conservan su nombre y llevan una frase: «te lo
 enseño todo», «te quito pistas», «tú solo». Tras cada ronda completa, una frase
 dice si repetir o avanzar; nada se bloquea. `#latencia` es una pantalla oculta
 que mide el retraso del toque y no corrige nada. Las variantes de escucha se
@@ -55,11 +59,11 @@ Especificación: [docs/EMPIEZA-AQUI.md](docs/EMPIEZA-AQUI.md).
 
 ### Inicio y continuidad
 
-La tarjeta de la última práctica queda identificada sin duplicar accesos.
+El nivel y la lección de la última práctica quedan identificados sin duplicar accesos.
 Terminar una ronda no la salta automáticamente ni se presenta como dominio:
-el alumno elige repetir o avanzar. **Escucha el cambio** conserva sus tres
-ejercicios: bajo, percusión y distinguir ambos. «Inicio» vuelve a las cinco
-tarjetas y los enlaces anteriores siguen funcionando. Las explicaciones no
+el alumno elige repetir o avanzar. El nivel 3 conserva tres ejercicios
+de escucha: bajo, percusión y distinguir ambos. «Inicio» vuelve a los siete
+niveles y los enlaces anteriores siguen funcionando. Las explicaciones no
 modifican la última práctica ni reproducen audio. Detalle en
 [navegación vigente](docs/NAVEGACION.md).
 Entrar en el mismo nivel recupera pista, ayudas, velocidad y posición en pausa;

@@ -114,7 +114,7 @@ No añadir base de datos todavía.
 
 `src/lib/learningModules.ts` separa las consignas y objetivos de la UI. El motor compara contra todos los beats en Pulso y contra downbeats en Cuenta y Encuentra el 1. Los tres módulos comparten preparación, scoring y replay. Teach / Assist / Train son ayudas independientes, no módulos adicionales.
 
-La identidad visual de esos tres niveles depende de `moduleId`, expuesto como
+La identidad visual de esas tres lecciones de ritmo depende de `moduleId`, expuesto como
 `data-level` por `BeatTrainer`. Los tokens `--level-*` de `globals.css` gobiernan
 superficies, acentos y foco; no alteran los colores semánticos de feedback.
 `useWaveformPlayer` actualiza únicamente las opciones de color de WaveSurfer al
@@ -196,10 +196,12 @@ diez, once y doce. Un fallo en el nuevo audio conserva el paquete anterior compl
 
 ### Navegación por habilidades
 
-`learningOverview.ts` define las cinco tarjetas, sus explicaciones y enlaces
-de entrada. `navigation.ts` resuelve las introducciones sin montar reproductores;
+`learningLevels.ts` define los siete niveles del curso y sus lecciones, con
+enlaces solo a prácticas existentes. `learningOverview.ts` conserva las
+introducciones pedagógicas de las prácticas actuales. `navigation.ts` resuelve
+ambas pantallas sin montar reproductores;
 las rutas anteriores siguen entrando directamente en los ejercicios.
-`guidedPath.ts` conserva el orden Oído → Escucha → Ritmo para la continuación
+`guidedPath.ts` sigue el orden Sonidos → Ritmo → Escucha para la continuación
 voluntaria y `stepLabel` muestra solo el área, sin «N de 7».
 Las rondas practicadas se guardan en `blueclue-path-done-v1`; `legacyDoneSteps`
 recupera los resultados guardados antes (quiz, escucha, rondas v2).

@@ -1,6 +1,17 @@
 # Navegación — tarjetas para practicar
 
-## Vigente: propuesta aprobada el 9 de octubre de 2026
+## Vigente: siete niveles, 10 de octubre de 2026
+
+Juan define siete niveles principales en Inicio. Cada uno abre una pantalla
+de lecciones. Pulso, Cuenta y Encuentra el 1 son lecciones del **nivel 2**;
+no son tres niveles del curso. El nivel 1 enlaza a sonidos y el nivel 3 a tres
+escuchas. Los niveles 4–7 muestran el programa previsto sin enlaces a
+ejercicios inexistentes. Se conserva la última práctica, sin autoplay,
+bloqueos ni afirmaciones de dominio. Las rutas anteriores siguen funcionando.
+Mapa y estado: [MAPA.md](MAPA.md). La especificación de cinco tarjetas que
+sigue es historial sustituido, no la portada vigente.
+
+## Historial: cinco tarjetas aprobadas el 9 de octubre de 2026
 
 Juan aprueba el boceto «Aprende a escuchar. Empieza a pinchar.» tras revisar
 y rechazar la portada desplegada en `c58a22f`. Esta decisión sustituye las

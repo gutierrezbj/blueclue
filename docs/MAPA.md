@@ -1,41 +1,42 @@
 # BlueClue — mapa de construcción
 
-Estado de referencia: **9 de octubre de 2026**.
+Estado de referencia: **10 de octubre de 2026**.
 Las casillas indican construcción, no dominio del alumno ni aprendizaje validado.
 
 ## La foto completa
 
 ```mermaid
 flowchart TD
-    ROOT["BlueClue · del pulso a la FLX4"] --> START["0 · Empieza aquí · DESPLEGADO 9 OCT · pendiente iPhone"]
-    START --> SOUNDS["✓ Paso 0 · Conoce los sonidos"]
-    START --> READY["✓ Frase de avance en Marca el 1"]
-    START --> LAT["✓ #latencia · diagnóstico oculto"]
-    START --> VARS["Variantes de escucha · 5 publicadas, 7 pendientes"]
-    ROOT --> RHYTHM["1 · Marca el 1 · CONSTRUIDO"]
-    RHYTHM --> PULSE["✓ Nivel 1 · Sigue el pulso"]
-    RHYTHM --> COUNT["✓ Nivel 2 · Cuenta 1-2-3-4"]
-    RHYTHM --> ONE["✓ Nivel 3 · Encuentra el 1"]
-    RHYTHM --> EAR["2 · Escucha el cambio · AQUÍ ESTAMOS"]
-    EAR --> BASS["✓ Escucha el bajo"]
-    EAR --> DRUMS["✓ Escucha la percusión"]
-    EAR --> CHOICE["✓ ¿Bajo o batería?"]
-    EAR --> VARIANTS["Pendiente · otras muestras y cambios de frase"]
-    EAR --> STRUCTURE["3 · Entiende la canción · POR CONSTRUIR"]
-    STRUCTURE --> PARTS["Intro · partes principales · break · drop · salida"]
-    STRUCTURE --> MIX["4 · Prepara la transición · POR CONSTRUIR"]
-    MIX --> ALIGN["Dónde entrar/salir · alinear canciones y frases"]
-    MIX --> FLX4["5 · Llévalo a la FLX4 · POR CONSTRUIR"]
-    FLX4 --> REAL["Cue · lanzar en el 1 · repetir transiciones"]
-    ROOT --> POCKET["✓ Base común · iPhone/PWA · offline · progreso local"]
+    ROOT["Inicio · 7 niveles"] --> S["1 · Conocer los sonidos · 1 práctica"]
+    ROOT --> R["2 · Seguir el ritmo y encontrar el 1 · 3 prácticas"]
+    R --> P["Sigue el pulso"]
+    R --> C["Cuenta 1-2-3-4"]
+    R --> O["Encuentra el 1"]
+    ROOT --> L["3 · Cambios, frases y partes · 3 prácticas de escucha"]
+    L --> B["Bajo · percusión · distinguir ambos"]
+    L --> F["Frases y partes · pendiente"]
+    ROOT --> E["4 · Preparar entrada y salida · pendiente"]
+    ROOT --> M["5 · Sincronizar y mezclar · pendiente"]
+    ROOT --> H["6 · Practicar en tu FLX4 · pendiente"]
+    ROOT --> X["7 · Construir una sesión · pendiente"]
 ```
 
-Las etapas 3–5 son dirección futura, no autorización para ampliar el alcance
+Los niveles 4–7 son dirección futura, no autorización para ampliar el alcance
 actual. El detalle se concretará antes de construir cada una. El análisis
 automático de biblioteca queda fuera de este recorrido pedagógico inmediato.
 Los conteos monótonos de 8/16/32 no vuelven al recorrido recomendado.
 
 ## Seguimiento compartido
+
+### Siete niveles — navegación local, 10 octubre
+
+- [x] Inicio con siete niveles; cada nivel abre sus lecciones.
+- [x] Reubicar Pulso, Cuenta y Encuentra el 1 dentro del nivel 2.
+- [x] Enlazar solo prácticas reales y conservar enlaces anteriores y progreso.
+- [ ] Validación en iPhone y publicación; los niveles 4–7 siguen sin prácticas.
+
+Lo que sigue es historial de iteraciones anteriores. Sus numeraciones de
+«nivel» para Pulso/Cuenta/El 1 no describen la navegación actual.
 
 ### Recuperar el entrenador — aprobado el 9 octubre, en revisión local
 

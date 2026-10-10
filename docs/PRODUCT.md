@@ -10,6 +10,21 @@ BlueClue convierte esos conceptos en práctica guiada.
 
 ## Qué debe enseñar
 
+El curso se organiza en **siete niveles**, cada uno con lecciones propias:
+
+1. Conocer los sonidos.
+2. Seguir el ritmo y encontrar el 1 (Pulso, Cuenta y Encuentra el 1 son lecciones).
+3. Reconocer cambios, frases y partes de una canción.
+4. Preparar una entrada y una salida.
+5. Sincronizar y mezclar dos canciones.
+6. Practicar en tu FLX4.
+7. Construir una sesión.
+
+Actualmente hay prácticas parciales en los niveles 1–3. Los niveles 4–7 son
+recorrido previsto, no habilidades impartidas por la aplicación. Finalizar el
+recorrido debería permitir escuchar y planear una sesión sencilla y practicarla
+en una controladora; la soltura se adquiere pinchando, no por completar pantallas.
+
 El recorrido de aprendizaje es:
 
 ```text

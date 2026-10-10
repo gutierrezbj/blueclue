@@ -130,6 +130,20 @@ Añade pruebas del motor de scoring:
   no dominado, y nunca cambia automáticamente el ejercicio que se retoma.
 - Consultar `SRS-BRIDGE.md` al empezar y actualizarlo al cerrar sesión.
 
+## Navegación vigente (decisión de Juan, 2026-10-10)
+
+- Inicio presenta siete niveles del aprendizaje DJ: sonidos; ritmo y el 1;
+  cambios, frases y partes; entrada y salida; sincronización y mezcla;
+  práctica en la FLX4; y construir una sesión.
+- Pulso, Cuenta y Encuentra el 1 son **lecciones del nivel 2**, no niveles
+  independientes. Teach / Assist / Train y velocidad son opciones de práctica.
+- Los niveles 1–3 enlazan únicamente a ejercicios existentes. Los niveles
+  4–7 muestran el recorrido previsto sin simular prácticas, completados ni
+  certificaciones. Se concretarán antes de construirlos.
+- Esta decisión sustituye solo la regla de cinco tarjetas y la numeración de
+  ritmo del apartado anterior; se conservan sus reglas de accesibilidad,
+  continuidad, honestidad pedagógica y audio verificado.
+
 ## Calidad
 
 - TypeScript estricto

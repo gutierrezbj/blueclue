@@ -5,7 +5,7 @@
 - **Repo**: https://github.com/gutierrezbj/blueclue
 - **Branch activo**: main
 - **Estado**: Produccion (web publica, perfil ligero ADR-001)
-- **Sprint actual**: recuperar el entrenador con cinco tarjetas aprobadas; construido y probado localmente. Produccion sigue en c58a22f, rechazada por Juan.
+- **Sprint actual**: siete niveles de aprendizaje con lecciones propias; navegación construida localmente. Producción sigue en c58a22f, rechazada por Juan.
 
 ## Que es este proyecto (2-3 lineas)
 Entrenador interactivo para aprender a pinchar desde cero: escuchar, seguir el pulso, contar 1-2-3-4, encontrar el 1 y reconocer que instrumento entra. Publico objetivo: nivel 0 absoluto. No es software DJ completo; prepara el oido para la controladora FLX4.
@@ -48,7 +48,17 @@ Entrenador interactivo para aprender a pinchar desde cero: escuchar, seguir el p
 ## Handoff — Parte de Guardia
 > Ultima actualizacion: 2026-10-10
 
-### Recuperacion del diseno aprobado
+### Navegación de siete niveles (vigente)
+- Juan aclara que Inicio debe mostrar siete niveles para aprender a pinchar.
+  Pulso, Cuenta y Encuentra el 1 son lecciones del nivel 2, no tres niveles.
+- `learningLevels.ts` define el currículo navegable; prácticas reales solo en
+  niveles 1–3. Los niveles 4–7 explican lo previsto sin botones de práctica.
+- Nuevas rutas `#aprende-nivel-1` a `#aprende-nivel-7`; las antiguas permanecen.
+  Progreso y motores de evaluación se conservan. 176 pruebas y tipos pasan.
+- Validación visual móvil, build y publicación quedan pendientes. Lo siguiente
+  en este archivo recoge decisiones históricas, no la portada vigente.
+
+### Historial: recuperación del diseño de cinco tarjetas
 - Juan aprueba el boceto de cinco tarjetas («yessssss»): sonidos, cambios,
   pulso, cuenta y el 1. Sustituye la portada de etapas y «N de 7».
 - Construido en `main`: tarjetas grandes, explicacion breve y acceso a la

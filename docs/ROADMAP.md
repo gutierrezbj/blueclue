@@ -1,5 +1,20 @@
 # Roadmap — BlueClue
 
+## Recorrido del alumno (decisión vigente, 10 de octubre de 2026)
+
+| Nivel | Qué aprende | Estado de las prácticas |
+| --- | --- | --- |
+| 1 · Conocer los sonidos | Distinguir elementos al oído | Primer ejercicio construido; resto previsto |
+| 2 · Seguir el ritmo y encontrar el 1 | Pulso, cuenta, downbeat | Tres lecciones construidas |
+| 3 · Reconocer cambios, frases y partes | Oír entradas de instrumentos y estructura | Tres escuchas construidas; frases y partes pendientes |
+| 4 · Preparar entrada y salida | Elegir puntos musicales | Recorrido definido; prácticas pendientes |
+| 5 · Sincronizar y mezclar | Oír alineación y transición | Recorrido definido; prácticas pendientes |
+| 6 · Practicar en tu FLX4 | Aplicar oído y decisiones en el equipo | Recorrido definido; prácticas pendientes |
+| 7 · Construir una sesión | Seleccionar, grabar y revisar | Recorrido definido; prácticas pendientes |
+
+Las versiones técnicas que siguen son hitos de construcción, **no otros
+niveles para el alumno**. No introducir cabina de dos decks por esta navegación.
+
 ## V0.1 — Beat Trainer
 
 Objetivo:
