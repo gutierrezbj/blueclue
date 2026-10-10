@@ -55,8 +55,14 @@ Entrenador interactivo para aprender a pinchar desde cero: escuchar, seguir el p
   niveles 1–3. Los niveles 4–7 explican lo previsto sin botones de práctica.
 - Nuevas rutas `#aprende-nivel-1` a `#aprende-nivel-7`; las antiguas permanecen.
   Progreso y motores de evaluación se conservan. 176 pruebas y tipos pasan.
-- Validación visual móvil, build y publicación quedan pendientes. Lo siguiente
-  en este archivo recoge decisiones históricas, no la portada vigente.
+- Validación visual a 320/375/1280 px, 176 pruebas, TypeScript y build público
+  aislado correctos. Vista previa en `http://127.0.0.1:3007/#inicio`.
+- Juan aprueba la vista previa («genial, seguimos»). Los cuatro commits hasta
+  `654add2` están en `origin/main`; el archivo de release público está preparado
+  en `.local/blueclue-654add2.tar`, sin `.local` ni piloto privado dentro.
+- Publicación pendiente de la verificación adicional de Tailscale SSH. La web
+  pública conserva `c58a22f`; no se ha modificado el VPS. Lo siguiente en este
+  archivo recoge decisiones históricas, no la portada vigente.
 
 ### Historial: recuperación del diseño de cinco tarjetas
 - Juan aprueba el boceto de cinco tarjetas («yessssss»): sonidos, cambios,
