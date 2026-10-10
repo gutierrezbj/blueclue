@@ -2,22 +2,21 @@ export type GuidedStepId = "sounds" | "bass" | "percussion" | "choice" | "pulse"
 export type StageId = "ear" | "listen" | "rhythm";
 export type GuidedStep = { id: GuidedStepId; title: string; hash: string; hint: string; stage: StageId };
 
-/** The recommended order: hear the sounds, recognise what enters, then keep time. */
 export const guidedPath: readonly GuidedStep[] = [
   { id: "sounds", stage: "ear", title: "Los cuatro sonidos", hash: "#sonidos", hint: "Bombo, caja, charles y bajo. Solo escuchar y elegir." },
-  { id: "bass", stage: "listen", title: "El bajo", hash: "#escucha-el-bajo", hint: "Reconoce cuándo entra el bajo." },
-  { id: "percussion", stage: "listen", title: "La percusión", hash: "#escucha-la-percusion", hint: "Reconoce cuándo entra la batería." },
-  { id: "choice", stage: "listen", title: "¿Bajo o batería?", hash: "#bajo-o-bateria", hint: "Di cuál de los dos acaba de entrar." },
   { id: "pulse", stage: "rhythm", title: "Sigue el pulso", hash: "#nivel-1", hint: "Toca el botón con cada golpe, como con el pie." },
   { id: "count", stage: "rhythm", title: "Cuenta 1-2-3-4", hash: "#nivel-2", hint: "Toca solo al volver al 1." },
-  { id: "downbeat", stage: "rhythm", title: "Encuentra el 1", hash: "#nivel-3", hint: "Sin marcas. Cuenta por dentro." }
+  { id: "downbeat", stage: "rhythm", title: "Encuentra el 1", hash: "#nivel-3", hint: "Sin marcas. Cuenta por dentro." },
+  { id: "bass", stage: "listen", title: "El bajo", hash: "#escucha-el-bajo", hint: "Reconoce cuándo entra el bajo." },
+  { id: "percussion", stage: "listen", title: "La percusión", hash: "#escucha-la-percusion", hint: "Reconoce cuándo entra la batería." },
+  { id: "choice", stage: "listen", title: "¿Bajo o batería?", hash: "#bajo-o-bateria", hint: "Di cuál de los dos acaba de entrar." }
 ];
 
 export type Stage = { id: StageId; title: string };
 export const stages: readonly Stage[] = [
-  { id: "ear", title: "Oído" },
-  { id: "listen", title: "Escucha" },
-  { id: "rhythm", title: "Ritmo" }
+  { id: "ear", title: "Nivel 1 · Sonidos" },
+  { id: "rhythm", title: "Nivel 2 · Ritmo" },
+  { id: "listen", title: "Nivel 3 · Canción" }
 ];
 
 export const GUIDED_PATH_STORAGE_KEY = "blueclue-path-v1";

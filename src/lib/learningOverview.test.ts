@@ -4,8 +4,8 @@ import { guidedPath, stepForHash } from "./guidedPath.ts";
 import { getLearningOverview, learningOverviews, overviewForHash } from "./learningOverview.ts";
 import { readAppRoute } from "./navigation.ts";
 
-test("five cards keep listening before the three existing rhythm levels", () => {
-  assert.deepEqual(learningOverviews.map(overview => overview.id), ["sounds", "listening", "pulse", "count", "downbeat"]);
+test("existing introductions follow the seven-level course order", () => {
+  assert.deepEqual(learningOverviews.map(overview => overview.id), ["sounds", "pulse", "count", "downbeat", "listening"]);
   assert.deepEqual(learningOverviews.flatMap(overview => overview.steps), guidedPath.map(step => step.id));
   assert.equal(new Set(learningOverviews.map(overview => overview.hash)).size, 5);
 });

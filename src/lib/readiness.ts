@@ -80,9 +80,9 @@ export function assessReadiness(history: RoundHistory, slot: RoundSlot, latest: 
       : isGoodRound(latest) ? `Buena ronda. ${goodRounds} de ${GOOD_ROUNDS_TO_ADVANCE} para avanzar: otra vez.` : "Vas bien. Otra vez, sin prisa.";
     return { verdict: "repeat", message, goodRounds, next };
   }
-  if (!next) return { verdict: "done", message: "Buenas rondas en este nivel y velocidad. Prueba otra pista o sigue con Escucha el cambio.", goodRounds, next };
+  if (!next) return { verdict: "done", message: "Buenas rondas en esta lección y velocidad. Prueba otra pista o explora el siguiente nivel.", goodRounds, next };
   const modeNames: Record<TrainingMode, string> = { teach: "Teach", assist: "Assist", train: "Train" };
-  const message = next.moduleId !== slot.moduleId ? `Ya puedes pasar al siguiente nivel: ${learningModules.find(module => module.id === next.moduleId)!.title}.`
+  const message = next.moduleId !== slot.moduleId ? `Puedes probar la siguiente lección: ${learningModules.find(module => module.id === next.moduleId)!.title}.`
     : next.speed !== slot.speed ? `Ya puedes probar más rápido: ${speedLabels[next.speed]}, otra vez con ${modeNames[next.mode]}.`
     : `Ya puedes probar con menos ayuda: ${modeNames[next.mode]}.`;
   return { verdict: "advance", message, goodRounds, next };

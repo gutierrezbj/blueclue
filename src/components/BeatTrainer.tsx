@@ -6,7 +6,7 @@ import { RoundSummary } from "./RoundSummary";
 import { PocketMode } from "./PocketMode";
 import { ChallengePanel } from "./ChallengePanel";
 import { enterPractice } from "@/lib/navigation";
-import { GUIDED_PATH_STORAGE_KEY, serializeGuidedPathState, stepLabel } from "@/lib/guidedPath";
+import { GUIDED_PATH_STORAGE_KEY, serializeGuidedPathState } from "@/lib/guidedPath";
 import { markStepDone } from "@/lib/pathProgress";
 import { completeChallenge, readChallengeRecords, saveChallengeRecord, type ChallengeRecord } from "@/lib/challenge";
 import type { OfflinePack } from "@/lib/offlineTypes";
@@ -481,7 +481,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack, i
       </header>
 
       <section className="mobile-only mobile-context" aria-label="Ejercicio actual">
-        <div className="level-label">{stepLabel(moduleId)} · Nivel {levelNumber}</div>
+        <div className="level-label">Nivel 2 · Ritmo · Lección {levelNumber}</div>
         <h1 ref={mobileHeadingRef} tabIndex={-1}>{mobileScreen === "settings" ? "Tu ejercicio" : mobileScreen === "summary" ? "Tu ronda" : lesson.title}</h1>
         <p>Pista {trackIndex + 1}/{tracks.length} · {track.title}</p>
         <span>{isChallenge ? "Challenge · Train · tú solo" : `${modeLabels[mode].split(" · ")[0]} · ${modeTaglines[mode]}`} · {speedLabels[playbackSpeed]}</span>
@@ -502,7 +502,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack, i
 
       <section className="journey-card" aria-labelledby="journey-heading">
         <div className="journey-overview">
-          <span className="field-label">PISTA {trackIndex + 1} DE {tracks.length} · NIVEL {levelNumber} DE 3 · {levelName.toUpperCase()}</span>
+          <span className="field-label">PISTA {trackIndex + 1} DE {tracks.length} · NIVEL 2 · LECCIÓN {levelNumber} DE 3 · {levelName.toUpperCase()}</span>
           <h2 id="journey-heading" ref={journeyHeadingRef} tabIndex={-1}>{lesson.title}</h2>
           <p>{lesson.instruction}</p>
           {resumed && <p>Retomamos tu ejercicio y su velocidad, sin arrancar la música.</p>}
@@ -515,8 +515,8 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack, i
           </select>
           <p className="save-notice" role="status">{storageUnavailable ? "No podemos guardar en este navegador. Puedes practicar, pero la sesión no se conservará al cerrar." : "Tu punto de práctica se guarda en este navegador."}</p>
         </div>
-        <nav className="module-selector" aria-label="Niveles de aprendizaje">
-          {learningModules.map((item, index) => <button key={item.id} type="button" className={moduleId === item.id ? "module-button active" : "module-button"} aria-current={moduleId === item.id ? "step" : undefined} disabled={!hydrated} onClick={() => navigatePractice({ trackId, moduleId: item.id, mode: item.defaultMode })}><small>NIVEL {index + 1}</small>{item.title}</button>)}
+        <nav className="module-selector" aria-label="Lecciones de ritmo">
+          {learningModules.map((item, index) => <button key={item.id} type="button" className={moduleId === item.id ? "module-button active" : "module-button"} aria-current={moduleId === item.id ? "step" : undefined} disabled={!hydrated} onClick={() => navigatePractice({ trackId, moduleId: item.id, mode: item.defaultMode })}><small>LECCIÓN {index + 1}</small>{item.title}</button>)}
         </nav>
         <a className="phrase-entry" href="#inicio" onClick={leavePractice}>Volver a Inicio</a>
       </section>
@@ -535,10 +535,10 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack, i
           <fieldset className="speed-control" disabled={!player.isReady}>
             <legend>VELOCIDAD PARA APRENDER</legend>
             <div>{playbackSpeeds.map((speed) => <button key={speed} type="button" aria-pressed={playbackSpeed === speed} onClick={() => changeSpeed(speed)}>{speedLabels[speed]}<small>{Math.round(speed * 100)} %</small></button>)}</div>
-            <p>{speedLabels[playbackSpeed]} · {practiceBpm} golpes por minuto. Puedes bajar el ritmo en cualquier nivel. Cambiarlo pausa sin perder tu sitio.</p>
+            <p>{speedLabels[playbackSpeed]} · {practiceBpm} golpes por minuto. Puedes bajar el ritmo en cualquier lección. Cambiarlo pausa sin perder tu sitio.</p>
           </fieldset>
 
-          <div className="mode-heading"><span className="field-label">NIVEL DE AYUDA</span><span>De la vista al oído</span></div>
+          <div className="mode-heading"><span className="field-label">AYUDAS</span><span>De la vista al oído</span></div>
           <div className="mode-selector" role="group" aria-label="Modo de entrenamiento">
             {practiceModes.map((item, index) => (
               <button key={item} type="button" className={mode === item ? "mode-button active" : "mode-button"} disabled={!hydrated} onClick={() => navigatePractice({ trackId, moduleId, mode: item })} aria-pressed={mode === item} aria-label={modeLabels[item]}>
@@ -614,7 +614,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack, i
                   {isReviewing && <small className="feedback-explanation">Observa la marca {isPulseExercise ? "del pulso" : "del 1"}. «Volver a practicar» repite el fragmento sin mostrar la respuesta.</small>}
                 </>
               ) : (
-                <><span className="field-label">{hasEnded ? "FIN DEL FRAGMENTO" : "ESCUCHA · MARCA · REPITE"}</span><p className="feedback-explanation">{hasEnded ? "Repite este ejercicio o continúa al siguiente módulo cuando te sientas cómodo." : !practiceEntry && player.isReady ? "Este fragmento es demasiado corto para preparar la escucha. Elige otra pista." : isListening ? listeningInstruction : lesson.instruction}</p></>
+                <><span className="field-label">{hasEnded ? "FIN DEL FRAGMENTO" : "ESCUCHA · MARCA · REPITE"}</span><p className="feedback-explanation">{hasEnded ? "Repite este ejercicio o continúa con otra lección cuando te sientas cómodo." : !practiceEntry && player.isReady ? "Este fragmento es demasiado corto para preparar la escucha. Elige otra pista." : isListening ? listeningInstruction : lesson.instruction}</p></>
               )}
             </div>
             <button type="button" className="replay-button desktop-only" disabled={!round || isReviewing} onClick={finishRound}>Ver resumen de esta ronda</button>
@@ -626,7 +626,7 @@ export function BeatTrainer({ tracks, catalogKind, catalogNotice, offlinePack, i
             </nav>}
             {!isChallenge && <p className="journey-hint">{lesson.readiness} Avanzar es voluntario, no una certificación.</p>}
           </div>
-          <div className="practice-footer">{isReferencePending ? <p className="provisional-summary">PRÁCTICA SIN NOTA<br />Las referencias están por validar. No significa que tengas cero aciertos.</p> : <><span>ESTE MÓDULO · {Math.round(playbackSpeed * 100)} %</span><strong>{accurateCount} / {trackAttempts.length}</strong><span>CLAVADOS O CERCA</span></>}</div>
+          <div className="practice-footer">{isReferencePending ? <p className="provisional-summary">PRÁCTICA SIN NOTA<br />Las referencias están por validar. No significa que tengas cero aciertos.</p> : <><span>ESTA LECCIÓN · {Math.round(playbackSpeed * 100)} %</span><strong>{accurateCount} / {trackAttempts.length}</strong><span>CLAVADOS O CERCA</span></>}</div>
         </aside>
       </div>
       <nav className="mobile-only mobile-actions" aria-label="Acciones del ejercicio">

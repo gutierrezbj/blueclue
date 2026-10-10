@@ -4,12 +4,12 @@ import { entryStep, guidedPath, nextGuidedStep, readGuidedPathState, serializeGu
 import { enterPractice, readAppRoute } from "./navigation.ts";
 import { getPracticeNeighbor, type PracticeSession } from "./practice.ts";
 
-test("the path goes ear, listening, then rhythm", () => {
-  assert.deepEqual(guidedPath.map(step => step.id), ["sounds", "bass", "percussion", "choice", "pulse", "count", "downbeat"]);
+test("the path follows course levels: sounds, rhythm, then song listening", () => {
+  assert.deepEqual(guidedPath.map(step => step.id), ["sounds", "pulse", "count", "downbeat", "bass", "percussion", "choice"]);
   assert.equal(guidedPath[0].hash, "#sonidos");
-  assert.equal(nextGuidedStep("sounds")?.id, "bass");
-  assert.equal(nextGuidedStep("choice")?.id, "pulse");
-  assert.equal(nextGuidedStep("downbeat"), null);
+  assert.equal(nextGuidedStep("sounds")?.id, "pulse");
+  assert.equal(nextGuidedStep("downbeat")?.id, "bass");
+  assert.equal(nextGuidedStep("choice"), null);
 });
 
 test("every path hash resolves to its step and foreign hashes do not", () => {
@@ -55,9 +55,9 @@ import { addDoneStep, legacyDoneSteps, readDoneSteps, stages, stepLabel, type Gu
 const opened = (stepId: GuidedStepId) => ({ stepId, updatedAt: "" });
 
 test("practice labels describe the skill without competing step numbering", () => {
-  assert.equal(stepLabel("sounds"), "Oído");
-  assert.equal(stepLabel("choice"), "Escucha");
-  assert.equal(stepLabel("downbeat"), "Ritmo");
+  assert.equal(stepLabel("sounds"), "Nivel 1 · Sonidos");
+  assert.equal(stepLabel("choice"), "Nivel 3 · Canción");
+  assert.equal(stepLabel("downbeat"), "Nivel 2 · Ritmo");
   for (const step of guidedPath) assert.ok(stages.some(stage => stage.id === step.stage));
 });
 
@@ -79,7 +79,7 @@ test("results saved before the done list count as done", () => {
     ["blueclue-listening-percussion-listening-v1", null],
     ["blueclue-rounds-v2", rounds],
     ["blueclue-rounds-v1", rounds]
-  ]), ["sounds", "bass", "choice", "count"]);
+  ]), ["sounds", "count", "bass", "choice"]);
   assert.deepEqual(legacyDoneSteps([["blueclue-rounds-v2", "{broken"]]), []);
 });
 

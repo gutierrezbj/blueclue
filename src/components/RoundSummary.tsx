@@ -25,7 +25,7 @@ export function RoundSummary({ summary, moduleId, provisional, readiness, onRevi
       </dl>
       {summary.extra > 0 && <p>{summary.extra} pulsaciones repetidas: se conserva la primera, sin sumar aciertos extra.</p>}
       {summary.offTarget > 0 && <p>{summary.offTarget} toques lejos del objetivo: no ocupan ni bloquean el siguiente. No se cuentan como repetidos.</p>}
-      {(summary.extra > summary.total || summary.offTarget > summary.total) && <p>{moduleId === "pulse" ? "En este nivel acompaña cada pulso con un solo toque. Escucha el espacio entre golpes y evita tocar varias veces en el mismo." : "Si buscas el 1, pulsa una vez por grupo: 1, deja pasar 2-3-4. Para tocar todos los golpes, elige Nivel 1 · Sigue el pulso."}</p>}
+      {(summary.extra > summary.total || summary.offTarget > summary.total) && <p>{moduleId === "pulse" ? "En esta lección acompaña cada pulso con un solo toque. Escucha el espacio entre golpes y evita tocar varias veces en el mismo." : "Si buscas el 1, pulsa una vez por grupo: 1, deja pasar 2-3-4. Para tocar todos los golpes, elige Sigue el pulso."}</p>}
       {summary.total === 0 ? <p>Todavía no has escuchado una oportunidad completa. Continúa después de la preparación.</p> : (
         <details>
           <summary>Ver dónde acertaste o te costó · pulsa para escuchar</summary>
