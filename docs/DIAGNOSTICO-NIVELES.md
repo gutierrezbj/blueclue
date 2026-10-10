@@ -1,6 +1,10 @@
 # Diagnóstico por nivel — 9 de octubre de 2026
 
-Documento de traspaso para el agente constructor. No es una especificación
+Actualización: Juan aprueba el boceto de cinco tarjetas tras este diagnóstico.
+El alcance vigente está en [NAVEGACION.md](NAVEGACION.md). No se aprueban por ello
+todos los cambios de progresión propuestos aquí.
+
+Documento histórico de traspaso para el agente constructor. No es una especificación
 aprobada: recoge la reacción de Juan a la navegación desplegada (`c58a22f`) y el
 análisis de cada nivel. Nada de esto está construido.
 

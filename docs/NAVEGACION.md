@@ -1,4 +1,33 @@
-# Navegación — un solo recorrido
+# Navegación — tarjetas para practicar
+
+## Vigente: propuesta aprobada el 9 de octubre de 2026
+
+Juan aprueba el boceto «Aprende a escuchar. Empieza a pinchar.» tras revisar
+y rechazar la portada desplegada en `c58a22f`. Esta decisión sustituye las
+reglas de portada descritas en el historial inferior.
+
+- Cinco tarjetas grandes: Conoce los sonidos, Escucha el cambio, Sigue el pulso,
+  Cuenta 1-2-3-4 y Encuentra el 1. Sin acordeones, «N de 7» ni «Próximamente».
+- Cada tarjeta abre una explicación breve del objetivo y su utilidad musical.
+  Sonidos y ritmo tienen una acción de práctica; escucha ofrece sus tres
+  ejercicios. Sin autoplay ni cambios en el punto de práctica al leer.
+- Los niveles de ritmo siguen siendo 1/pulso/turquesa, 2/cuenta/azul y
+  3/el 1/negro y amarillo. Ayudas y velocidad no cambian esos colores.
+- La última práctica se identifica en su tarjeta, sin duplicar el acceso.
+  Se retoma aunque ya se haya completado una ronda; no se salta a otra ni
+  a Challenge por haber terminado todos los ejercicios.
+- «Ya practicado» no significa «dominado». Las recomendaciones y puntuaciones
+  siguen en sus motores; no cambian umbrales, música, récords ni almacenamiento.
+- Las rutas anteriores se conservan. Las introducciones nuevas son
+  `#aprender-sonidos`, `#aprender-pulso`, `#aprender-cuenta`, `#aprender-el-1`.
+  `#escucha-el-cambio` sigue siendo la entrada a las tres escuchas.
+- La práctica móvil permanece limpia: explicación antes de entrar, no sobre
+  el TAP. Challenge queda al final de la práctica, no en el inicio.
+
+La aplicación sigue preparando habilidades básicas. El salto a canciones
+reales verificadas y a la FLX4 no está construido por esta modificación.
+
+## Historial: navegación sustituida de `c58a22f`
 
 Fecha: 9 de octubre de 2026. Decisiones de Juan tras probar «Empieza aquí» en
 su iPhone: la portada estaba revuelta («Paso 0 de cuántos», «¿qué mapa?», dos

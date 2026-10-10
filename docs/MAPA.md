@@ -37,6 +37,16 @@ Los conteos monótonos de 8/16/32 no vuelven al recorrido recomendado.
 
 ## Seguimiento compartido
 
+### Recuperar el entrenador — aprobado el 9 octubre, en revisión local
+
+- [x] Boceto de cinco tarjetas aprobado por Juan.
+- [x] Objetivo y utilidad musical antes de cada práctica; motores intactos.
+- [x] Retomar sin saltar ejercicios por haber terminado una ronda.
+- [x] Retirar «N de 7», acordeones y futuros deshabilitados de la portada.
+- [ ] Prueba del nuevo recorrido por Juan en iPhone y publicación.
+
+La sección siguiente conserva el historial de la navegación rechazada.
+
 ### Navegación — un solo recorrido (desplegada c58a22f, 9 octubre)
 
 Decidido por Juan: Oído → Escucha → Ritmo, pasos «N de 7», un paso de canción

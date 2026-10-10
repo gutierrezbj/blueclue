@@ -5,7 +5,7 @@
 - **Repo**: https://github.com/gutierrezbj/blueclue
 - **Branch activo**: main
 - **Estado**: Produccion (web publica, perfil ligero ADR-001)
-- **Sprint actual**: Navegacion de un solo recorrido desplegada (c58a22f); siguiente por acordar (musica real verificada por oido o puente a la FLX4)
+- **Sprint actual**: recuperar el entrenador con cinco tarjetas aprobadas; construido y probado localmente. Produccion sigue en c58a22f, rechazada por Juan.
 
 ## Que es este proyecto (2-3 lineas)
 Entrenador interactivo para aprender a pinchar desde cero: escuchar, seguir el pulso, contar 1-2-3-4, encontrar el 1 y reconocer que instrumento entra. Publico objetivo: nivel 0 absoluto. No es software DJ completo; prepara el oido para la controladora FLX4.
@@ -46,7 +46,24 @@ Entrenador interactivo para aprender a pinchar desde cero: escuchar, seguir el p
 - Catalogo de infraestructura (offset +280): https://app.notion.com/p/3217981f08ef81828e31edfcc9b78414
 
 ## Handoff — Parte de Guardia
-> Ultima actualizacion: 2026-10-09
+> Ultima actualizacion: 2026-10-10
+
+### Recuperacion del diseno aprobado
+- Juan aprueba el boceto de cinco tarjetas («yessssss»): sonidos, cambios,
+  pulso, cuenta y el 1. Sustituye la portada de etapas y «N de 7».
+- Construido en `main`: tarjetas grandes, explicacion breve y acceso a la
+  practica. No se cambia audio, scoring, ayudas, velocidades ni records.
+- La ultima practica sigue siendo el punto de retorno aunque haya una ronda
+  terminada; no hay salto automatico ni estado «todo dominado». Los datos de
+  rondas anteriores se conservan como practica, no como certificacion.
+- `learningOverview.ts` concentra las tarjetas y objetivos; las nuevas rutas
+  de introduccion no montan reproductor ni actualizan la ultima practica.
+- 174 pruebas pasan, TypeScript y build publico aislado correctos. Navegacion
+  comprobada a 320/375/1280 px sin overflow ni autoplay; restauracion de
+  nivel 3/Train/80 %/19,5 s pausada, historial del navegador y storage bloqueado.
+- Vista previa: `http://127.0.0.1:3007/#inicio`, desde `.local/cards-preview`
+  (solo archivos publicos). Contiene un enlace `node_modules` al repo: NO borrar
+  recursivamente su destino. No se ha desplegado ni repetido la prueba offline.
 
 ### Que se hizo en la ultima sesion
 - Auditoria del repo y especificacion del hito nivel 0 en `docs/EMPIEZA-AQUI.md` (2026-10-08).
@@ -59,8 +76,8 @@ Entrenador interactivo para aprender a pinchar desde cero: escuchar, seguir el p
 - Merge a `main` (c58a22f) y despliegue: imagen `blueclue:c58a22f`, 172/174 tests (2 privados omitidos), HTTPS ok/demo/c58a22f. Registro en OPERATIONS (74403d8) y Notion.
 
 ### Que quedo pendiente
-- [ ] **PRIORIDAD — leer `docs/DIAGNOSTICO-NIVELES.md`.** Juan rechaza la navegacion desplegada `c58a22f` (etapas, «N de 7», «Tu recorrido»): confusa y sin plan de aprendizaje visible. Quiere la portada con el estilo de `#sonidos` (una tarjeta por nivel) y que cada nivel lleve a un modulo con que aprendes, ejercicio guiado y resultado. Propuesta escrita, NO aprobada: preguntar y ensenar boceto antes de construir. Juan pasa el proyecto al agente constructor.
-- [ ] Juan: probar c58a22f en el iPhone (recargar o actualizar la descarga offline); revisar sobre todo el triangulo de reproduccion del paso 5, unico glifo que queda (forzado a texto con U+FE0E).
+- [ ] **PRIORIDAD — validar y publicar las tarjetas aprobadas**, no volver a la portada rechazada de c58a22f. Ver `docs/NAVEGACION.md` y probar la vista previa local con Juan antes del despliegue.
+- [ ] Tras publicar: probar el recorrido y actualizar la descarga en iPhone. La revision local no certifica Safari fisico ni la actualizacion offline.
 - [ ] Juan: tres medidas en `#latencia` con sus auriculares; anotar medianas antes de plantear compensacion.
 - [ ] Juan: escuchar las 7 variantes restantes (`node scripts/create-listening-variants.mjs` genera en `.local/variants/`; `--publish <id>` publica las aceptadas).
 - [ ] Criterio del hito sin validar: «Juan reconoce lo aprendido en una muestra no practicada».
@@ -72,8 +89,10 @@ Entrenador interactivo para aprender a pinchar desde cero: escuchar, seguir el p
 - Ronda buena = 8+ oportunidades y (clavadas+cerca)/(oportunidades+repetidas+fuera) >= 80 %; solo rondas completas desde 0:00; clave `blueclue-rounds-v2`.
 - La latencia se mide, no se corrige: `#latencia` usa Web Audio y el ejercicio MediaElement, su numero no sirve directamente para el scoring.
 - Variantes de escucha solo se publican tras escucha de Juan.
-- Recorrido (2026-10-09): Oido (paso 1) → Escucha (2-4) → Ritmo (5-7); cada etapa termina con «Ahora en una cancion de verdad» en gris hasta tener pistas verificadas; etapas 4-6 (Cancion, Mezcla, FLX4) en gris hasta construirse.
-- Paso «hecho» = completado una vez, no aprobado; el boton de la portada lleva al ultimo paso abierto si no esta hecho.
+- Orden conservado: sonidos → cambios → pulso → cuenta → el 1. Sin futuras
+  etapas deshabilitadas ni «N de 7» en la UI; el futuro queda en el mapa documental.
+- Ronda terminada = practicado, no dominado. Retomar no salta a otro ejercicio
+  por haberlo practicado. Challenge permanece al final de la practica.
 
 ### Contexto importante
 - El agente constructor empuja a la MISMA rama de trabajo; comparar siempre `origin/<rama>` y no solo `main`.

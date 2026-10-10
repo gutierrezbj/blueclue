@@ -41,10 +41,11 @@ Incluye:
 
 ### Empieza aquí — entrada para nivel 0
 
-La portada ofrece un botón grande **Empieza aquí** (o **Seguir donde lo dejé**)
-que recorre, en orden: Paso 0 · Conoce los sonidos (`#sonidos`), los tres niveles
-de Marca el 1 y las tres prácticas de Escucha el cambio. Los bloques siguen debajo
-como mapa. Teach, Assist y Train conservan su nombre y llevan una frase: «te lo
+La portada ofrece cinco tarjetas grandes: **Conoce los sonidos**, **Escucha el
+cambio**, **Sigue el pulso**, **Cuenta 1-2-3-4** y **Encuentra el 1**. Cada una
+explica qué entrenas, para qué sirve al pinchar y cómo practicar. No hay etapas
+futuras deshabilitadas ni numeración «N de 7». Los tres niveles de ritmo conservan
+sus números y colores. Teach, Assist y Train conservan su nombre y llevan una frase: «te lo
 enseño todo», «te quito pistas», «tú solo». Tras cada ronda completa, una frase
 dice si repetir o avanzar; nada se bloquea. `#latencia` es una pantalla oculta
 que mide el retraso del toque y no corrige nada. Las variantes de escucha se
@@ -52,12 +53,15 @@ generan con `node scripts/create-listening-variants.mjs` en `.local/variants/`
 y solo se publican las que Juan acepta (`--publish <id>`).
 Especificación: [docs/EMPIEZA-AQUI.md](docs/EMPIEZA-AQUI.md).
 
-### Inicio por bloques
+### Inicio y continuidad
 
-La portada ofrece dos botones grandes: **Marca el 1** → elegir uno de los tres
-niveles, y **Escucha el cambio** → bajo, percusión y distinguir ambos. No hay ejercicios ficticios,
-bloqueos ni audio al navegar. «Inicio» vuelve a los bloques; «Niveles» sale de
-la práctica de ritmo. Los enlaces anteriores siguen funcionando.
+La tarjeta de la última práctica queda identificada sin duplicar accesos.
+Terminar una ronda no la salta automáticamente ni se presenta como dominio:
+el alumno elige repetir o avanzar. **Escucha el cambio** conserva sus tres
+ejercicios: bajo, percusión y distinguir ambos. «Inicio» vuelve a las cinco
+tarjetas y los enlaces anteriores siguen funcionando. Las explicaciones no
+modifican la última práctica ni reproducen audio. Detalle en
+[navegación vigente](docs/NAVEGACION.md).
 Entrar en el mismo nivel recupera pista, ayudas, velocidad y posición en pausa;
 elegir otro empieza en Teach/Despacio desde cero, conservando pista e historial.
 Dentro del ejercicio siguen disponibles Ajustes, recorrido guiado y Challenge.

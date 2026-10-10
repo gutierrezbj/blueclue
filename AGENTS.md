@@ -122,9 +122,12 @@ Añade pruebas del motor de scoring:
 - Sin símbolos ni emojis en la interfaz (ni ♪, ▶, ↺, →, ←): texto.
 - Nada se bloquea; nada se da por aprendido por aceptar un sonido.
 - Las muestras de escucha solo se publican tras escucharlas Juan.
-- Un solo recorrido (2026-10-09, `docs/NAVEGACION.md`): Oído → Escucha → Ritmo,
-  pasos «N de 7», etapas numeradas; lo futuro se ve en gris y no se abre.
-  Un paso nuevo se añade en `guidedPath.ts` y marca «hecho» con `markStepDone`.
+- Diseño aprobado tras rechazar `c58a22f` (2026-10-09, `docs/NAVEGACION.md`):
+  cinco tarjetas grandes, sonidos → cambios → pulso → cuenta → el 1.
+  Sin etapas, «N de 7» ni futuros deshabilitados en la portada. Los tres niveles
+  de ritmo conservan números, paletas y ayudas. Cada tarjeta explica qué se
+  practica y para qué; no inicia audio. Completar una ronda significa practicado,
+  no dominado, y nunca cambia automáticamente el ejercicio que se retoma.
 - Consultar `SRS-BRIDGE.md` al empezar y actualizarlo al cerrar sesión.
 
 ## Calidad

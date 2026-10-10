@@ -226,6 +226,23 @@ escucha de los once audios anteriores ni se certifica Safari en iPhone físico.
 
 ## Referencias técnicas
 
+### Tarjetas para practicar — revisión local, 10 octubre 2026
+
+Boceto aprobado por Juan: cinco tarjetas, explicación del objetivo antes de
+practicar, sin etapas futuras ni «N de 7». Los tres niveles conservan colores;
+velocidad, ayudas, motores y claves de progreso no cambian.
+
+Validado con Edge automatizado a 320, 375 y 1280 px: las cinco tarjetas y sus
+retornos, sin desbordamiento horizontal ni autoplay. Sesión con todos los pasos
+practicados: no salta a Challenge y recupera nivel 3/Train/80 %/19,5 s en pausa.
+Atrás del navegador vuelve a la práctica; Play y pausa responden. Con acceso a
+almacenamiento bloqueado se muestra el aviso y las tarjetas siguen disponibles.
+174 pruebas locales pasan y la compilación pública aislada funciona. No se
+repite la descarga offline ni se valida Safari físico en esta revisión.
+
+Pendiente: aceptación del recorrido en iPhone y despliegue. Vista previa local
+en `http://127.0.0.1:3007/#inicio`; no es una dirección accesible desde el iPhone.
+
 Tercer paso V0.2 (5 octubre): release `86f6473`, `/#compases-32`. Grupos de ocho
 hasta 32, una vuelta larga, misma entrada. Cinco versiones largas independientes
 de los audios anteriores. 100 tests locales; Linux 98 pasan y dos omitidos.

@@ -194,12 +194,17 @@ La última ronda de elección se guarda en `blueclue-listening-choice-listening-
 La descarga actual contiene trece audios; sigue aceptando paquetes de cinco,
 diez, once y doce. Un fallo en el nuevo audio conserva el paquete anterior completo.
 
-### Navegación (un solo recorrido)
+### Navegación por habilidades
 
-`guidedPath.ts` fija el orden Oído → Escucha → Ritmo, las etapas, las futuras
-en gris y la lógica pura de la portada (`homeState`, `stageStatus`, `stepLabel`).
-Los pasos hechos se guardan en `blueclue-path-done-v1`; `legacyDoneSteps`
-recupera como hechos los resultados guardados antes (quiz, escucha, rondas v2).
+`learningOverview.ts` define las cinco tarjetas, sus explicaciones y enlaces
+de entrada. `navigation.ts` resuelve las introducciones sin montar reproductores;
+las rutas anteriores siguen entrando directamente en los ejercicios.
+`guidedPath.ts` conserva el orden Oído → Escucha → Ritmo para la continuación
+voluntaria y `stepLabel` muestra solo el área, sin «N de 7».
+Las rondas practicadas se guardan en `blueclue-path-done-v1`; `legacyDoneSteps`
+recupera los resultados guardados antes (quiz, escucha, rondas v2).
+Estos datos no certifican dominio ni seleccionan el siguiente ejercicio:
+la tarjeta de la última práctica depende solo de `blueclue-path-v1`.
 `pathProgress.ts` es el único punto que toca `localStorage` para el recorrido;
 cada pantalla llama a `markStepDone` al completar su paso.
 
