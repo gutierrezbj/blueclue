@@ -1,9 +1,11 @@
 import type { LearningModuleId } from "./learningModules.ts";
 import type { PracticeSession } from "./practice.ts";
+import { overviewForHash, type OverviewId } from "./learningOverview.ts";
 
 export type AppRoute =
   | { screen: "home" | "rhythm" | "listening-menu" | "bass" | "percussion" | "choice" | "sounds" | "latency" }
   | { screen: "bars"; bars: 8 | 16 | 32 }
+  | { screen: "overview"; overviewId: OverviewId }
   | { screen: "practice"; moduleId?: LearningModuleId };
 
 export function readAppRoute(hash: string): AppRoute {
@@ -11,6 +13,8 @@ export function readAppRoute(hash: string): AppRoute {
   if (hash === "#latencia") return { screen: "latency" };
   if (hash === "#marca-el-1") return { screen: "rhythm" };
   if (hash === "#escucha-el-cambio") return { screen: "listening-menu" };
+  const overview = overviewForHash(hash);
+  if (overview) return { screen: "overview", overviewId: overview.id };
   if (hash === "#escucha-el-bajo") return { screen: "bass" };
   if (hash === "#escucha-la-percusion") return { screen: "percussion" };
   if (hash === "#bajo-o-bateria") return { screen: "choice" };

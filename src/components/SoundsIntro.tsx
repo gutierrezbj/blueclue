@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { nextGuidedStep, stepLabel, stepNumber, guidedPath } from "@/lib/guidedPath";
+import { nextGuidedStep, stepLabel } from "@/lib/guidedPath";
 import { markStepDone } from "@/lib/pathProgress";
 import { QUIZ_LENGTH, SOUNDS_STORAGE_KEY, answerQuiz, currentQuestion, getSoundCard, isQuizFinished, quizClosing, quizFeedback, readSavedQuiz, soundCards, startQuizRound, summarizeQuiz, type QuizRound, type SoundId } from "@/lib/soundQuiz";
 
@@ -107,7 +107,7 @@ export function SoundsIntro({ audioVersion }: { audioVersion: string }) {
         <div className="sound-cards compact">
           {soundCards.map(card => <button key={card.id} type="button" className="sound-card" onClick={() => play(card.id)}><span className="sound-card-top"><strong>{card.name}</strong><span className="sound-card-state">Oír</span></span></button>)}
         </div>
-        {summary.passed ? <a className="next-button sounds-next" href={nextStep.hash}>Siguiente paso · {stepNumber(nextStep.id)} de {guidedPath.length} · {nextStep.title}</a> : <><button type="button" className="next-button sounds-next" onClick={startQuiz}>Otra vez · 8 preguntas</button><a className="previous-button sounds-secondary" href={nextStep.hash}>Seguir igualmente · {nextStep.title}</a></>}
+        {summary.passed ? <a className="next-button sounds-next" href={nextStep.hash}>Probar ahora · {nextStep.title}</a> : <><button type="button" className="next-button sounds-next" onClick={startQuiz}>Otra vez · 8 preguntas</button><a className="previous-button sounds-secondary" href={nextStep.hash}>Seguir igualmente · {nextStep.title}</a></>}
         <button type="button" className="previous-button sounds-secondary" onClick={() => { setStage("meet"); setRound(null); }}>Volver a conocer los sonidos</button>
         {summary.passed && <button type="button" className="previous-button sounds-secondary" onClick={startQuiz}>Repetir el juego</button>}
       </section> : <>

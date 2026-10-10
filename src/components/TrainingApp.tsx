@@ -38,7 +38,7 @@ export function TrainingApp(props: Props) {
     window.addEventListener("hashchange", navigate);
     return () => window.removeEventListener("hashchange", navigate);
   }, []);
-  useEffect(() => { window.scrollTo({ top: 0, behavior: "instant" }); }, [route.screen]);
+  useEffect(() => { window.scrollTo({ top: 0, behavior: "instant" }); }, [route.screen, route.screen === "overview" ? route.overviewId : null]);
   if (route.screen === "sounds") return <SoundsIntro audioVersion={props.audioVersion} />;
   if (route.screen === "latency") return <LatencyCheck />;
   if (route.screen === "bass" || route.screen === "percussion" || route.screen === "choice") {
@@ -50,5 +50,5 @@ export function TrainingApp(props: Props) {
     return <BarCountingTrainer key={bars} bars={bars} tracks={bars === 32 ? props.longTracks : props.tracks} catalogKind={bars === 32 ? "demo" : props.catalogKind} />;
   }
   if (route.screen === "practice") return <BeatTrainer {...props} key={route.moduleId ?? "resume"} initialModule={route.moduleId} />;
-  return <LearningMenu screen={route.screen} />;
+  return <LearningMenu screen={route.screen} overviewId={route.screen === "overview" ? route.overviewId : undefined} />;
 }

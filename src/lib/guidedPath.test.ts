@@ -50,16 +50,14 @@ test("the path follows internal next, previous and next-track transitions", () =
   assert.equal(entryStep(readGuidedPathState(serializeGuidedPathState(next.moduleId))).id, "pulse");
 });
 
-import { addDoneStep, futureStages, homeState, legacyDoneSteps, readDoneSteps, stageStatus, stages, stepLabel, stepNumber, type GuidedStepId } from "./guidedPath.ts";
+import { addDoneStep, legacyDoneSteps, readDoneSteps, stages, stepLabel, type GuidedStepId } from "./guidedPath.ts";
 
 const opened = (stepId: GuidedStepId) => ({ stepId, updatedAt: "" });
 
-test("one numbering: steps 1 to 7 inside stages 1 to 3, future stages 4 to 6", () => {
-  assert.equal(stepLabel("sounds"), "Paso 1 de 7 · Oído");
-  assert.equal(stepLabel("choice"), "Paso 4 de 7 · Escucha");
-  assert.equal(stepLabel("downbeat"), "Paso 7 de 7 · Ritmo");
-  assert.deepEqual(stages.map(stage => stage.number), [1, 2, 3]);
-  assert.deepEqual(futureStages.map(stage => stage.number), [4, 5, 6]);
+test("practice labels describe the skill without competing step numbering", () => {
+  assert.equal(stepLabel("sounds"), "Oído");
+  assert.equal(stepLabel("choice"), "Escucha");
+  assert.equal(stepLabel("downbeat"), "Ritmo");
   for (const step of guidedPath) assert.ok(stages.some(stage => stage.id === step.stage));
 });
 
@@ -85,36 +83,13 @@ test("results saved before the done list count as done", () => {
   assert.deepEqual(legacyDoneSteps([["blueclue-rounds-v2", "{broken"]]), []);
 });
 
-test("home A: nothing done and at most step 1 opened says Empieza aquí at step 1", () => {
-  for (const last of [null, opened("sounds")]) {
-    const state = homeState(last, new Set());
-    assert.equal(state.kind, "first");
-    assert.ok(state.kind === "first" && state.target.id === "sounds");
+test("completing a practice never moves the resume target to another exercise or Challenge", () => {
+  for (const step of guidedPath) {
+    const practiced = readDoneSteps(addDoneStep(null, step.id));
+    assert.ok(practiced.has(step.id));
+    assert.equal(entryStep(opened(step.id)).id, step.id);
   }
-});
-
-test("home B: resumes the last opened step, or the next one not done, and offers restart only after step 1", () => {
-  let state = homeState(opened("choice"), new Set(["sounds", "bass", "percussion"]));
-  assert.ok(state.kind === "progress" && state.target.id === "choice" && state.doneCount === 3 && state.canRestart);
-  state = homeState(opened("bass"), new Set(["sounds", "bass"]));
-  assert.ok(state.kind === "progress" && state.target.id === "percussion");
-  state = homeState(opened("count"), new Set());
-  assert.ok(state.kind === "progress" && state.target.id === "count" && state.doneCount === 0);
-  state = homeState(opened("sounds"), new Set(["bass"]));
-  assert.ok(state.kind === "progress" && state.target.id === "sounds" && !state.canRestart);
-  state = homeState(opened("downbeat"), new Set(["sounds", "downbeat"]));
-  assert.ok(state.kind === "progress" && state.target.id === "bass");
-});
-
-test("home C: all seven done points to the challenge", () => {
-  const state = homeState(opened("downbeat"), new Set(guidedPath.map(step => step.id)));
-  assert.deepEqual(state, { kind: "complete", doneCount: 7 });
-});
-
-test("stage status is here for the target stage, done when all its steps are done", () => {
-  const done = new Set<GuidedStepId>(["sounds", "bass"]);
-  assert.equal(stageStatus("ear", done, "percussion"), "done");
-  assert.equal(stageStatus("listen", done, "percussion"), "here");
-  assert.equal(stageStatus("rhythm", done, "percussion"), "pending");
-  assert.equal(stepNumber("pulse"), 5);
+  const practiced = readDoneSteps(JSON.stringify(guidedPath.map(step => step.id)));
+  assert.equal(practiced.size, 7);
+  assert.equal(entryStep(opened("bass")).id, "bass");
 });

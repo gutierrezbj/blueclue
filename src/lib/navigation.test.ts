@@ -3,7 +3,7 @@ import test from "node:test";
 import { enterPractice, readAppRoute } from "./navigation.ts";
 import type { PracticeSession } from "./practice.ts";
 
-test("home contains two learning blocks with explicit level entry points", () => {
+test("existing block and exercise links remain available", () => {
   for (const hash of ["", "#inicio", "#unknown"]) assert.deepEqual(readAppRoute(hash), { screen: "home" });
   assert.deepEqual(readAppRoute("#marca-el-1"), { screen: "rhythm" });
   assert.deepEqual(readAppRoute("#escucha-el-cambio"), { screen: "listening-menu" });

@@ -5,7 +5,7 @@ import { evaluateListeningTap, getListeningFeedback, getListeningGuide, getListe
 import { listeningLessons, type ListeningInstrument } from "@/lib/listeningLessons";
 import { handleTapKeyDown } from "@/lib/tapInput";
 import { useWaveformPlayer } from "@/lib/useWaveformPlayer";
-import { guidedPath, nextGuidedStep, stepLabel, stepNumber } from "@/lib/guidedPath";
+import { nextGuidedStep, stepLabel } from "@/lib/guidedPath";
 import { markStepDone } from "@/lib/pathProgress";
 
 export function ListeningTrainer({ track, variantCount = 1, onAnother }: { track: ListeningTrack; variantCount?: number; onAnother?: () => void }) {
@@ -155,7 +155,7 @@ export function ListeningTrainer({ track, variantCount = 1, onAnother }: { track
         {summary.entries.map((entry, index) => <button type="button" className="previous-button" key={entry.time} onClick={() => review(entry.time)}>{isChoice ? `${index + 1} · ${track.changes.find(change => change.time === entry.time)?.action === "bass-in" ? "Bajo" : "Batería"}` : index === 0 ? "Primera entrada" : lesson.returnLabel} · {entry.recognized ? "Reconocida" : entry.wrong ? "Confundida" : "Sin reconocer"} · Escuchar</button>)}
         <button type="button" className="next-button" onClick={onAnother ?? restart}>{onAnother ? "Practicar otra vez · otra muestra" : "Practicar otra vez"}</button>
         {onAnother && <p className="phrase-context">«Repetir» conserva esta muestra. Hay {variantCount} muestras de esta práctica.</p>}
-        {nextStep && <a className="previous-button" href={nextStep.hash}>Siguiente paso · {stepNumber(nextStep.id)} de {guidedPath.length} · {nextStep.title}</a>}
+        {nextStep && <a className="previous-button" href={nextStep.hash}>Probar ahora · {nextStep.title}</a>}
       </>}
     </section> : stage === "listen" ? <>
       <div className="phrase-guide" role="status"><strong>{getListeningGuide(track, player.currentTime)}</strong></div>
