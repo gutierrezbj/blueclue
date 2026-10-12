@@ -5,7 +5,7 @@
 - **Repo**: https://github.com/gutierrezbj/blueclue
 - **Branch activo**: main
 - **Estado**: Produccion (web publica, perfil ligero ADR-001)
-- **Sprint actual**: siete niveles de aprendizaje con lecciones propias; navegación publicada como b9e7017. Pendiente validación de actualización en iPhone.
+- **Sprint actual**: navegación de siete niveles publicada como b9e7017; cuarta lección del nivel 2 construida solo en local, pendiente de prueba auditiva y publicación.
 
 ## Que es este proyecto (2-3 lineas)
 Entrenador interactivo para aprender a pinchar desde cero: escuchar, seguir el pulso, contar 1-2-3-4, encontrar el 1 y reconocer que instrumento entra. Publico objetivo: nivel 0 absoluto. No es software DJ completo; prepara el oido para la controladora FLX4.
@@ -49,6 +49,13 @@ Entrenador interactivo para aprender a pinchar desde cero: escuchar, seguir el p
 > Ultima actualizacion: 2026-10-12
 
 ### Publicación del recorrido aprobado
+- Juan confirma el 12 octubre que la navegación se ve bien en móvil. La nueva
+  práctica «Recupera la cuenta» está en el código local, no en producción:
+  alterna dos compases con guía y dos sin ella, marca el siguiente 1 y ofrece
+  feedback/revisión. Reutiliza cinco pistas, sin nuevos audios. 182 tests,
+  TypeScript y build pasan; revisión visual local a 320 y 375 px correcta.
+- Próximo paso: Juan prueba si realmente puede recuperar el 1 al oído;
+  después decidir publicación. La prueba visual no demuestra aprendizaje.
 - Tailscale SSH autorizado; imagen `blueclue:b9e7017` construida con 174 tests
   públicos correctos y dos privados omitidos. TypeScript y build correctos.
 - `current` → `b9e7017`, Docker healthy; HTTPS `/health` devuelve

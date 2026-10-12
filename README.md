@@ -47,7 +47,10 @@ encontrar el 1**, **Reconocer cambios, frases y partes de una canción**,
 **Practicar en tu FLX4** y **Construir una sesión**. Cada nivel abre sus
 lecciones. Solo las lecciones que ya tienen ejercicio son enlaces; el resto
 es un plan visible, no una práctica fingida. Pulso, Cuenta y Encuentra el 1
-son tres lecciones del nivel 2, no niveles independientes.
+son lecciones del nivel 2, no niveles independientes. La cuarta, **Recupera
+la cuenta**, muestra dos compases guiados y oculta las ayudas durante los dos
+siguientes: el alumno marca el 1 al regresar. Reutiliza las cinco pistas
+existentes; la prueba auditiva de esta lección todavía está pendiente.
 
 Teach, Assist y Train conservan su nombre y llevan una frase: «te lo
 enseño todo», «te quito pistas», «tú solo». Tras cada ronda completa, una frase

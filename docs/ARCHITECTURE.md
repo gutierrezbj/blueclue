@@ -132,6 +132,14 @@ campo de persistencia: restaurar el módulo restaura también su identidad.
 
 `src/lib/practiceEntry.ts` reserva los dos primeros compases de cada fragmento para escucha. Usa los downbeats y el reloj del audio; antes de la ventana temprana del tercer downbeat no devuelve intentos. Excluye los objetivos de escucha del scoring y convierte su tolerancia temprana a segundos del archivo según la velocidad de reproducción. No cambia la posición al reanudar ni las ayudas de Teach / Assist / Train. El foco pasa a TAP cuando se habilita, no durante la escucha inicial.
 
+`src/lib/countRecovery.ts` planifica ciclos breves de dos compases con guía y
+dos sin guía a partir de los downbeats JSON. Solo evalúa el primer TAP válido
+en el siguiente 1, usando los umbrales reales compartidos de scoring. La UI
+`CountRecoveryTrainer` mantiene la onda montada para no interrumpir el audio,
+pero la oculta en el tramo sin guía; revisión y nueva ronda no puntúan. Ajustes
+y última ronda usan una clave local separada; referencias privadas pendientes de
+escucha muestran resultados orientativos sin guardar aciertos.
+
 ## Audio
 
 `evaluateRoundTap` registra y devuelve en una sola operación la ronda, el feedback

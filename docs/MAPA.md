@@ -8,10 +8,11 @@ Las casillas indican construcción, no dominio del alumno ni aprendizaje validad
 ```mermaid
 flowchart TD
     ROOT["Inicio · 7 niveles"] --> S["1 · Conocer los sonidos · 1 práctica"]
-    ROOT --> R["2 · Seguir el ritmo y encontrar el 1 · 3 prácticas"]
+    ROOT --> R["2 · Seguir el ritmo y encontrar el 1 · 4 prácticas"]
     R --> P["Sigue el pulso"]
     R --> C["Cuenta 1-2-3-4"]
     R --> O["Encuentra el 1"]
+    R --> Q["Recupera la cuenta · probar al oído"]
     ROOT --> L["3 · Cambios, frases y partes · 3 prácticas de escucha"]
     L --> B["Bajo · percusión · distinguir ambos"]
     L --> F["Frases y partes · pendiente"]
@@ -32,9 +33,11 @@ Los conteos monótonos de 8/16/32 no vuelven al recorrido recomendado.
 
 - [x] Inicio con siete niveles; cada nivel abre sus lecciones.
 - [x] Reubicar Pulso, Cuenta y Encuentra el 1 dentro del nivel 2.
+- [x] Añadir «Recupera la cuenta»: guía dos compases, retirada dos, marca del siguiente 1 con revisión. Construido en local; pendiente prueba de Juan.
 - [x] Enlazar solo prácticas reales y conservar enlaces anteriores y progreso.
 - [x] Publicación en HTTPS el 12 de octubre (`b9e7017`); los niveles 4–7 siguen sin prácticas.
-- [ ] Validación de navegación y actualización offline en iPhone físico.
+- [x] Juan confirma que la navegación actual se ve bien en el móvil (12 octubre).
+- [ ] Validación auditiva de la nueva lección y actualización offline en iPhone físico.
 
 Lo que sigue es historial de iteraciones anteriores. Sus numeraciones de
 «nivel» para Pulso/Cuenta/El 1 no describen la navegación actual.
