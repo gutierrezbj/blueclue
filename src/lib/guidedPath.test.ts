@@ -5,10 +5,11 @@ import { enterPractice, readAppRoute } from "./navigation.ts";
 import { getPracticeNeighbor, type PracticeSession } from "./practice.ts";
 
 test("the path follows course levels: sounds, rhythm, then song listening", () => {
-  assert.deepEqual(guidedPath.map(step => step.id), ["sounds", "pulse", "count", "downbeat", "bass", "percussion", "choice"]);
+  assert.deepEqual(guidedPath.map(step => step.id), ["sounds", "pulse", "count", "downbeat", "recover", "bass", "percussion", "choice"]);
   assert.equal(guidedPath[0].hash, "#sonidos");
   assert.equal(nextGuidedStep("sounds")?.id, "pulse");
-  assert.equal(nextGuidedStep("downbeat")?.id, "bass");
+  assert.equal(nextGuidedStep("downbeat")?.id, "recover");
+  assert.equal(nextGuidedStep("recover")?.id, "bass");
   assert.equal(nextGuidedStep("choice"), null);
 });
 
@@ -90,6 +91,6 @@ test("completing a practice never moves the resume target to another exercise or
     assert.equal(entryStep(opened(step.id)).id, step.id);
   }
   const practiced = readDoneSteps(JSON.stringify(guidedPath.map(step => step.id)));
-  assert.equal(practiced.size, 7);
+  assert.equal(practiced.size, 8);
   assert.equal(entryStep(opened("bass")).id, "bass");
 });

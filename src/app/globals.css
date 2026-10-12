@@ -430,6 +430,12 @@ button, a, summary { touch-action: manipulation; }
 .phrase-summary h2 { margin: 16px 0 0; font-size: 20px; }
 .phrase-summary p { margin: 4px 0; }
 .phrase-shell [hidden] { display: none; }
+.recovery-settings { margin: 8px 0 12px; padding: 0 12px; border: 1px solid var(--level-border); border-radius: 10px; }
+.recovery-settings summary { min-height: 44px; padding: 12px 0; color: var(--level-accent); font-size: 13px; cursor: pointer; }
+.recovery-settings p { color: #c2d6dc; font-size: 13px; line-height: 1.5; }
+.recovery-settings label { display: block; margin: 12px 0 5px; font-size: 12px; }
+.recovery-settings .speed-control { margin: 16px 0; }
+.recovery-shell .phrase-header > span { color: #c2d6dc; font-size: 12px; }
 
 @media (max-width: 900px) {
   .phrase-shell .waveform { height: 48px; }

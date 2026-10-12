@@ -18,8 +18,8 @@ export function LearningMenu({ screen, overviewId, levelId }: Props) {
   const lastStep = progress.lastOpened ? entryStep(progress.lastOpened) : null;
   const overview = screen === "listening-menu" ? getLearningOverview("listening") : overviewId ? getLearningOverview(overviewId) : null;
   const isResume = overview && lastStep && overview.steps.includes(lastStep.id);
-  const level = overview && ["pulse", "count", "downbeat"].includes(overview.id) ? overview.id : undefined;
-  const cards = screen === "rhythm" ? learningOverviews.filter(item => ["pulse", "count", "downbeat"].includes(item.id)) : learningOverviews;
+  const level = overview?.id === "recover" ? "count" : overview && ["pulse", "count", "downbeat"].includes(overview.id) ? overview.id : undefined;
+  const cards = screen === "rhythm" ? learningOverviews.filter(item => ["pulse", "count", "downbeat", "recover"].includes(item.id)) : learningOverviews;
 
   if (screen === "level" && levelId) {
     const selectedLevel = getLearningLevel(levelId);

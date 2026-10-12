@@ -5,9 +5,9 @@ import { getLearningOverview, learningOverviews, overviewForHash } from "./learn
 import { readAppRoute } from "./navigation.ts";
 
 test("existing introductions follow the seven-level course order", () => {
-  assert.deepEqual(learningOverviews.map(overview => overview.id), ["sounds", "pulse", "count", "downbeat", "listening"]);
+  assert.deepEqual(learningOverviews.map(overview => overview.id), ["sounds", "pulse", "count", "downbeat", "recover", "listening"]);
   assert.deepEqual(learningOverviews.flatMap(overview => overview.steps), guidedPath.map(step => step.id));
-  assert.equal(new Set(learningOverviews.map(overview => overview.hash)).size, 5);
+  assert.equal(new Set(learningOverviews.map(overview => overview.hash)).size, 6);
 });
 
 test("every introduction has a real exercise and explains practice without certifying mastery", () => {

@@ -29,7 +29,7 @@ export const learningLevels: readonly LearningLevel[] = [
       { title: "Sigue el pulso", description: "Acompaña cada golpe regular, sin buscar todavía el 1.", hash: "#aprender-pulso", stepId: "pulse" },
       { title: "Cuenta 1-2-3-4", description: "Sigue la cuenta y marca cuando vuelve al 1.", hash: "#aprender-cuenta", stepId: "count" },
       { title: "Encuentra el 1", description: "Identifica el comienzo del compás con menos ayudas.", hash: "#aprender-el-1", stepId: "downbeat" },
-      { title: "Recupera la cuenta", description: "Aprenderás a volver al pulso cuando te pierdas." }
+      { title: "Recupera la cuenta", description: "Sigue contando sin guía y marca el siguiente 1.", hash: "#aprender-recuperar", stepId: "recover" }
     ]
   },
   {

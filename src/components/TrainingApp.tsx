@@ -3,6 +3,7 @@
 import { useEffect, useState, type ComponentProps } from "react";
 import { BeatTrainer } from "./BeatTrainer";
 import { BarCountingTrainer } from "./BarCountingTrainer";
+import { CountRecoveryTrainer } from "./CountRecoveryTrainer";
 import { ListeningPractice } from "./ListeningPractice";
 import { SoundsIntro } from "./SoundsIntro";
 import { LatencyCheck } from "./LatencyCheck";
@@ -49,6 +50,7 @@ export function TrainingApp(props: Props) {
     const bars = route.bars;
     return <BarCountingTrainer key={bars} bars={bars} tracks={bars === 32 ? props.longTracks : props.tracks} catalogKind={bars === 32 ? "demo" : props.catalogKind} />;
   }
+  if (route.screen === "recover") return <CountRecoveryTrainer tracks={props.tracks} catalogKind={props.catalogKind} />;
   if (route.screen === "practice") return <BeatTrainer {...props} key={route.moduleId ?? "resume"} initialModule={route.moduleId} />;
   return <LearningMenu screen={route.screen} overviewId={route.screen === "overview" ? route.overviewId : undefined} levelId={route.screen === "level" ? route.levelId : undefined} />;
 }

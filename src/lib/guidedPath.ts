@@ -1,4 +1,4 @@
-export type GuidedStepId = "sounds" | "bass" | "percussion" | "choice" | "pulse" | "count" | "downbeat";
+export type GuidedStepId = "sounds" | "bass" | "percussion" | "choice" | "pulse" | "count" | "downbeat" | "recover";
 export type StageId = "ear" | "listen" | "rhythm";
 export type GuidedStep = { id: GuidedStepId; title: string; hash: string; hint: string; stage: StageId };
 
@@ -7,6 +7,7 @@ export const guidedPath: readonly GuidedStep[] = [
   { id: "pulse", stage: "rhythm", title: "Sigue el pulso", hash: "#nivel-1", hint: "Toca el botón con cada golpe, como con el pie." },
   { id: "count", stage: "rhythm", title: "Cuenta 1-2-3-4", hash: "#nivel-2", hint: "Toca solo al volver al 1." },
   { id: "downbeat", stage: "rhythm", title: "Encuentra el 1", hash: "#nivel-3", hint: "Sin marcas. Cuenta por dentro." },
+  { id: "recover", stage: "rhythm", title: "Recupera la cuenta", hash: "#recupera-la-cuenta", hint: "Sigue contando cuando desaparece la guía y vuelve a marcar el 1." },
   { id: "bass", stage: "listen", title: "El bajo", hash: "#escucha-el-bajo", hint: "Reconoce cuándo entra el bajo." },
   { id: "percussion", stage: "listen", title: "La percusión", hash: "#escucha-la-percusion", hint: "Reconoce cuándo entra la batería." },
   { id: "choice", stage: "listen", title: "¿Bajo o batería?", hash: "#bajo-o-bateria", hint: "Di cuál de los dos acaba de entrar." }

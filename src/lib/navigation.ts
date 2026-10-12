@@ -4,7 +4,7 @@ import { overviewForHash, type OverviewId } from "./learningOverview.ts";
 import { levelForHash, type LearningLevelId } from "./learningLevels.ts";
 
 export type AppRoute =
-  | { screen: "home" | "rhythm" | "listening-menu" | "bass" | "percussion" | "choice" | "sounds" | "latency" }
+  | { screen: "home" | "rhythm" | "listening-menu" | "bass" | "percussion" | "choice" | "sounds" | "latency" | "recover" }
   | { screen: "bars"; bars: 8 | 16 | 32 }
   | { screen: "overview"; overviewId: OverviewId }
   | { screen: "level"; levelId: LearningLevelId }
@@ -22,6 +22,7 @@ export function readAppRoute(hash: string): AppRoute {
   if (hash === "#escucha-el-bajo") return { screen: "bass" };
   if (hash === "#escucha-la-percusion") return { screen: "percussion" };
   if (hash === "#bajo-o-bateria") return { screen: "choice" };
+  if (hash === "#recupera-la-cuenta") return { screen: "recover" };
   if (hash === "#compases") return { screen: "bars", bars: 8 };
   if (hash === "#compases-16") return { screen: "bars", bars: 16 };
   if (hash === "#compases-32") return { screen: "bars", bars: 32 };

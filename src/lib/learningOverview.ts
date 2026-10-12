@@ -1,7 +1,7 @@
 import type { GuidedStepId } from "./guidedPath.ts";
 import type { LearningModuleId } from "./learningModules.ts";
 
-export type OverviewId = "sounds" | "listening" | LearningModuleId;
+export type OverviewId = "sounds" | "listening" | "recover" | LearningModuleId;
 export type LearningOverview = {
   id: OverviewId;
   title: string;
@@ -43,6 +43,13 @@ export const learningOverviews: readonly LearningOverview[] = [
     purpose: "Empieza a ubicar una entrada musical. Marcar el 1 es una base; todavía no demuestra que sepas mezclar dos canciones.",
     instructions: ["Escucha cómo llega el 1 después del 4.", "Marca solo el comienzo de cada compás.", "Repite los fallos; deja el Challenge para después."],
     result: "Verás clavadas, cerca y fallos. Después podrás probarte sin ayudas."
+  },
+  {
+    id: "recover", title: "Recupera la cuenta", label: "Nivel 2 · Lección 4",
+    hint: "Sigue contando cuando la guía desaparece.", hash: "#aprender-recuperar", practiceHash: "#recupera-la-cuenta", steps: ["recover"],
+    purpose: "Si dejas de mirar la cuenta, necesitas seguir oyendo el pulso y reconocer cuándo vuelve el 1.",
+    instructions: ["Escucha dos compases con guía.", "Sigue otros dos por dentro cuando se oculte.", "Marca el siguiente 1; revisa el resultado y repite."],
+    result: "Tendrás cinco oportunidades por pista, con feedback y revisión. No es una prueba de dominio."
   },
   {
     id: "listening", title: "Escucha el cambio", label: "Nivel 3 · Cambios",

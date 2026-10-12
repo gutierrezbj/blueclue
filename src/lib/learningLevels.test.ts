@@ -15,7 +15,7 @@ test("the seven course levels have unique reachable pages in the agreed order", 
 
 test("available lessons use existing exercises; planned lessons are never linked to another level", () => {
   const available = learningLevels.flatMap(level => level.lessons.filter(lesson => lesson.hash));
-  assert.equal(available.length, 7);
+  assert.equal(available.length, 8);
   for (const lesson of available) assert.notEqual(readAppRoute(lesson.hash!).screen, "home");
   for (const level of learningLevels.slice(3)) assert.ok(level.lessons.every(lesson => !lesson.hash));
 });
