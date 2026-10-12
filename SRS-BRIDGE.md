@@ -5,7 +5,7 @@
 - **Repo**: https://github.com/gutierrezbj/blueclue
 - **Branch activo**: main
 - **Estado**: Produccion (web publica, perfil ligero ADR-001)
-- **Sprint actual**: siete niveles de aprendizaje con lecciones propias; navegación construida localmente. Producción sigue en c58a22f, rechazada por Juan.
+- **Sprint actual**: siete niveles de aprendizaje con lecciones propias; navegación publicada como b9e7017. Pendiente validación de actualización en iPhone.
 
 ## Que es este proyecto (2-3 lineas)
 Entrenador interactivo para aprender a pinchar desde cero: escuchar, seguir el pulso, contar 1-2-3-4, encontrar el 1 y reconocer que instrumento entra. Publico objetivo: nivel 0 absoluto. No es software DJ completo; prepara el oido para la controladora FLX4.
@@ -46,7 +46,17 @@ Entrenador interactivo para aprender a pinchar desde cero: escuchar, seguir el p
 - Catalogo de infraestructura (offset +280): https://app.notion.com/p/3217981f08ef81828e31edfcc9b78414
 
 ## Handoff — Parte de Guardia
-> Ultima actualizacion: 2026-10-10
+> Ultima actualizacion: 2026-10-12
+
+### Publicación del recorrido aprobado
+- Tailscale SSH autorizado; imagen `blueclue:b9e7017` construida con 174 tests
+  públicos correctos y dos privados omitidos. TypeScript y build correctos.
+- `current` → `b9e7017`, Docker healthy; HTTPS `/health` devuelve
+  `ok/demo/b9e7017`. Inicio público tiene siete niveles, nivel 2 tres lecciones
+  y su introducción abre sin errores. HTTP redirige a HTTPS; `/offline-pack` 200.
+- Rollback `c58a22f`; sin cambios de puertos, Nginx ni monitorización.
+- Pendiente: Juan prueba actualización de la PWA y navegación en Safari/iPhone;
+  reconocer cambios y el 1 sin guía sigue siendo validación pedagógica separada.
 
 ### Navegación de siete niveles (vigente)
 - Juan aclara que Inicio debe mostrar siete niveles para aprender a pinchar.
@@ -60,9 +70,8 @@ Entrenador interactivo para aprender a pinchar desde cero: escuchar, seguir el p
 - Juan aprueba la vista previa («genial, seguimos»). Los cuatro commits hasta
   `654add2` están en `origin/main`; el archivo de release público está preparado
   en `.local/blueclue-654add2.tar`, sin `.local` ni piloto privado dentro.
-- Publicación pendiente de la verificación adicional de Tailscale SSH. La web
-  pública conserva `c58a22f`; no se ha modificado el VPS. Lo siguiente en este
-  archivo recoge decisiones históricas, no la portada vigente.
+- La verificación adicional de Tailscale y publicación se completaron el 12 de
+  octubre. Lo siguiente recoge decisiones históricas, no la portada vigente.
 
 ### Historial: recuperación del diseño de cinco tarjetas
 - Juan aprueba el boceto de cinco tarjetas («yessssss»): sonidos, cambios,

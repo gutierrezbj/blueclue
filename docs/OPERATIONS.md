@@ -1,6 +1,23 @@
 # Operación ligera — BlueClue
 
-Estado actualizado el 9 de octubre de 2026.
+Estado actualizado el 12 de octubre de 2026.
+
+## Siete niveles — publicados como b9e7017
+
+- Juan aprobó la navegación local de siete niveles; los niveles 1–3 enlazan
+  únicamente a ejercicios existentes y los 4–7 muestran el recorrido previsto.
+- Release extraída de `git archive` sin `.local` ni audio piloto privado; hash
+  SHA-256 del paquete `2e038600720264a0a94ba5ce1dc7141b4272c48fbcb3efb9b0547d89e95e0fcf`.
+- Construcción aislada en Servidor 2: 176 tests, 174 pasan y dos privados se
+  omiten sin su audio; TypeScript y build correctos. Imagen `blueclue:b9e7017`.
+- Solo `blueclue-web` recreado; contenedor healthy, `/health` local y HTTPS
+  `ok/demo/b9e7017`, portada pública HTTP 200, HTTP → HTTPS 301 y paquete
+  offline HTTP 200. Navegador móvil: siete tarjetas, tres lecciones de ritmo,
+  entrada a Sigue el pulso y cero errores de página.
+- `current` → `b9e7017`; rollback disponible en `c58a22f`. Puerto, proxy y
+  comprobaciones de monitorización existentes sin cambios. Pendiente: probar
+  actualización de la PWA y continuidad en iPhone físico; este chequeo remoto
+  no demuestra el aprendizaje del alumno.
 
 ## Navegación de un solo recorrido — publicada como c58a22f
 

@@ -33,7 +33,8 @@ Los conteos monótonos de 8/16/32 no vuelven al recorrido recomendado.
 - [x] Inicio con siete niveles; cada nivel abre sus lecciones.
 - [x] Reubicar Pulso, Cuenta y Encuentra el 1 dentro del nivel 2.
 - [x] Enlazar solo prácticas reales y conservar enlaces anteriores y progreso.
-- [ ] Validación en iPhone y publicación; los niveles 4–7 siguen sin prácticas.
+- [x] Publicación en HTTPS el 12 de octubre (`b9e7017`); los niveles 4–7 siguen sin prácticas.
+- [ ] Validación de navegación y actualización offline en iPhone físico.
 
 Lo que sigue es historial de iteraciones anteriores. Sus numeraciones de
 «nivel» para Pulso/Cuenta/El 1 no describen la navegación actual.
