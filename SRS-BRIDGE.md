@@ -5,7 +5,7 @@
 - **Repo**: https://github.com/gutierrezbj/blueclue
 - **Branch activo**: main
 - **Estado**: Produccion (web publica, perfil ligero ADR-001)
-- **Sprint actual**: navegación de siete niveles publicada como b9e7017; cuarta lección del nivel 2 construida solo en local, pendiente de prueba auditiva y publicación.
+- **Sprint actual**: navegación de siete niveles publicada como b9e7017; cuarta lección del nivel 2 aprobada como reto en local, pendiente de publicación y prueba en iPhone.
 
 ## Que es este proyecto (2-3 lineas)
 Entrenador interactivo para aprender a pinchar desde cero: escuchar, seguir el pulso, contar 1-2-3-4, encontrar el 1 y reconocer que instrumento entra. Publico objetivo: nivel 0 absoluto. No es software DJ completo; prepara el oido para la controladora FLX4.
@@ -46,9 +46,14 @@ Entrenador interactivo para aprender a pinchar desde cero: escuchar, seguir el p
 - Catalogo de infraestructura (offset +280): https://app.notion.com/p/3217981f08ef81828e31edfcc9b78414
 
 ## Handoff — Parte de Guardia
-> Ultima actualizacion: 2026-10-12
+> Ultima actualizacion: 2026-10-15
 
 ### Publicación del recorrido aprobado
+- Juan prueba «Recupera la cuenta» en local: «un poco difícil pero esa es la
+  idea, que el oído busque», seguido de «perfect». Conservamos la dificultad;
+  esto valida la intención del ejercicio, no aún su eficacia ni Safari físico.
+  Publicación pendiente de decisión explícita; dos commits locales (`1e49068`,
+  `608a1c2`) están por delante de `origin/main`.
 - Juan confirma el 12 octubre que la navegación se ve bien en móvil. La nueva
   práctica «Recupera la cuenta» está en el código local, no en producción:
   alterna dos compases con guía y dos sin ella, marca el siguiente 1 y ofrece

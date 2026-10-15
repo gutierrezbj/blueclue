@@ -5,7 +5,7 @@
 | Nivel | Qué aprende | Estado de las prácticas |
 | --- | --- | --- |
 | 1 · Conocer los sonidos | Distinguir elementos al oído | Primer ejercicio construido; resto previsto |
-| 2 · Seguir el ritmo y encontrar el 1 | Pulso, cuenta, downbeat y recuperar la cuenta | Cuatro lecciones construidas; la cuarta pendiente de prueba auditiva de Juan |
+| 2 · Seguir el ritmo y encontrar el 1 | Pulso, cuenta, downbeat y recuperar la cuenta | Cuatro lecciones construidas; Juan acepta el reto de la cuarta en local, pendiente iPhone |
 | 3 · Reconocer cambios, frases y partes | Oír entradas de instrumentos y estructura | Tres escuchas construidas; frases y partes pendientes |
 | 4 · Preparar entrada y salida | Elegir puntos musicales | Recorrido definido; prácticas pendientes |
 | 5 · Sincronizar y mezclar | Oír alineación y transición | Recorrido definido; prácticas pendientes |
@@ -17,8 +17,9 @@ niveles para el alumno**. No introducir cabina de dos decks por esta navegación
 
 La cuarta lección del nivel 2 reutiliza las cinco pistas del Beat Trainer:
 dos compases con guía, dos sin números ni onda, y una marca al volver al 1.
-No introduce canciones ni conceptos de mezcla. Su utilidad debe comprobarse
-al oído en móvil antes de considerarla validada.
+No introduce canciones ni conceptos de mezcla. Juan considera que la dificultad
+local tiene sentido para entrenar el oído; falta probarla en el iPhone antes de
+considerar validada su utilidad en uso cotidiano.
 
 ## V0.1 — Beat Trainer
 

@@ -1,6 +1,6 @@
 # BlueClue — mapa de construcción
 
-Estado de referencia: **10 de octubre de 2026**.
+Estado de referencia: **15 de octubre de 2026**.
 Las casillas indican construcción, no dominio del alumno ni aprendizaje validado.
 
 ## La foto completa
@@ -12,7 +12,7 @@ flowchart TD
     R --> P["Sigue el pulso"]
     R --> C["Cuenta 1-2-3-4"]
     R --> O["Encuentra el 1"]
-    R --> Q["Recupera la cuenta · probar al oído"]
+    R --> Q["Recupera la cuenta · reto aceptado en local"]
     ROOT --> L["3 · Cambios, frases y partes · 3 prácticas de escucha"]
     L --> B["Bajo · percusión · distinguir ambos"]
     L --> F["Frases y partes · pendiente"]
@@ -33,11 +33,11 @@ Los conteos monótonos de 8/16/32 no vuelven al recorrido recomendado.
 
 - [x] Inicio con siete niveles; cada nivel abre sus lecciones.
 - [x] Reubicar Pulso, Cuenta y Encuentra el 1 dentro del nivel 2.
-- [x] Añadir «Recupera la cuenta»: guía dos compases, retirada dos, marca del siguiente 1 con revisión. Construido en local; pendiente prueba de Juan.
+- [x] Añadir «Recupera la cuenta»: guía dos compases, retirada dos, marca del siguiente 1 con revisión. Juan confirma en local que cuesta, pero buscar el 1 de oído es la intención del ejercicio (13 octubre).
 - [x] Enlazar solo prácticas reales y conservar enlaces anteriores y progreso.
 - [x] Publicación en HTTPS el 12 de octubre (`b9e7017`); los niveles 4–7 siguen sin prácticas.
 - [x] Juan confirma que la navegación actual se ve bien en el móvil (12 octubre).
-- [ ] Validación auditiva de la nueva lección y actualización offline en iPhone físico.
+- [ ] Probar esta lección en iPhone físico y actualizar el paquete offline tras publicarla; aún no se ha publicado.
 
 Lo que sigue es historial de iteraciones anteriores. Sus numeraciones de
 «nivel» para Pulso/Cuenta/El 1 no describen la navegación actual.
