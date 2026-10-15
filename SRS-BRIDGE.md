@@ -52,8 +52,8 @@ Entrenador interactivo para aprender a pinchar desde cero: escuchar, seguir el p
 - Juan prueba «Recupera la cuenta» en local: «un poco difícil pero esa es la
   idea, que el oído busque», seguido de «perfect». Conservamos la dificultad;
   esto valida la intención del ejercicio, no aún su eficacia ni Safari físico.
-  Publicación pendiente de decisión explícita; dos commits locales (`1e49068`,
-  `608a1c2`) están por delante de `origin/main`.
+  Publicación pendiente de decisión explícita; código y mapa están en
+  `origin/main` hasta `58f5fe0`. Release pública preparada sin audio privado.
 - Juan confirma el 12 octubre que la navegación se ve bien en móvil. La nueva
   práctica «Recupera la cuenta» está en el código local, no en producción:
   alterna dos compases con guía y dos sin ella, marca el siguiente 1 y ofrece
